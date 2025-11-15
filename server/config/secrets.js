@@ -29,13 +29,16 @@ export const config = {
   },
 
   endpoints: {
-    npr: process.env.NPR_ENDPOINT,
-    dms: process.env.DMS_ENDPOINT,
-    visa: process.env.VISA_ENDPOINT,
-    mcs: process.env.MCS_ENDPOINT,
-    abis: process.env.ABIS_ENDPOINT,
+    npr: process.env.DHA_NPR_ENDPOINT,
+    dms: process.env.DHA_DMS_ENDPOINT,
+    visa: process.env.DHA_VISA_ENDPOINT,
+    mcs: process.env.DHA_MCS_ENDPOINT,
+    abis: process.env.DHA_ABIS_ENDPOINT,
     hanis: process.env.HANIS_ENDPOINT,
-    gwp: process.env.GWP_ENDPOINT
+    gwp: process.env.GWP_URL_ENDPOINT,
+    cipc: process.env.CIPC_API_ENDPOINT,
+    dhaBase: process.env.DHA_API_BASE_URL,
+    sita: process.env.SITA_API_BASE_URL
   },
 
   icao: {
@@ -60,7 +63,7 @@ export function validateConfig() {
   const warnings = [];
 
   if (config.production.useProductionApis) {
-    console.log('✅ Production mode enabled');
+    console.log('✅ Production mode enabled - Real DHA API Integration');
     
     if (!config.dha.nprApiKey) warnings.push('DHA_NPR_API_KEY not configured');
     if (!config.dha.dmsApiKey) warnings.push('DHA_DMS_API_KEY not configured');
@@ -69,12 +72,27 @@ export function validateConfig() {
     if (!config.dha.abisApiKey) warnings.push('DHA_ABIS_API_KEY not configured');
     if (!config.dha.hanisApiKey) warnings.push('HANIS_API_KEY not configured');
     
-    if (!config.endpoints.npr) warnings.push('NPR_ENDPOINT not configured');
-    if (!config.endpoints.dms) warnings.push('DMS_ENDPOINT not configured');
-    if (!config.endpoints.visa) warnings.push('VISA_ENDPOINT not configured');
-    if (!config.endpoints.mcs) warnings.push('MCS_ENDPOINT not configured');
-    if (!config.endpoints.abis) warnings.push('ABIS_ENDPOINT not configured');
+    if (!config.endpoints.npr) warnings.push('DHA_NPR_ENDPOINT not configured');
+    if (!config.endpoints.dms) warnings.push('DHA_DMS_ENDPOINT not configured');
+    if (!config.endpoints.visa) warnings.push('DHA_VISA_ENDPOINT not configured');
+    if (!config.endpoints.mcs) warnings.push('DHA_MCS_ENDPOINT not configured');
+    if (!config.endpoints.abis) warnings.push('DHA_ABIS_ENDPOINT not configured');
     if (!config.endpoints.hanis) warnings.push('HANIS_ENDPOINT not configured');
+    
+    const endpointCount = [
+      config.endpoints.npr,
+      config.endpoints.dms,
+      config.endpoints.visa,
+      config.endpoints.mcs,
+      config.endpoints.abis,
+      config.endpoints.hanis
+    ].filter(Boolean).length;
+    
+    if (endpointCount === 6) {
+      console.log('✅ All 6 DHA production endpoints configured');
+    } else {
+      console.log(`⚠️  Only ${endpointCount}/6 DHA endpoints configured`);
+    }
   }
 
   if (!config.document.signingKey) {
@@ -121,13 +139,13 @@ export function logConfigStatus() {
   console.log(`  NIIS_API_KEY: ${config.dha.niisApiKey ? '✅ CONFIGURED' : '⚠️  NOT SET'}`);
   console.log('');
   console.log('🌐 Production Endpoints:');
-  console.log(`  NPR Endpoint: ${config.endpoints.npr ? '✅ CONFIGURED' : '⚠️  NOT SET'}`);
-  console.log(`  DMS Endpoint: ${config.endpoints.dms ? '✅ CONFIGURED' : '⚠️  NOT SET'}`);
-  console.log(`  VISA Endpoint: ${config.endpoints.visa ? '✅ CONFIGURED' : '⚠️  NOT SET'}`);
-  console.log(`  MCS Endpoint: ${config.endpoints.mcs ? '✅ CONFIGURED' : '⚠️  NOT SET'}`);
-  console.log(`  ABIS Endpoint: ${config.endpoints.abis ? '✅ CONFIGURED' : '⚠️  NOT SET'}`);
-  console.log(`  HANIS Endpoint: ${config.endpoints.hanis ? '✅ CONFIGURED' : '⚠️  NOT SET'}`);
-  console.log(`  GWP Endpoint: ${config.endpoints.gwp ? '✅ CONFIGURED' : '⚠️  NOT SET'}`);
+  console.log(`  NPR Endpoint: ${config.endpoints.npr ? '✅ ' + config.endpoints.npr : '⚠️  NOT SET'}`);
+  console.log(`  DMS Endpoint: ${config.endpoints.dms ? '✅ ' + config.endpoints.dms : '⚠️  NOT SET'}`);
+  console.log(`  VISA Endpoint: ${config.endpoints.visa ? '✅ ' + config.endpoints.visa : '⚠️  NOT SET'}`);
+  console.log(`  MCS Endpoint: ${config.endpoints.mcs ? '✅ ' + config.endpoints.mcs : '⚠️  NOT SET'}`);
+  console.log(`  ABIS Endpoint: ${config.endpoints.abis ? '✅ ' + config.endpoints.abis : '⚠️  NOT SET'}`);
+  console.log(`  HANIS Endpoint: ${config.endpoints.hanis ? '✅ ' + config.endpoints.hanis : '⚠️  NOT SET'}`);
+  console.log(`  GWP Endpoint: ${config.endpoints.gwp ? '✅ ' + config.endpoints.gwp : '⚠️  NOT SET'}`);
   console.log('');
   console.log('🌍 ICAO PKD Integration:');
   console.log(`  ICAO_PKD_API_KEY: ${config.icao.pkdApiKey ? '✅ CONFIGURED' : '⚠️  NOT SET'}`);
