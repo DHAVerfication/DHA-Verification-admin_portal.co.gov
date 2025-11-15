@@ -259,6 +259,30 @@ app.get('/user-profile', (req, res) => {
   res.sendFile(path.join(__dirname, '../attached_assets/user-profile_1763210930330.html'));
 });
 
+// ID Card route
+app.get('/id-card', (req, res) => {
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.sendFile(path.join(__dirname, '../attached_assets/id-card.html'));
+});
+
+// Permanent Residence route
+app.get('/permanent-residence', (req, res) => {
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.sendFile(path.join(__dirname, '../attached_assets/permanent-residence_1763213840475.html'));
+});
+
+// Travel Document route
+app.get('/travel-document', (req, res) => {
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.sendFile(path.join(__dirname, '../attached_assets/travel-document_1763213840475.html'));
+});
+
+// E-Visa route
+app.get('/e-visa', (req, res) => {
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.sendFile(path.join(__dirname, '../attached_assets/e-visa_1763213840475.html'));
+});
+
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({
