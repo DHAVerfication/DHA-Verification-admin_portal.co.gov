@@ -11,6 +11,7 @@ import QRCode from 'qrcode';
 import puppeteer from 'puppeteer';
 import { config, validateConfig, logConfigStatus } from './config/secrets.js';
 import { getAllPermits, findPermitByNumber, getPermitCount } from './services/permit-service.js';
+import permitsRouter from './routes/permits.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -91,6 +92,15 @@ app.get('/e-visa', (req, res) => {
   res.sendFile(path.join(__dirname, '../attached_assets/e-visa_1763213840475.html'));
 });
 
+// Permit Profile route
+app.get('/permit-profile', (req, res) => {
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.sendFile(path.join(__dirname, '../attached_assets/permit-profile.html'));
+});
+
+// Use permits router
+app.use('/api/permits', permitsRouter);
+
 // Health check endpoint
 app.get('/api/health', async (req, res) => {
   const permitCount = await getPermitCount();
@@ -103,19 +113,6 @@ app.get('/api/health', async (req, res) => {
     forceRealApis: config.production.forceRealApis,
     verificationLevel: config.production.verificationLevel,
     timestamp: new Date().toISOString()
-  });
-});
-
-// Get all permits
-app.get('/api/permits', async (req, res) => {
-  const result = await getAllPermits();
-  res.json({
-    success: true,
-    count: result.permits.length,
-    permits: result.permits,
-    dataSource: result.usingRealApis ? 'DHA Production APIs' : 'Fallback Data (Endpoints Not Configured)',
-    usingRealApis: result.usingRealApis,
-    productionMode: config.production.useProductionApis
   });
 });
 
