@@ -1,5 +1,26 @@
 import PDFDocument from 'pdfkit';
 import QRCode from 'qrcode';
+import { DocumentVerificationService } from './document-verification.js';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Image path helpers
+const getImagePath = (documentType, imageName) => {
+  const imageDir = path.join(__dirname, '../../attached_assets/images', documentType);
+  return path.join(imageDir, imageName);
+};
+
+const imageExists = (filePath) => {
+  try {
+    return fs.existsSync(filePath);
+  } catch {
+    return false;
+  }
+};
 
 export async function generatePermitPDF(permit) {
   return new Promise((resolve, reject) => {
@@ -67,6 +88,17 @@ function generatePermanentResidencePDF(doc, permit) {
      .text('SECTIONS 26 AND 27 OF ACT NO 13 OF 2002', 50, 150, { align: 'center', width: 495 });
 
   let y = 175;
+
+  // Try to include template image
+  const permanentResidenceImagePath = getImagePath('permanent-residence', 'template.png');
+  if (imageExists(permanentResidenceImagePath)) {
+    try {
+      doc.image(permanentResidenceImagePath, 50, 175, { width: 200, height: 150 });
+      y = 350;
+    } catch (error) {
+      console.log('Could not load permanent residence image:', error.message);
+    }
+  }
 
   // Permit Number and Reference Number
   doc.fontSize(9).fillColor('#000000').font('Helvetica-Bold');
@@ -147,14 +179,21 @@ function generatePermanentResidencePDF(doc, permit) {
   doc.fontSize(8).fillColor('#333333')
      .text(`Control Number: ${permit.controlNumber || 'A629649'}`, 50, 750);
 
-  // QR Code
+  // Generate and embed QR Code with verification
   const verificationUrl = `${process.env.REPL_SLUG ? `https://${process.env.REPL_SLUG}.${process.env.REPL_OWNER}.repl.co` : 'http://localhost:5000'}/api/permits/${permit.id}/verify-document`;
-  QRCode.toDataURL(verificationUrl, { width: 100 })
+  
+  QRCode.toDataURL(verificationUrl, { width: 100, margin: 1, errorCorrectionLevel: 'H' })
     .then(qrDataUrl => {
-      const qrImage = Buffer.from(qrDataUrl.split(',')[1], 'base64');
-      doc.image(qrImage, 450, 200, { width: 80 });
+      try {
+        const qrImage = Buffer.from(qrDataUrl.split(',')[1], 'base64');
+        doc.image(qrImage, 450, 200, { width: 80 });
+        // Add verification label
+        doc.fontSize(7).fillColor('#006600').text('SCAN TO VERIFY', 450, 290, { width: 80, align: 'center' });
+      } catch (error) {
+        console.error('Error embedding QR code:', error);
+      }
     })
-    .catch(() => {});
+    .catch(error => console.error('QR code generation failed:', error));
 }
 
 function generateWorkPermitPDF(doc, permit) {
@@ -202,13 +241,18 @@ function generateWorkPermitPDF(doc, permit) {
   y += 15;
   doc.text('(2) The above permit holder does not become a permanent resident', 50, y, { width: 495 });
 
-  const verificationUrl = `https://${process.env.REPL_SLUG}.${process.env.REPL_OWNER}.repl.co/api/permits/${permit.id}/verify-document`;
-  QRCode.toDataURL(verificationUrl, { width: 100 })
+  const verificationUrl = `${process.env.REPL_SLUG ? `https://${process.env.REPL_SLUG}.${process.env.REPL_OWNER}.repl.co` : 'http://localhost:5000'}/api/permits/${permit.id}/verify-document`;
+  QRCode.toDataURL(verificationUrl, { width: 100, margin: 1, errorCorrectionLevel: 'H' })
     .then(qrDataUrl => {
-      const qrImage = Buffer.from(qrDataUrl.split(',')[1], 'base64');
-      doc.image(qrImage, 450, y + 20, { width: 80 });
+      try {
+        const qrImage = Buffer.from(qrDataUrl.split(',')[1], 'base64');
+        doc.image(qrImage, 450, y + 20, { width: 80 });
+        doc.fontSize(7).fillColor('#006600').text('SCAN TO VERIFY', 450, y + 110, { width: 80, align: 'center' });
+      } catch (error) {
+        console.error('Error embedding QR code:', error);
+      }
     })
-    .catch(() => {});
+    .catch(error => console.error('QR code generation failed:', error));
 
   y += 80;
   doc.fontSize(8).fillColor('#000000');
@@ -254,13 +298,18 @@ function generateRelativesPermitPDF(doc, permit) {
   y += 15;
   doc.text('(3) Subject to Reg. 3(7)', 50, y, { width: 495 });
 
-  const verificationUrl = `https://www.dha.gov.za/verify?ref=${permit.permitNumber || ''}`;
-  QRCode.toDataURL(verificationUrl, { width: 100 })
+  const verificationUrl = `${process.env.REPL_SLUG ? `https://${process.env.REPL_SLUG}.${process.env.REPL_OWNER}.repl.co` : 'http://localhost:5000'}/api/permits/${permit.id}/verify-document`;
+  QRCode.toDataURL(verificationUrl, { width: 100, margin: 1, errorCorrectionLevel: 'H' })
     .then(qrDataUrl => {
-      const qrImage = Buffer.from(qrDataUrl.split(',')[1], 'base64');
-      doc.image(qrImage, 450, y + 20, { width: 80 });
+      try {
+        const qrImage = Buffer.from(qrDataUrl.split(',')[1], 'base64');
+        doc.image(qrImage, 450, y + 20, { width: 80 });
+        doc.fontSize(7).fillColor('#006600').text('SCAN TO VERIFY', 450, y + 110, { width: 80, align: 'center' });
+      } catch (error) {
+        console.error('Error embedding QR code:', error);
+      }
     })
-    .catch(() => {});
+    .catch(error => console.error('QR code generation failed:', error));
 
   y += 80;
   doc.fontSize(8).fillColor('#000000');
@@ -277,6 +326,17 @@ function generateBirthCertificatePDF(doc, permit) {
      .text(permit.identityNumber || 'N/A', 50, 165, { align: 'center', width: 495 });
 
   let y = 200;
+
+  // Try to include birth certificate image
+  const birthCertImagePath = getImagePath('birth-certificate', 'template.png');
+  if (imageExists(birthCertImagePath)) {
+    try {
+      doc.image(birthCertImagePath, 50, 200, { width: 150, height: 120 });
+      y = 340;
+    } catch (error) {
+      console.log('Could not load birth certificate image:', error.message);
+    }
+  }
 
   doc.fontSize(10).fillColor('#000000').font('Helvetica-Bold');
   doc.text('CHILD', 50, y);
@@ -316,13 +376,18 @@ function generateBirthCertificatePDF(doc, permit) {
   doc.fontSize(8).fillColor('#000000');
   doc.text(`DATE PRINTED: ${new Date().toISOString().split('T')[0]}`, 50, y);
 
-  const verificationUrl = `https://www.dha.gov.za/verify?ref=${permit.referenceNumber || permit.identityNumber || ''}`;
-  QRCode.toDataURL(verificationUrl, { width: 100 })
+  const verificationUrl = `${process.env.REPL_SLUG ? `https://${process.env.REPL_SLUG}.${process.env.REPL_OWNER}.repl.co` : 'http://localhost:5000'}/api/permits/${permit.id}/verify-document`;
+  QRCode.toDataURL(verificationUrl, { width: 100, margin: 1, errorCorrectionLevel: 'H' })
     .then(qrDataUrl => {
-      const qrImage = Buffer.from(qrDataUrl.split(',')[1], 'base64');
-      doc.image(qrImage, 450, 200, { width: 80 });
+      try {
+        const qrImage = Buffer.from(qrDataUrl.split(',')[1], 'base64');
+        doc.image(qrImage, 450, 200, { width: 80 });
+        doc.fontSize(7).fillColor('#006600').text('SCAN TO VERIFY', 450, 290, { width: 80, align: 'center' });
+      } catch (error) {
+        console.error('Error embedding QR code:', error);
+      }
     })
-    .catch(() => {});
+    .catch(error => console.error('QR code generation failed:', error));
 
   doc.fontSize(8).fillColor('#006600')
      .text(`Control Number: ${permit.referenceNumber || 'G' + Math.random().toString().slice(2, 9)}`, 50, 750);
@@ -339,6 +404,17 @@ function generateNaturalizationPDF(doc, permit) {
      .text('(Section 5, South African Citizenship Act, 1995)', 50, 160, { align: 'center', width: 495 });
 
   let y = 200;
+
+  // Try to include naturalization image
+  const natImagePath = getImagePath('naturalisation', 'template.png');
+  if (imageExists(natImagePath)) {
+    try {
+      doc.image(natImagePath, 50, 200, { width: 150, height: 120 });
+      y = 340;
+    } catch (error) {
+      console.log('Could not load naturalization image:', error.message);
+    }
+  }
 
   doc.fontSize(10).fillColor('#000000').font('Times-Roman')
      .text('In terms of the powers conferred on him by the South African Citizenship Act, 1995 (Act 88 of 1995), the Minister of Home Affairs has been pleased to grant this certificate to', 50, y, { width: 495, align: 'justify' });
@@ -368,6 +444,20 @@ function generateNaturalizationPDF(doc, permit) {
   y += 15;
   doc.text(`Reference number: ${permit.referenceNumber || '______________'}`, 50, y, { width: 495 });
 
+  // QR Code
+  const verificationUrl = `${process.env.REPL_SLUG ? `https://${process.env.REPL_SLUG}.${process.env.REPL_OWNER}.repl.co` : 'http://localhost:5000'}/api/permits/${permit.id}/verify-document`;
+  QRCode.toDataURL(verificationUrl, { width: 100, margin: 1, errorCorrectionLevel: 'H' })
+    .then(qrDataUrl => {
+      try {
+        const qrImage = Buffer.from(qrDataUrl.split(',')[1], 'base64');
+        doc.image(qrImage, 450, 250, { width: 80 });
+        doc.fontSize(7).fillColor('#006600').text('SCAN TO VERIFY', 450, 340, { width: 80, align: 'center' });
+      } catch (error) {
+        console.error('Error embedding QR code:', error);
+      }
+    })
+    .catch(error => console.error('QR code generation failed:', error));
+
   doc.fontSize(8).fillColor('#006600')
      .text(`Control Number: ${permit.controlNumber || 'A' + Math.random().toString().slice(2, 9)}`, 50, 750);
 }
@@ -381,6 +471,18 @@ function generateRefugeePDF(doc, permit) {
      .text('PARTICULARS OF RECOGNISED REFUGEE IN THE RSA', 50, y, { align: 'center', width: 495 });
 
   y += 30;
+
+  // Try to include refugee certificate image
+  const refugeeImagePath = getImagePath('refugee-certificate', 'template.png');
+  if (imageExists(refugeeImagePath)) {
+    try {
+      doc.image(refugeeImagePath, 50, y, { width: 150, height: 120 });
+      y += 140;
+    } catch (error) {
+      console.log('Could not load refugee certificate image:', error.message);
+    }
+  }
+
   doc.fontSize(10).fillColor('#000000').font('Helvetica-Bold');
   doc.text('NAME AND SURNAME:', 50, y);
   doc.font('Helvetica').text(permit.name || 'N/A', 200, y);
@@ -419,13 +521,18 @@ function generateRefugeePDF(doc, permit) {
   doc.text('ISSUING OFFICE:', 50, y);
   doc.text('DEPARTMENT OF HOME AFFAIRS', 50, y + 15);
 
-  const verificationUrl = `https://www.dha.gov.za/verify?ref=${permit.fileNumber || permit.permitNumber || ''}`;
-  QRCode.toDataURL(verificationUrl, { width: 100 })
+  const verificationUrl = `${process.env.REPL_SLUG ? `https://${process.env.REPL_SLUG}.${process.env.REPL_OWNER}.repl.co` : 'http://localhost:5000'}/api/permits/${permit.id}/verify-document`;
+  QRCode.toDataURL(verificationUrl, { width: 100, margin: 1, errorCorrectionLevel: 'H' })
     .then(qrDataUrl => {
-      const qrImage = Buffer.from(qrDataUrl.split(',')[1], 'base64');
-      doc.image(qrImage, 450, y, { width: 80 });
+      try {
+        const qrImage = Buffer.from(qrDataUrl.split(',')[1], 'base64');
+        doc.image(qrImage, 450, 350, { width: 80 });
+        doc.fontSize(7).fillColor('#006600').text('SCAN TO VERIFY', 450, 440, { width: 80, align: 'center' });
+      } catch (error) {
+        console.error('Error embedding QR code:', error);
+      }
     })
-    .catch(() => {});
+    .catch(error => console.error('QR code generation failed:', error));
 
   y += 100;
   doc.fontSize(7).fillColor('#666666')

@@ -1,6 +1,6 @@
 export const config = {
   env: process.env.NODE_ENV || 'production',
-  port: 5000,
+  port: process.env.PORT || 3000,
   
   production: {
     useProductionApis: process.env.USE_PRODUCTION_APIS === 'true',
