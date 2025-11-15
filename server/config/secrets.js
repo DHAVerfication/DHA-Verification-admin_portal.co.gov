@@ -17,6 +17,13 @@ export const config = {
     pkiPublicKey: process.env.PKI_PUBLIC_KEY
   },
 
+  api: {
+    maxRetries: 5,
+    retryDelay: 2000,
+    timeout: 30000,
+    bypassSslVerification: true
+  },
+
   dha: {
     nprApiKey: process.env.DHA_NPR_API_KEY,
     dmsApiKey: process.env.DHA_DMS_API_KEY,
