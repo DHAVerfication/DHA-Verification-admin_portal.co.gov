@@ -3,7 +3,7 @@ modules = ["nodejs-20", "bash", "web"]
 expertMode = true
 
 [workflows]
-runButton = "DHA Production Server"
+runButton = "Project"
 
 [[workflows.workflow]]
 name = "Project"
@@ -58,16 +58,20 @@ localPort = 5000
 externalPort = 80
 
 [[ports]]
-localPort = 5001
-externalPort = 3001
-
-[[ports]]
 localPort = 5002
 externalPort = 3003
 
 [[ports]]
 localPort = 8000
 externalPort = 8000
+
+[[ports]]
+localPort = 10000
+externalPort = 5000
+
+[[ports]]
+localPort = 38113
+externalPort = 3001
 
 [[ports]]
 localPort = 39489

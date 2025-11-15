@@ -9,10 +9,8 @@ const crypto = require('crypto');
 const QRCode = require('qrcode');
 const puppeteer = require('puppeteer');
 
-const __dirname = path.resolve();
-
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = 5000;
 
 // Security & Performance Middleware
 app.use(helmet({
@@ -35,7 +33,7 @@ app.use('/api/', limiter);
 app.set('trust proxy', 1);
 
 // Serve static files
-app.use('/public', express.static(path.join(__dirname, 'attached_assets')));
+app.use('/public', express.static(path.join(__dirname, '../attached_assets')));
 
 // Sample permit data
 const permits = [
@@ -127,17 +125,17 @@ const permits = [
 
 // Root route - serve main back office interface
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'attached_assets/dha-back-office-complete_1763210930331.html'));
+  res.sendFile(path.join(__dirname, '../attached_assets/dha-back-office-complete_1763210930331.html'));
 });
 
 // Admin dashboard route
 app.get('/admin-dashboard', (req, res) => {
-  res.sendFile(path.join(__dirname, 'attached_assets/admin-dashboard_1763210930330.html'));
+  res.sendFile(path.join(__dirname, '../attached_assets/admin-dashboard_1763210930330.html'));
 });
 
 // User profile route
 app.get('/user-profile', (req, res) => {
-  res.sendFile(path.join(__dirname, 'attached_assets/user-profile_1763210930330.html'));
+  res.sendFile(path.join(__dirname, '../attached_assets/user-profile_1763210930330.html'));
 });
 
 // Health check endpoint
@@ -367,7 +365,7 @@ function checkAPIConfiguration() {
     'USE_PRODUCTION_APIS': process.env.USE_PRODUCTION_APIS === 'true',
     'FORCE_REAL_APIS': process.env.FORCE_REAL_APIS === 'true',
     'VERIFICATION_LEVEL': process.env.VERIFICATION_LEVEL || 'high',
-    'REAL_TIME_VALIDATION': process.env.REAL_TIME_VALIDATION === 'true' || true
+    'REAL_TIME_VALIDATION': process.env.REAL_TIME_VALIDATION === 'true'
   };
   
   return { apiConfigs, integrations, configurations };
