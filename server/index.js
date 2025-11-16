@@ -55,7 +55,7 @@ app.use('/public', express.static(path.join(__dirname, '../attached_assets'), {
 // Root route - serve main back office interface
 app.get('/', (req, res) => {
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
-  const filePath = path.join(__dirname, '../attached_assets/dha-back-office-complete_1763210930331.html');
+  const filePath = path.join(__dirname, '../attached_assets/index.html');
   res.sendFile(filePath, (err) => {
     if (err) {
       console.error('[ROUTE ERROR] Root - File not found:', filePath);
