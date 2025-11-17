@@ -6,11 +6,11 @@ import os
 os.chdir('/workspaces/Inshallah786')
 
 commands = [
-    ('git status --short', 'Show changes'),
-    ('git add -A', 'Stage changes'),
-    ('git commit -m "🚀 FINAL: Dynamic asset discovery + Render build copies to src/ - Fully operational"', 'Commit'),
-    ('git pull --rebase origin main', 'Rebase with remote'),
-    ('git push origin main', 'Push to GitHub'),
+    (['git', 'status', '--short'], 'Show changes'),
+    (['git', 'add', '-A'], 'Stage changes'),
+    (['git', 'commit', '-m', '🚀 FINAL: Dynamic asset discovery + Render build copies to src/ - Fully operational'], 'Commit'),
+    (['git', 'pull', '--rebase', 'origin', 'main'], 'Rebase with remote'),
+    (['git', 'push', 'origin', 'main'], 'Push to GitHub'),
 ]
 
 print('🚀 FINAL DEPLOYMENT TO RENDER\n')
@@ -18,9 +18,9 @@ print('=' * 60)
 
 for cmd, desc in commands:
     print(f'\n📍 {desc}...')
-    print(f'   Command: {cmd}')
+    print(f'   Command: {" ".join(cmd)}')
     try:
-        result = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=30)
+        result = subprocess.run(cmd, shell=False, capture_output=True, text=True, timeout=30)
         if result.stdout:
             print(result.stdout)
         if result.stderr and 'nothing to commit' not in result.stderr.lower():
