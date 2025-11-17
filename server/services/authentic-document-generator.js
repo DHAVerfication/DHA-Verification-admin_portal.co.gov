@@ -1416,7 +1416,6 @@ export async function generateAuthenticDocument(applicant, documentType, outputP
     
     const browser = await puppeteer.launch({
       headless: true,
-      executablePath: config.puppeteer.executablePath,
       args: [
         '--no-sandbox',
         '--disable-setuid-sandbox',
