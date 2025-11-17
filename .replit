@@ -114,5 +114,5 @@ channel = "stable-25_05"
 
 [deployment]
 deploymentTarget = "vm"
-run = ["node", "dist/server/index-minimal.js"]
-build = ["bash", "render-build-production.sh"]
+run = ["sh", "-c", "bash start-dev.sh"]
+build = ["sh", "-c", "npm install"]
