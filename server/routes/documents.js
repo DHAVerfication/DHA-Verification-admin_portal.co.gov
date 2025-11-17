@@ -17,7 +17,6 @@ async function tryDHAApiFirst(applicant) {
   console.log(`🌐 Attempting to fetch document from DHA API for ${applicant.name}...`);
   
   try {
-    // Try to fetch from appropriate DHA API based on document type
     const apiEndpoint = getAPIEndpointForType(applicant.type);
     
     if (!apiEndpoint) {
@@ -25,31 +24,54 @@ async function tryDHAApiFirst(applicant) {
       return null;
     }
     
+    const apiKey = getAPIKeyForType(applicant.type);
+    
+    if (!apiKey) {
+      console.log(`⚠️  No API key configured for ${applicant.type}`);
+      return null;
+    }
+    
     const response = await fetch(apiEndpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${getAPIKeyForType(applicant.type)}`
+        'Authorization': `Bearer ${apiKey}`,
+        'X-Client-Type': 'DHA-BackOffice',
+        'X-Verification-Level': config.production?.verificationLevel || 'PRODUCTION',
+        'Accept': 'application/json'
       },
       body: JSON.stringify({
         permitNumber: applicant.permitNumber,
         passport: applicant.passport,
-        idNumber: applicant.idNumber || applicant.identityNumber
+        idNumber: applicant.idNumber || applicant.identityNumber,
+        documentType: applicant.type
       }),
-      signal: AbortSignal.timeout(5000) // 5 second timeout
+      signal: AbortSignal.timeout(10000) // 10 second timeout
     });
+    
+    // Import and record API health
+    const { apiHealthMonitor } = await import('../services/api-health-monitor.js');
     
     if (response.ok) {
       const data = await response.json();
       console.log(`✅ Successfully fetched document from DHA API for ${applicant.name}`);
+      apiHealthMonitor.recordAttempt(apiEndpoint, true);
       return data;
     }
     
     console.log(`⚠️  DHA API returned ${response.status} for ${applicant.name}`);
+    apiHealthMonitor.recordAttempt(apiEndpoint, false);
     return null;
     
   } catch (error) {
-    console.log(`⚠️  DHA API unavailable for ${applicant.name}: ${error.message}`);
+    console.log(`❌ DHA API error for ${applicant.name}: ${error.message}`);
+    
+    const apiEndpoint = getAPIEndpointForType(applicant.type);
+    if (apiEndpoint) {
+      const { apiHealthMonitor } = await import('../services/api-health-monitor.js');
+      apiHealthMonitor.recordAttempt(apiEndpoint, false);
+    }
+    
     return null;
   }
 }
