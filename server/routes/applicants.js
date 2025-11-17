@@ -1,6 +1,6 @@
 import express from 'express';
 import { getAllPermits } from '../services/permit-service.js';
-import { generatePermitPDF } from '../services/pdf-generator.js';
+import { generatePermitPDF } from '../services/document-generator.js';
 import QRCode from 'qrcode';
 import JSZip from 'jszip';
 
