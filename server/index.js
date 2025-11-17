@@ -15,6 +15,7 @@ import permitsRouter from './routes/permits.js';
 import applicantsRouter from './routes/applicants.js';
 import documentsRouter from './routes/documents.js';
 import printingRouter from './routes/printing.js';
+import evisaRouter from './routes/evisa.js';
 import { INLINE_HTML } from './inline-html.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -219,6 +220,7 @@ app.use('/api/documents', documentsRouter);
 
 // Use printing router for DHA and GWP hard copy orders
 app.use('/api/printing', printingRouter);
+app.use('/api/evisa', evisaRouter);
 
 // Health check endpoint - PRODUCTION LIVE
 app.get('/api/health', async (req, res) => {

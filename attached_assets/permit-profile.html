@@ -407,6 +407,7 @@
         <div class="quick-actions">
             <h3>⚡ Quick Actions</h3>
             <div class="actions-grid">
+                <button class="action-btn" onclick="generateEvisa()">📧 Generate E-visa</button>
                 <button class="action-btn" onclick="orderDHAPrint()">📄 DHA Official Hard Copy</button>
                 <button class="action-btn" onclick="orderGWPPrint()">🏢 GWP High-Priority Print</button>
                 <button class="action-btn" onclick="verifyDocuments()">Verify Documents</button>
@@ -516,6 +517,59 @@
                 }
             } catch (error) {
                 alert(`❌ Error submitting order: ${error.message}`);
+            }
+        }
+
+        async function generateEvisa() {
+            if (!confirm('Generate South Africa E-visa?\n\nThis will create an official E-visa document with:\n- Real-time DHA authorization\n- QR code for validity verification\n- All applicant details\n- Approval status\n\nProceed?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/evisa/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        applicant: {
+                            name: 'Muhammad Mohsin',
+                            surname: 'MOHSIN',
+                            forename: 'MUHAMMAD',
+                            passport: 'AD0110994',
+                            type: 'Permanent Residence',
+                            permitNumber: 'PR/PTA/2025/10/13459',
+                            referenceNumber: 'PRP6296482',
+                            nationality: 'PAKISTANI',
+                            dateOfBirth: '23-06-1985',
+                            gender: 'MALE',
+                            category: 'Skilled Professional',
+                            status: 'Issued',
+                            issueDate: '2025-10-13',
+                            expiryDate: 'Indefinite',
+                            issuingOffice: 'DEPARTMENT OF HOME AFFAIRS, PRETORIA 0001'
+                        }
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    const blob = new Blob([result.html], { type: 'text/html' });
+                    const url = URL.createObjectURL(blob);
+                    const newWindow = window.open(url, '_blank');
+                    
+                    if (newWindow) {
+                        alert(`✅ E-visa Generated Successfully!\n\nVisa Number: ${result.evisaData.visaNumber}\nStatus: ${result.authorization.status}\nAuthorization: ${result.authorization.authorizationCode}\n\nOpening in new window...`);
+                    } else {
+                        alert('E-visa generated! Please allow popups to view the document.');
+                    }
+                } else {
+                    alert('❌ Error generating E-visa: ' + result.error);
+                }
+            } catch (error) {
+                console.error('E-visa generation error:', error);
+                alert('Error generating E-visa: ' + error.message);
             }
         }
 
