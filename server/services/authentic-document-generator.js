@@ -58,6 +58,30 @@ async function generateDocumentHTML(applicant, documentType) {
   }
 }
 
+function generateGuillocheSVG() {
+  return `
+    <svg class="guilloche-pattern" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 200">
+      <defs>
+        <pattern id="guillocheLines" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+          <path d="M0,50 Q25,25 50,50 T100,50" stroke="#006633" stroke-width="0.3" fill="none" opacity="0.15"/>
+          <path d="M0,50 Q25,75 50,50 T100,50" stroke="#006633" stroke-width="0.3" fill="none" opacity="0.15"/>
+        </pattern>
+        <radialGradient id="rosetteGrad" cx="50%" cy="50%">
+          <stop offset="0%" style="stop-color:#006633;stop-opacity:0.05" />
+          <stop offset="100%" style="stop-color:#006633;stop-opacity:0.02" />
+        </radialGradient>
+      </defs>
+      <rect width="800" height="200" fill="url(#guillocheLines)"/>
+      <circle cx="100" cy="100" r="80" fill="none" stroke="#006633" stroke-width="0.2" opacity="0.1"/>
+      <circle cx="100" cy="100" r="70" fill="none" stroke="#006633" stroke-width="0.2" opacity="0.1"/>
+      <circle cx="100" cy="100" r="60" fill="none" stroke="#006633" stroke-width="0.2" opacity="0.1"/>
+      <circle cx="700" cy="100" r="80" fill="none" stroke="#006633" stroke-width="0.2" opacity="0.1"/>
+      <circle cx="700" cy="100" r="70" fill="none" stroke="#006633" stroke-width="0.2" opacity="0.1"/>
+      <circle cx="700" cy="100" r="60" fill="none" stroke="#006633" stroke-width="0.2" opacity="0.1"/>
+    </svg>
+  `;
+}
+
 function generatePermanentResidenceHTML(applicant, coatOfArms) {
   const qrData = `VERIFY:${applicant.permitNumber}|${applicant.passport}|DHA`;
   
@@ -68,7 +92,7 @@ function generatePermanentResidenceHTML(applicant, coatOfArms) {
   <meta charset="UTF-8">
   <style>
     @page {
-      size: A4;
+      size: A4 portrait;
       margin: 0;
     }
     * {
@@ -78,9 +102,18 @@ function generatePermanentResidenceHTML(applicant, coatOfArms) {
     }
     body {
       font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #f5f1e8 0%, #e8e4dc 100%);
+      background: linear-gradient(135deg, #f5f1e8 0%, #e8e4dc 50%, #f0ebe0 100%);
       padding: 40px;
       position: relative;
+    }
+    .guilloche-pattern {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      opacity: 0.4;
     }
     .watermark {
       position: absolute;
@@ -88,18 +121,19 @@ function generatePermanentResidenceHTML(applicant, coatOfArms) {
       left: 50%;
       transform: translate(-50%, -50%) rotate(-45deg);
       font-size: 120px;
-      color: rgba(0, 0, 0, 0.03);
+      color: rgba(0, 102, 51, 0.04);
       font-weight: bold;
       z-index: 0;
       white-space: nowrap;
+      letter-spacing: 20px;
     }
     .document {
       position: relative;
       z-index: 1;
-      background: white;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.95) 100%);
       padding: 50px;
-      border: 3px solid #006633;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      border: 4px solid #006633;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.25), inset 0 0 60px rgba(0,102,51,0.03);
     }
     .header {
       display: flex;
@@ -282,7 +316,8 @@ function generatePermanentResidenceHTML(applicant, coatOfArms) {
   </style>
 </head>
 <body>
-  <div class="watermark">DEPARTMENT OF HOME AFFAIRS</div>
+  ${generateGuillocheSVG()}
+  <div class="watermark">REPUBLIC OF SOUTH AFRICA</div>
   <div class="document">
     <div class="header">
       <div class="logo-section">
@@ -424,7 +459,7 @@ function generateWorkPermitHTML(applicant, coatOfArms) {
   <meta charset="UTF-8">
   <style>
     @page {
-      size: A4 landscape;
+      size: A4 portrait;
       margin: 0;
     }
     * {
@@ -434,26 +469,37 @@ function generateWorkPermitHTML(applicant, coatOfArms) {
     }
     body {
       font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 50%, #a5d6a7 100%);
-      padding: 30px;
-    }
-    .document {
-      background: white;
-      padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      background: linear-gradient(135deg, #e3f2e1 0%, #c8e6c9 50%, #b2dfb2 100%);
+      padding: 40px;
       position: relative;
-      overflow: hidden;
     }
-    .background-pattern {
+    .guilloche-pattern {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      opacity: 0.3;
+    }
+    .watermark {
       position: absolute;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%);
-      width: 400px;
-      height: 400px;
-      background: radial-gradient(circle, rgba(76, 175, 80, 0.05) 0%, transparent 70%);
-      pointer-events: none;
+      transform: translate(-50%, -50%) rotate(-45deg);
+      font-size: 100px;
+      color: rgba(46, 125, 50, 0.04);
+      font-weight: bold;
+      z-index: 0;
+      white-space: nowrap;
+    }
+    .document {
+      background: linear-gradient(to bottom, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.95) 100%);
+      padding: 40px;
+      border: 4px solid #2e7d32;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.25), inset 0 0 60px rgba(46,125,50,0.03);
+      position: relative;
+      z-index: 1;
     }
     .content {
       position: relative;
@@ -553,8 +599,9 @@ function generateWorkPermitHTML(applicant, coatOfArms) {
   </style>
 </head>
 <body>
+  ${generateGuillocheSVG()}
+  <div class="watermark">WORK PERMIT</div>
   <div class="document">
-    <div class="background-pattern"></div>
     <div class="content">
       <div class="header">
         <div class="logo-section">
@@ -622,7 +669,7 @@ function generateRelativePermitHTML(applicant, coatOfArms) {
   <meta charset="UTF-8">
   <style>
     @page {
-      size: A4 landscape;
+      size: A6 portrait;
       margin: 0;
     }
     * {
@@ -632,14 +679,37 @@ function generateRelativePermitHTML(applicant, coatOfArms) {
     }
     body {
       font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #e1f5fe 0%, #b3e5fc 50%, #81d4fa 100%);
-      padding: 30px;
+      background: linear-gradient(135deg, #e0f2f7 0%, #b3d9e8 50%, #90c9dd 100%);
+      padding: 15px;
+      position: relative;
+    }
+    .guilloche-pattern {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      opacity: 0.25;
+    }
+    .watermark {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-45deg);
+      font-size: 36px;
+      color: rgba(1, 87, 155, 0.04);
+      font-weight: bold;
+      z-index: 0;
+      white-space: nowrap;
     }
     .document {
-      background: white;
-      padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      background: linear-gradient(to bottom, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.95) 100%);
+      padding: 20px;
+      border: 3px solid #01579b;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25), inset 0 0 40px rgba(1,87,155,0.03);
+      position: relative;
+      z-index: 1;
       position: relative;
       overflow: hidden;
     }
@@ -740,8 +810,9 @@ function generateRelativePermitHTML(applicant, coatOfArms) {
   </style>
 </head>
 <body>
+  ${generateGuillocheSVG()}
+  <div class="watermark">RELATIVE'S PERMIT</div>
   <div class="document">
-    <div class="background-pattern"></div>
     <div class="content">
       <div class="header">
         <div class="logo-section">
@@ -825,7 +896,7 @@ function generateBirthCertificateHTML(applicant, coatOfArms) {
   <meta charset="UTF-8">
   <style>
     @page {
-      size: A4;
+      size: A5 portrait;
       margin: 0;
     }
     * {
@@ -835,14 +906,37 @@ function generateBirthCertificateHTML(applicant, coatOfArms) {
     }
     body {
       font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
-      padding: 40px;
+      background: linear-gradient(135deg, #f9e5f3 0%, #f0d4e8 50%, #e8c4dd 100%);
+      padding: 25px;
+      position: relative;
+    }
+    .guilloche-pattern {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      opacity: 0.3;
+    }
+    .watermark {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-45deg);
+      font-size: 60px;
+      color: rgba(123, 31, 162, 0.04);
+      font-weight: bold;
+      z-index: 0;
+      white-space: nowrap;
     }
     .document {
-      background: white;
-      padding: 50px;
-      border: 3px solid #7b1fa2;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      background: linear-gradient(to bottom, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.95) 100%);
+      padding: 35px;
+      border: 4px solid #7b1fa2;
+      box-shadow: 0 12px 35px rgba(0,0,0,0.25), inset 0 0 50px rgba(123,31,162,0.03);
+      position: relative;
+      z-index: 1;
     }
     .header {
       display: flex;
@@ -938,6 +1032,8 @@ function generateBirthCertificateHTML(applicant, coatOfArms) {
   </style>
 </head>
 <body>
+  ${generateGuillocheSVG()}
+  <div class="watermark">BIRTH CERTIFICATE</div>
   <div class="document">
     <div class="header">
       <div class="logo-section">
@@ -1030,7 +1126,7 @@ function generateNaturalizationHTML(applicant, coatOfArms) {
   <meta charset="UTF-8">
   <style>
     @page {
-      size: A4;
+      size: A4 portrait;
       margin: 0;
     }
     * {
@@ -1040,14 +1136,37 @@ function generateNaturalizationHTML(applicant, coatOfArms) {
     }
     body {
       font-family: 'Georgia', serif;
-      background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+      background: linear-gradient(135deg, #fff8e1 0%, #ffe9b2 50%, #ffd180 100%);
       padding: 40px;
+      position: relative;
+    }
+    .guilloche-pattern {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      opacity: 0.35;
+    }
+    .watermark {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-45deg);
+      font-size: 110px;
+      color: rgba(255, 111, 0, 0.04);
+      font-weight: bold;
+      z-index: 0;
+      white-space: nowrap;
     }
     .document {
-      background: white;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.95) 100%);
       padding: 50px;
       border: 5px double #ff6f00;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+      box-shadow: 0 18px 45px rgba(0,0,0,0.3), inset 0 0 70px rgba(255,111,0,0.03);
+      position: relative;
+      z-index: 1;
     }
     .header {
       text-align: center;
@@ -1143,6 +1262,8 @@ function generateNaturalizationHTML(applicant, coatOfArms) {
   </style>
 </head>
 <body>
+  ${generateGuillocheSVG()}
+  <div class="watermark">NATURALIZATION</div>
   <div class="document">
     <div class="header">
       ${coatOfArms ? `<img src="${coatOfArms}" alt="Coat of Arms" class="coat-of-arms">` : ''}
@@ -1212,7 +1333,7 @@ function generateRefugeeHTML(applicant, coatOfArms) {
   <meta charset="UTF-8">
   <style>
     @page {
-      size: A4;
+      size: A4 portrait;
       margin: 0;
     }
     * {
@@ -1222,14 +1343,37 @@ function generateRefugeeHTML(applicant, coatOfArms) {
     }
     body {
       font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);
-      padding: 30px;
+      background: linear-gradient(135deg, #fce6ec 0%, #f9cbd6 50%, #f5a5b8 100%);
+      padding: 40px;
+      position: relative;
+    }
+    .guilloche-pattern {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      opacity: 0.3;
+    }
+    .watermark {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-45deg);
+      font-size: 100px;
+      color: rgba(194, 24, 91, 0.04);
+      font-weight: bold;
+      z-index: 0;
+      white-space: nowrap;
     }
     .document {
-      background: white;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.95) 100%);
       padding: 40px;
       border: 4px solid #c2185b;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.25), inset 0 0 60px rgba(194,24,91,0.03);
+      position: relative;
+      z-index: 1;
     }
     .header {
       display: flex;
@@ -1325,6 +1469,8 @@ function generateRefugeeHTML(applicant, coatOfArms) {
   </style>
 </head>
 <body>
+  ${generateGuillocheSVG()}
+  <div class="watermark">REFUGEE STATUS</div>
   <div class="document">
     <div class="header">
       <div class="left-section">

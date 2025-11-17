@@ -9,5 +9,8 @@ export FORCE_REAL_APIS=true
 export VERIFICATION_LEVEL=high
 export REAL_TIME_VALIDATION=true
 
+# IMPORTANT: Use port 5000 for Replit webview (don't use database port 5432)
+export PORT=5000
+
 # Start the server
 node server/index.js
