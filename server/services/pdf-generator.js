@@ -5,6 +5,7 @@ import { DocumentVerificationService } from './document-verification.js';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import sharp from 'sharp';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -22,6 +23,22 @@ const imageExists = (filePath) => {
     return false;
   }
 };
+
+// Convert SVG to PNG buffer for PDF embedding
+async function getSVGAsBuffer(svgPath) {
+  try {
+    if (!imageExists(svgPath)) {
+      return null;
+    }
+    const buffer = await sharp(svgPath)
+      .png({ quality: 90 })
+      .toBuffer();
+    return buffer;
+  } catch (error) {
+    console.log('SVG conversion failed:', error.message);
+    return null;
+  }
+}
 
 export async function generatePermitPDF(permit) {
   return new Promise(async (resolve, reject) => {
@@ -60,9 +77,15 @@ export async function generatePermitPDF(permit) {
 }
 
 function drawDHAHeader(doc, documentTitle) {
-  // Try to add official coat of arms
-  const coatOfArmsPath = path.join(__dirname, '../../attached_assets/images/coat-of-arms.png');
-  if (imageExists(coatOfArmsPath)) {
+  // Try to add official coat of arms (SVG will be converted to PNG for PDF embedding)
+  const coatOfArmsSvgPath = path.join(__dirname, '../../attached_assets/images/coat-of-arms.svg');
+  const coatOfArmsPngPath = path.join(__dirname, '../../attached_assets/images/coat-of-arms.png');
+  
+  // Use PNG if it exists, otherwise SVG will be handled by fallback
+  let coatOfArmsPath = imageExists(coatOfArmsPngPath) ? coatOfArmsPngPath : 
+                       (imageExists(coatOfArmsSvgPath) ? coatOfArmsSvgPath : null);
+  
+  if (coatOfArmsPath) {
     try {
       doc.image(coatOfArmsPath, 460, 45, { width: 60, height: 60 });
     } catch (error) {
@@ -92,7 +115,7 @@ function drawDHAHeader(doc, documentTitle) {
   // Add subtle watermark
   doc.save();
   doc.opacity(0.03);
-  if (imageExists(coatOfArmsPath)) {
+  if (coatOfArmsPath) {
     try {
       doc.image(coatOfArmsPath, 200, 300, { width: 200, height: 200 });
     } catch (error) {
@@ -106,14 +129,19 @@ async function generatePermanentResidencePDF(doc, permit) {
   // Background - Light beige/cream texture
   doc.rect(0, 0, 595, 842).fill('#F5F3E8');
   
+  // Try SVG first, fallback to PNG
+  const coatOfArmsSvgPath = path.join(__dirname, '../../attached_assets/images/coat-of-arms.svg');
+  const coatOfArmsPngPath = path.join(__dirname, '../../attached_assets/images/coat-of-arms.png');
+  let coatOfArmsPath = imageExists(coatOfArmsSvgPath) ? coatOfArmsSvgPath : coatOfArmsPngPath;
+  
   // Subtle watermark pattern
   doc.save();
   doc.opacity(0.015);
-  const coatOfArmsPath = path.join(__dirname, '../../attached_assets/images/coat-of-arms.png');
   if (imageExists(coatOfArmsPath)) {
     try {
       doc.image(coatOfArmsPath, 220, 350, { width: 180, height: 180 });
     } catch (error) {
+      console.log('Watermark load failed:', error.message);
       // Continue without watermark
     }
   }
@@ -125,7 +153,16 @@ async function generatePermanentResidencePDF(doc, permit) {
       doc.image(coatOfArmsPath, 50, 40, { width: 70, height: 70 });
     } catch (error) {
       console.log('Could not load coat of arms:', error.message);
+      // Draw fallback coat of arms
+      doc.circle(85, 75, 35).stroke('#007a3d').lineWidth(2);
+      doc.fontSize(14).font('Helvetica-Bold').fillColor('#FFD700')
+        .text('ZA', 70, 65, { width: 30, align: 'center' });
     }
+  } else {
+    // Draw fallback coat of arms
+    doc.circle(85, 75, 35).stroke('#007a3d').lineWidth(2);
+    doc.fontSize(14).font('Helvetica-Bold').fillColor('#FFD700')
+      .text('ZA', 70, 65, { width: 30, align: 'center' });
   }
 
   // DHA Branding - right side of header

@@ -43,7 +43,8 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const result = await getAllPermits();
-    const permit = result.permits.find(p => p.id === req.params.id);
+    const id = parseInt(req.params.id) || req.params.id;
+    const permit = result.permits.find(p => p.id === id || String(p.id) === req.params.id);
 
     if (!permit) {
       return res.status(404).json({
@@ -84,7 +85,8 @@ router.get('/:id', async (req, res) => {
 router.get('/:id/pdf', async (req, res) => {
   try {
     const result = await getAllPermits();
-    const permit = result.permits.find(p => p.id === req.params.id);
+    const id = parseInt(req.params.id) || req.params.id;
+    const permit = result.permits.find(p => p.id === id || String(p.id) === req.params.id);
 
     if (!permit) {
       return res.status(404).json({
@@ -107,11 +109,12 @@ router.get('/:id/pdf', async (req, res) => {
   }
 });
 
-// GET applicant QR code
+// GET QR code for applicant
 router.get('/:id/qr', async (req, res) => {
   try {
     const result = await getAllPermits();
-    const permit = result.permits.find(p => p.id === req.params.id);
+    const id = parseInt(req.params.id) || req.params.id;
+    const permit = result.permits.find(p => p.id === id || String(p.id) === req.params.id);
 
     if (!permit) {
       return res.status(404).json({
