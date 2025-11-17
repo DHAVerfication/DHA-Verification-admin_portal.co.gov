@@ -156,18 +156,13 @@ async function generateFromTemplate(permit) {
     try {
       const templatePath = TEMPLATES[permit.type];
       if (!templatePath || !fs.existsSync(templatePath)) {
-        console.log(`⚠️  No template found for ${permit.type}, using structured generation`);
-        // Fall back to structured generation
-        return resolve(await generateStructuredPDF(permit));
+        throw new Error(`No template found for ${permit.type}`);
       }
 
-      console.log(`📋 Using template: ${templatePath}`);
-      
       const doc = new PDFDocument({ size: 'A4', margins: { top: 0, bottom: 0, left: 0, right: 0 } });
       const chunks = [];
       doc.on('data', chunk => chunks.push(chunk));
       doc.on('end', () => resolve(Buffer.concat(chunks)));
-      doc.on('error', reject);
 
       // Process template image
       const templateBuffer = await sharp(templatePath)
@@ -181,70 +176,9 @@ async function generateFromTemplate(permit) {
       // Overlay applicant data
       overlayApplicantData(doc, permit);
 
-      // Add QR code for verification
-      try {
-        const qrCode = await QRCode.toDataURL(
-          `https://www.dha.gov.za/verify?ref=${permit.permitNumber || permit.referenceNumber}`,
-          { width: 80, errorCorrectionLevel: 'H' }
-        );
-        const qrBuffer = Buffer.from(qrCode.split(',')[1], 'base64');
-        doc.image(qrBuffer, 450, 720, { width: 80, height: 80 });
-      } catch (qrError) {
-        console.log('⚠️  QR code generation skipped:', qrError.message);
-      }
-
-      doc.end();
-    } catch (error) {
-      console.error('❌ Template generation error:', error);
-      reject(error);
-    }
-  });
-}
-
-/**
- * Generate structured PDF without template (fallback)
- */
-async function generateStructuredPDF(permit) {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const doc = new PDFDocument({ 
-        size: 'A4',
-        margins: { top: 50, bottom: 50, left: 50, right: 50 }
-      });
-
-      const chunks = [];
-      doc.on('data', chunk => chunks.push(chunk));
-      doc.on('end', () => resolve(Buffer.concat(chunks)));
-      doc.on('error', reject);
-
-      // Route to specific generator based on type
-      switch (permit.type) {
-        case 'Permanent Residence':
-        case 'Permanent Resident':
-          await generatePermanentResidencePDF(doc, permit);
-          break;
-        case 'General Work Permit':
-        case 'Work Permit':
-          await generateWorkPermitPDF(doc, permit);
-          break;
-        case "Relative's Permit":
-        case "Relative's Visa":
-          await generateRelativesPermitPDF(doc, permit);
-          break;
-        case 'Birth Certificate':
-          await generateBirthCertificatePDF(doc, permit);
-          break;
-        case 'Naturalization Certificate':
-        case 'Naturalisation':
-          await generateNaturalizationPDF(doc, permit);
-          break;
-        case 'Refugee Status (Section 24)':
-        case 'Refugee Certificate':
-          await generateRefugeePDF(doc, permit);
-          break;
-        default:
-          await generateGenericPermitPDF(doc, permit);
-      }
+      // Note: QR codes have been removed from template-based documents
+      // The scanned templates are professional documents without QR overlays
+      // For verification, use the verification page: https://www.dha.gov.za/verify
 
       doc.end();
     } catch (error) {

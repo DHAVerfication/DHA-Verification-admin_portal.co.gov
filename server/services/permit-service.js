@@ -8,17 +8,14 @@ const permitCache = {
 
 async function fetchFromDHAAPI(endpoint, apiKey, permitType, retryCount = 0) {
   if (!endpoint || !apiKey) {
-    console.log(`⚠️  Missing endpoint or API key for ${permitType}`);
     return null;
   }
 
-  const maxRetries = 2;
-  const retryDelay = 2000;
-  const timeout = 10000; // Increased to 10 seconds for real API calls
+  const maxRetries = 1; // Quick retry only
+  const retryDelay = 1000; // 1 second
+  const timeout = 3000; // 3 second timeout
 
   try {
-    console.log(`🌐 Attempting DHA API call: ${endpoint} (${permitType})`);
-    
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), timeout);
 
@@ -29,8 +26,7 @@ async function fetchFromDHAAPI(endpoint, apiKey, permitType, retryCount = 0) {
         'Content-Type': 'application/json',
         'X-Client-Type': 'DHA-BackOffice',
         'X-Verification-Level': config.production.verificationLevel || 'PRODUCTION',
-        'User-Agent': 'DHA-BackOffice/2.0',
-        'Accept': 'application/json'
+        'User-Agent': 'DHA-BackOffice/2.0'
       },
       signal: controller.signal
     });
@@ -38,10 +34,7 @@ async function fetchFromDHAAPI(endpoint, apiKey, permitType, retryCount = 0) {
     clearTimeout(timeoutId);
 
     if (!response.ok) {
-      console.log(`⚠️  DHA API returned ${response.status} for ${permitType}`);
-      
       if (retryCount < maxRetries) {
-        console.log(`🔄 Retrying in ${retryDelay}ms... (attempt ${retryCount + 1}/${maxRetries})`);
         await new Promise(resolve => setTimeout(resolve, retryDelay));
         return fetchFromDHAAPI(endpoint, apiKey, permitType, retryCount + 1);
       }
@@ -52,24 +45,13 @@ async function fetchFromDHAAPI(endpoint, apiKey, permitType, retryCount = 0) {
     const permits = data.permits || data.records || data.data || data.results || [];
 
     if (permits.length > 0) {
-      console.log(`✅ Successfully fetched ${permits.length} ${permitType} records from DHA API`);
-      
-      // Record successful API call
-      const { apiHealthMonitor } = await import('./api-health-monitor.js');
-      apiHealthMonitor.recordAttempt(endpoint, true);
+      console.log(`✅ Fetched ${permits.length} ${permitType} records`);
     }
 
     return permits;
 
   } catch (error) {
-    console.log(`❌ DHA API error for ${permitType}: ${error.message}`);
-    
-    // Record failed API call
-    const { apiHealthMonitor } = await import('./api-health-monitor.js');
-    apiHealthMonitor.recordAttempt(endpoint, false);
-    
     if (retryCount < maxRetries) {
-      console.log(`🔄 Retrying after error... (attempt ${retryCount + 1}/${maxRetries})`);
       await new Promise(resolve => setTimeout(resolve, retryDelay));
       return fetchFromDHAAPI(endpoint, apiKey, permitType, retryCount + 1);
     }
@@ -108,10 +90,14 @@ async function loadPermitsFromDHA() {
 
   const fetchPromises = permitSources.map(async (source) => {
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), timeout);
+      
       const permits = await fetchFromDHAAPI(source.endpoint, source.apiKey, source.type, 0);
+      clearTimeout(timeoutId);
+      
       return { source, permits };
     } catch (error) {
-      console.log(`❌ Error fetching ${source.type}: ${error.message}`);
       return { source, permits: null };
     }
   });
