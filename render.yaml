@@ -5,7 +5,7 @@ services:
     plan: standard
     
     # Build configuration
-    buildCommand: npm install
+    buildCommand: npm install && mkdir -p /opt/render/project/attached_assets && cp -r attached_assets/* /opt/render/project/attached_assets/ 2>/dev/null || true
     startCommand: npm start
     
     # Environment variables - FIXED: using key/value only (no scope)
