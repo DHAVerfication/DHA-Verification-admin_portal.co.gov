@@ -66,18 +66,34 @@ function generateGuillocheSVG() {
           <path d="M0,50 Q25,25 50,50 T100,50" stroke="#006633" stroke-width="0.3" fill="none" opacity="0.15"/>
           <path d="M0,50 Q25,75 50,50 T100,50" stroke="#006633" stroke-width="0.3" fill="none" opacity="0.15"/>
         </pattern>
+        <pattern id="microtext" x="0" y="0" width="200" height="20" patternUnits="userSpaceOnUse">
+          <text x="0" y="10" font-size="3px" fill="#006633" opacity="0.3">RSA•DHA•SECURE•RSA•DHA•SECURE•</text>
+        </pattern>
+        <pattern id="securityThread" x="0" y="0" width="5" height="10" patternUnits="userSpaceOnUse">
+          <rect width="2" height="10" fill="#FFD700" opacity="0.4"/>
+        </pattern>
+        <linearGradient id="hologramGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#00ff00;stop-opacity:0.1" />
+          <stop offset="33%" style="stop-color:#00ffff;stop-opacity:0.1" />
+          <stop offset="66%" style="stop-color:#ff00ff;stop-opacity:0.1" />
+          <stop offset="100%" style="stop-color:#ffff00;stop-opacity:0.1" />
+        </linearGradient>
         <radialGradient id="rosetteGrad" cx="50%" cy="50%">
           <stop offset="0%" style="stop-color:#006633;stop-opacity:0.05" />
           <stop offset="100%" style="stop-color:#006633;stop-opacity:0.02" />
         </radialGradient>
       </defs>
       <rect width="800" height="200" fill="url(#guillocheLines)"/>
+      <rect x="0" y="0" width="800" height="10" fill="url(#microtext)"/>
+      <rect x="0" y="190" width="800" height="10" fill="url(#microtext)"/>
+      <rect x="50" y="0" width="5" height="200" fill="url(#securityThread)"/>
       <circle cx="100" cy="100" r="80" fill="none" stroke="#006633" stroke-width="0.2" opacity="0.1"/>
       <circle cx="100" cy="100" r="70" fill="none" stroke="#006633" stroke-width="0.2" opacity="0.1"/>
       <circle cx="100" cy="100" r="60" fill="none" stroke="#006633" stroke-width="0.2" opacity="0.1"/>
       <circle cx="700" cy="100" r="80" fill="none" stroke="#006633" stroke-width="0.2" opacity="0.1"/>
       <circle cx="700" cy="100" r="70" fill="none" stroke="#006633" stroke-width="0.2" opacity="0.1"/>
       <circle cx="700" cy="100" r="60" fill="none" stroke="#006633" stroke-width="0.2" opacity="0.1"/>
+      <rect x="680" y="20" width="100" height="40" fill="url(#hologramGrad)" opacity="0.5" rx="5"/>
     </svg>
   `;
 }

@@ -275,6 +275,34 @@
             background: #ffeb3b;
         }
 
+        .printing-section {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(13, 71, 161, 0.1);
+        }
+
+        .printing-section h3 {
+            color: #0d47a1;
+            font-size: 18px;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #fdd835;
+            padding-bottom: 10px;
+        }
+
+        .print-option {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 6px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .print-option:hover {
+            border-color: #0d47a1;
+            box-shadow: 0 4px 12px rgba(13, 71, 161, 0.1);
+        }
+
         @media (max-width: 768px) {
             .profile-header {
                 flex-direction: column;
@@ -379,10 +407,27 @@
         <div class="quick-actions">
             <h3>⚡ Quick Actions</h3>
             <div class="actions-grid">
-                <button class="action-btn" onclick="generateCertificate()">Generate Certificate</button>
+                <button class="action-btn" onclick="orderDHAPrint()">📄 DHA Official Hard Copy</button>
+                <button class="action-btn" onclick="orderGWPPrint()">🏢 GWP High-Priority Print</button>
                 <button class="action-btn" onclick="verifyDocuments()">Verify Documents</button>
                 <button class="action-btn" onclick="downloadAll()">Download All</button>
-                <button class="action-btn" onclick="shareProfile()">Share Profile</button>
+            </div>
+        </div>
+        
+        <div class="printing-section">
+            <h3>🖨️ Hard Copy Printing</h3>
+            <p style="font-size: 13px; margin-bottom: 15px;">Order official government hard copies delivered to post office within 2-3 business days</p>
+            <div class="actions-grid">
+                <div class="print-option">
+                    <h4 style="color: #0d47a1; margin-bottom: 10px;">DHA Official System</h4>
+                    <p style="font-size: 12px; margin-bottom: 10px;">Security paper with watermark, guilloche patterns, and holographic elements</p>
+                    <button class="action-btn" onclick="orderDHAPrint()">Order DHA Print</button>
+                </div>
+                <div class="print-option">
+                    <h4 style="color: #0d47a1; margin-bottom: 10px;">GWP High Priority</h4>
+                    <p style="font-size: 12px; margin-bottom: 10px;">Top-of-queue printing with post office delivery tracking (2-3 days)</p>
+                    <button class="action-btn" onclick="orderGWPPrint()">Order GWP Print</button>
+                </div>
             </div>
         </div>
 
@@ -421,6 +466,111 @@
 
         function openVerification() {
             window.location.href = '/verify';
+        }
+
+        async function orderDHAPrint() {
+            if (!confirm('Order DHA Official Hard Copy?\n\nThis will print your document on security paper with watermarks, guilloche patterns, and holographic elements.\n\nEstimated delivery: 2-3 business days')) {
+                return;
+            }
+
+            const permitData = {
+                type: 'Permanent Residence',
+                permitNumber: '9401015000000',
+                passport: 'A12345678',
+                name: 'Your Name',
+                surname: 'Your Surname',
+                issueDate: '2024-01-01',
+                expiryDate: '2035-01-01',
+                nationality: 'South African',
+                dateOfBirth: '1994-01-01'
+            };
+
+            const recipientInfo = {
+                name: 'Your Full Name',
+                address: {
+                    street: '123 Main Street',
+                    city: 'Cape Town',
+                    province: 'Western Cape',
+                    postalCode: '8000',
+                    country: 'South Africa'
+                },
+                contactNumber: '+27123456789',
+                email: 'your.email@example.com'
+            };
+
+            try {
+                const response = await fetch('/api/printing/submit-dha-print', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ permitData, recipientInfo })
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert(`✅ DHA Official Print Order Submitted!\n\nOrder Number: ${result.orderNumber}\nDHA Reference: ${result.dhaSystemRef}\nEstimated Completion: ${result.estimatedCompletionDate}\nStatus: ${result.status}\n\nYou will receive a confirmation email with tracking details.`);
+                } else {
+                    alert(`❌ Order failed: ${result.error}`);
+                }
+            } catch (error) {
+                alert(`❌ Error submitting order: ${error.message}`);
+            }
+        }
+
+        async function orderGWPPrint() {
+            const postOfficeCode = prompt('Enter your preferred Post Office code (e.g., CPT-CENTRAL-001):', 'CPT-CENTRAL-001');
+            if (!postOfficeCode) return;
+
+            if (!confirm(`Order GWP High-Priority Hard Copy?\n\nPost Office: ${postOfficeCode}\nPriority: HIGH (Top of Queue)\nEstimated delivery: 2-3 business days\n\nThis will be sent for printing at the Government Warehouse and Printing facility.`)) {
+                return;
+            }
+
+            const permitData = {
+                type: 'Permanent Residence',
+                permitNumber: '9401015000000',
+                passport: 'A12345678',
+                name: 'Your Name',
+                surname: 'Your Surname',
+                issueDate: '2024-01-01',
+                expiryDate: '2035-01-01',
+                nationality: 'South African',
+                dateOfBirth: '1994-01-01'
+            };
+
+            const recipientInfo = {
+                name: 'Your Full Name',
+                address: {
+                    street: '123 Main Street',
+                    city: 'Cape Town',
+                    province: 'Western Cape',
+                    postalCode: '8000',
+                    country: 'South Africa'
+                },
+                contactNumber: '+27123456789',
+                email: 'your.email@example.com'
+            };
+
+            try {
+                const response = await fetch('/api/printing/submit-gwp-print', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ permitData, recipientInfo, postOfficeCode })
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert(`✅ GWP High-Priority Print Order Submitted!\n\nOrder Number: ${result.orderNumber}\nGWP Reference: ${result.gwpSystemRef}\nQueue Position: ${result.queuePosition} (High Priority)\nTracking Number: ${result.trackingNumber}\nPost Office: ${result.postOffice}\nScheduled Delivery: ${result.scheduledDeliveryDate}\nEstimated Ready: ${result.estimatedReadyDate}\n\nYou will receive SMS and email notifications with tracking updates.`);
+                } else {
+                    alert(`❌ Order failed: ${result.error}`);
+                }
+            } catch (error) {
+                alert(`❌ Error submitting order: ${error.message}`);
+            }
         }
     </script>
 </body>

@@ -14,6 +14,7 @@ import { getAllPermits, findPermitByNumber, getPermitCount } from './services/pe
 import permitsRouter from './routes/permits.js';
 import applicantsRouter from './routes/applicants.js';
 import documentsRouter from './routes/documents.js';
+import printingRouter from './routes/printing.js';
 import { INLINE_HTML } from './inline-html.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -215,6 +216,9 @@ app.use('/api/applicants', applicantsRouter);
 
 // Use documents router for PDF generation, preview, and download
 app.use('/api/documents', documentsRouter);
+
+// Use printing router for DHA and GWP hard copy orders
+app.use('/api/printing', printingRouter);
 
 // Health check endpoint - PRODUCTION LIVE
 app.get('/api/health', async (req, res) => {

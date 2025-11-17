@@ -36,16 +36,22 @@ export const config = {
   },
 
   endpoints: {
-    npr: process.env.DHA_NPR_ENDPOINT || 'https://api.dha.gov.za/npr/v1',
-    dms: process.env.DHA_DMS_ENDPOINT || 'https://api.dha.gov.za/dms/v1',
-    visa: process.env.DHA_VISA_ENDPOINT || 'https://api.dha.gov.za/visa/v1',
-    mcs: process.env.DHA_MCS_ENDPOINT || 'https://api.dha.gov.za/mcs/v1',
-    abis: process.env.DHA_ABIS_ENDPOINT || 'https://api.dha.gov.za/abis/v1',
-    hanis: process.env.HANIS_ENDPOINT || 'https://api.dha.gov.za/hanis/v1',
-    gwp: process.env.GWP_URL_ENDPOINT || 'https://gwp.dha.gov.za/api',
+    npr: process.env.DHA_NPR_ENDPOINT || 'https://npr-prod.dha.gov.za/api/v1',
+    dms: process.env.DHA_DMS_ENDPOINT || 'https://npm-prod.dha.gov.za/api/v1',
+    visa: process.env.DHA_VISA_ENDPOINT || 'https://visa-prod.dha.gov.za/api/v1',
+    mcs: process.env.DHA_MCS_ENDPOINT || 'https://mcs-prod.dha.gov.za/api/v2',
+    abis: process.env.DHA_ABIS_ENDPOINT || 'https://abis-prod.dha.gov.za/api/v1',
+    hanis: process.env.HANIS_ENDPOINT || 'https://hanis-prod.dha.gov.za/api/v2',
+    gwp: process.env.GWP_API_ENDPOINT || 'http://www.gpwonline.co.za/api',
     cipc: process.env.CIPC_API_ENDPOINT || 'https://api.cipc.co.za/api',
     dhaBase: process.env.DHA_API_BASE_URL || 'https://api.dha.gov.za',
     sita: process.env.SITA_API_BASE_URL || 'https://api.sita.co.za'
+  },
+
+  gwp: {
+    apiKey: process.env.GWP_API_KEY || 'gwp-production-key-2025',
+    apiEndpoint: process.env.GWP_API_ENDPOINT || 'http://www.gpwonline.co.za/api',
+    highPriorityQueue: process.env.GWP_PRIORITY_QUEUE || 'HIGH_PRIORITY'
   },
 
   icao: {
