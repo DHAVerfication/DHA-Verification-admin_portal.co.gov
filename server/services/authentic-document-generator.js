@@ -281,7 +281,7 @@ function generatePermanentResidenceHTML(applicant, coatOfArms) {
       color: #000080;
     }
     .signature-label {
-      font-size: 9px;
+      font-size: 12px;
       color: #666;
       font-style: italic;
     }
@@ -290,14 +290,14 @@ function generatePermanentResidenceHTML(applicant, coatOfArms) {
       padding: 10px;
       text-align: center;
       color: #cc0000;
-      font-size: 9px;
+      font-size: 12px;
       font-weight: bold;
       line-height: 1.4;
       max-width: 200px;
     }
     .conditions {
       margin-top: 30px;
-      font-size: 9px;
+      font-size: 12px;
       line-height: 1.6;
     }
     .conditions-title {
@@ -778,12 +778,12 @@ function generateRelativePermitHTML(applicant, coatOfArms) {
       text-align: left;
     }
     .dept-title {
-      font-size: 9px;
+      font-size: 12px;
       color: #0277bd;
       font-weight: bold;
     }
     .country-name {
-      font-size: 8px;
+      font-size: 11px;
       color: #333;
     }
     .control-info {
@@ -801,7 +801,7 @@ function generateRelativePermitHTML(applicant, coatOfArms) {
       margin-bottom: 5px;
     }
     .ref-number {
-      font-size: 9px;
+      font-size: 12px;
       color: #666;
       margin-bottom: 3px;
     }
@@ -824,12 +824,12 @@ function generateRelativePermitHTML(applicant, coatOfArms) {
     }
     .conditions {
       margin-top: 20px;
-      font-size: 9px;
+      font-size: 12px;
       line-height: 1.5;
     }
     .signature {
       margin-top: 20px;
-      font-size: 9px;
+      font-size: 12px;
       font-style: italic;
     }
     .barcode {
@@ -1026,7 +1026,7 @@ function generateBirthCertificateHTML(applicant, coatOfArms) {
       width: 200px;
       color: #666;
       text-transform: uppercase;
-      font-size: 9px;
+      font-size: 12px;
     }
     .info-value {
       flex: 1;
@@ -1051,14 +1051,14 @@ function generateBirthCertificateHTML(applicant, coatOfArms) {
       color: #7b1fa2;
     }
     .stamp-label {
-      font-size: 9px;
+      font-size: 12px;
       color: #666;
       margin-top: 5px;
     }
     .footer {
       margin-top: 40px;
       text-align: center;
-      font-size: 9px;
+      font-size: 12px;
       color: #666;
     }
   </style>
@@ -1257,7 +1257,7 @@ function generateNaturalizationHTML(applicant, coatOfArms) {
       color: #666;
       margin-bottom: 5px;
       text-transform: uppercase;
-      font-size: 9px;
+      font-size: 12px;
     }
     .info-value {
       font-weight: bold;
@@ -1285,7 +1285,7 @@ function generateNaturalizationHTML(applicant, coatOfArms) {
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 8px;
+      font-size: 11px;
       text-align: center;
       margin: 0 auto;
       color: #ff6f00;
@@ -1467,7 +1467,7 @@ function generateRefugeeHTML(applicant, coatOfArms) {
       width: 150px;
       color: #666;
       text-transform: uppercase;
-      font-size: 8px;
+      font-size: 11px;
       font-weight: bold;
     }
     .info-value {
@@ -1476,7 +1476,7 @@ function generateRefugeeHTML(applicant, coatOfArms) {
       color: #000;
     }
     .legal-text {
-      font-size: 9px;
+      font-size: 12px;
       line-height: 1.6;
       margin: 20px 0;
       text-align: justify;
@@ -1490,12 +1490,12 @@ function generateRefugeeHTML(applicant, coatOfArms) {
       display: flex;
       justify-content: space-between;
       margin-top: 20px;
-      font-size: 9px;
+      font-size: 12px;
     }
     .verification-text {
       text-align: center;
       margin-top: 25px;
-      font-size: 9px;
+      font-size: 12px;
       color: #666;
     }
   </style>
