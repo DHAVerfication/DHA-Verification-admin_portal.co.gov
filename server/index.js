@@ -12,6 +12,7 @@ import puppeteer from 'puppeteer';
 import { config, validateConfig, logConfigStatus } from './config/secrets.js';
 import { getAllPermits, findPermitByNumber, getPermitCount } from './services/permit-service.js';
 import permitsRouter from './routes/permits.js';
+import { INLINE_HTML } from './inline-html.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -77,14 +78,21 @@ app.use('/api/', limiter);
 // Trust proxy for Replit environment
 app.set('trust proxy', 1);
 
-// Helper function to serve files with fallback paths
-const serveFile = (res, filename, fallbackPaths = []) => {
+// Helper function to serve files with fallback paths and inline HTML backup
+const serveFile = (res, filename, fallbackPaths = [], inlineHTML = null) => {
   const paths = [path.join(FINAL_ASSETS_DIR, filename), ...fallbackPaths];
   
   const tryServe = (index) => {
     if (index >= paths.length) {
-      console.error(`[ROUTE ERROR] All paths failed for ${filename}:`, paths);
-      res.status(404).send(`File not found: ${filename}`);
+      // All file paths failed - use inline HTML fallback if available
+      if (inlineHTML) {
+        console.warn(`[FALLBACK] Using inline HTML for ${filename}`);
+        res.setHeader('Content-Type', 'text/html; charset=utf-8');
+        res.send(inlineHTML);
+      } else {
+        console.error(`[ROUTE ERROR] All paths failed for ${filename} and no fallback:`, paths);
+        res.status(404).send(`File not found: ${filename}`);
+      }
       return;
     }
     
@@ -113,7 +121,7 @@ app.use('/public', express.static(FINAL_ASSETS_DIR, {
 // Root route - serve main back office interface
 app.get('/', (req, res) => {
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
-  serveFile(res, 'index.html', ['/opt/render/project/attached_assets/index.html']);
+  serveFile(res, 'index.html', ['/opt/render/project/attached_assets/index.html'], INLINE_HTML.index);
 });
 
 // Admin dashboard route
