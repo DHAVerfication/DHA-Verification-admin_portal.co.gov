@@ -8,7 +8,6 @@ import compression from 'compression';
 import rateLimit from 'express-rate-limit';
 import crypto from 'crypto';
 import QRCode from 'qrcode';
-import puppeteer from 'puppeteer';
 import { config, validateConfig, logConfigStatus } from './config/secrets.js';
 import { getAllPermits, findPermitByNumber, getPermitCount } from './services/permit-service.js';
 import permitsRouter from './routes/permits.js';
