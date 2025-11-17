@@ -621,8 +621,8 @@
                         </div>
 
                         <div class="card-actions">
-                            <button class="action-btn btn-view" onclick="viewProfile('${app.id}')">👁 View</button>
-                            <button class="action-btn btn-download" onclick="downloadPDF('${app.id}')">⬇ PDF</button>
+                            <button class="action-btn btn-view" onclick="previewDocument('${app.id}')">👁 Preview</button>
+                            <button class="action-btn btn-download" onclick="downloadPDF('${app.id}')">⬇ Download</button>
                             <button class="action-btn btn-verify" onclick="verifyQR('${app.id}')">✓ Verify</button>
                         </div>
                     </div>
@@ -658,12 +658,15 @@
             filtered.forEach(app => loadQRCode(app.id));
         }
 
-        function viewProfile(appId) {
-            alert('Profile view for applicant ' + appId + ' (coming soon)');
+        function previewDocument(appId) {
+            window.open(`/api/documents/preview/${appId}`, '_blank');
         }
 
         function downloadPDF(appId) {
-            window.open(`/api/applicants/${appId}/pdf`, '_blank');
+            const link = document.createElement('a');
+            link.href = `/api/documents/download/${appId}`;
+            link.download = '';
+            link.click();
         }
 
         function verifyQR(appId) {
