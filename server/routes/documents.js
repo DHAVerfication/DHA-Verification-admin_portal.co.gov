@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url';
 import fs from 'fs/promises';
 import { getAllPermits } from '../services/permit-service.js';
 import { generateAuthenticDocument, generateAllDocuments } from '../services/authentic-document-generator.js';
+import { config } from '../config/secrets.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -15,7 +16,66 @@ const router = express.Router();
 async function tryDHAApiFirst(applicant) {
   console.log(`🌐 Attempting to fetch document from DHA API for ${applicant.name}...`);
   
-  return null;
+  try {
+    // Try to fetch from appropriate DHA API based on document type
+    const apiEndpoint = getAPIEndpointForType(applicant.type);
+    
+    if (!apiEndpoint) {
+      console.log(`⚠️  No API endpoint configured for ${applicant.type}`);
+      return null;
+    }
+    
+    const response = await fetch(apiEndpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${getAPIKeyForType(applicant.type)}`
+      },
+      body: JSON.stringify({
+        permitNumber: applicant.permitNumber,
+        passport: applicant.passport,
+        idNumber: applicant.idNumber || applicant.identityNumber
+      }),
+      signal: AbortSignal.timeout(5000) // 5 second timeout
+    });
+    
+    if (response.ok) {
+      const data = await response.json();
+      console.log(`✅ Successfully fetched document from DHA API for ${applicant.name}`);
+      return data;
+    }
+    
+    console.log(`⚠️  DHA API returned ${response.status} for ${applicant.name}`);
+    return null;
+    
+  } catch (error) {
+    console.log(`⚠️  DHA API unavailable for ${applicant.name}: ${error.message}`);
+    return null;
+  }
+}
+
+function getAPIEndpointForType(type) {
+  const endpoints = {
+    'Permanent Residence': config.endpoints?.npr,
+    'General Work Permit': config.endpoints?.visa,
+    "Relative's Permit": config.endpoints?.visa,
+    'Birth Certificate': config.endpoints?.dms,
+    'Naturalization Certificate': config.endpoints?.dms,
+    'Refugee Status (Section 24)': config.endpoints?.mcs
+  };
+  return endpoints[type] || null;
+}
+
+function getAPIKeyForType(type) {
+  const keys = {
+    'Permanent Residence': config.dha?.nprApiKey,
+    'General Work Permit': config.dha?.visaApiKey,
+    "Relative's Permit": config.dha?.visaApiKey,
+    'Birth Certificate': config.dha?.dmsApiKey,
+    'Naturalization Certificate': config.dha?.dmsApiKey,
+    'Refugee Status (Section 24)': config.dha?.mcsApiKey
+  };
+  return keys[type] || '';
 }
 
 router.get('/generate-all', async (req, res) => {

@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import QRCode from 'qrcode';
-import puppeteer from 'puppeteer';
+import sharp from 'sharp';
 import { config } from '../config/secrets.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -1412,35 +1412,16 @@ function generateRefugeeHTML(applicant, coatOfArms) {
 
 export async function generateAuthenticDocument(applicant, documentType, outputPath) {
   try {
-    const html = await generateDocumentHTML(applicant, documentType);
+    console.log(`📄 Generating ${documentType} for ${applicant.name} using template-based PDF...`);
     
-    const browser = await puppeteer.launch({
-      headless: true,
-      args: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-dev-shm-usage',
-        '--disable-gpu'
-      ]
-    });
-
-    const page = await browser.newPage();
-    await page.setContent(html, { waitUntil: 'networkidle0' });
+    // Import the document generator service
+    const { generatePermitPDF } = await import('./document-generator.js');
     
-    await page.pdf({
-      path: outputPath,
-      format: documentType === 'Permanent Residence' || documentType === 'Birth Certificate' || documentType === 'Naturalization Certificate' || documentType === 'Refugee Status (Section 24)' ? 'A4' : 'A4',
-      landscape: documentType === 'General Work Permit' || documentType === "Relative's Permit",
-      printBackground: true,
-      margin: {
-        top: '0',
-        right: '0',
-        bottom: '0',
-        left: '0'
-      }
-    });
-
-    await browser.close();
+    // Generate PDF buffer using template-based system
+    const pdfBuffer = await generatePermitPDF(applicant, { forceTemplate: false });
+    
+    // Write to file
+    await fs.promises.writeFile(outputPath, pdfBuffer);
     
     console.log(`✅ Generated ${documentType} for ${applicant.name}`);
     return outputPath;
