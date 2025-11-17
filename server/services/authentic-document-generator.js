@@ -2,6 +2,7 @@ import PDFDocument from 'pdfkit';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { execSync } from 'child_process';
 import QRCode from 'qrcode';
 import puppeteer from 'puppeteer';
 import { config } from '../config/secrets.js';
@@ -10,6 +11,18 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const PROJECT_ROOT = path.join(__dirname, '../..');
 const ASSETS_DIR = path.join(PROJECT_ROOT, 'attached_assets');
+
+function getChromiumPath() {
+  try {
+    const chromiumPath = execSync('which chromium', { encoding: 'utf-8' }).trim();
+    if (chromiumPath && fs.existsSync(chromiumPath)) {
+      return chromiumPath;
+    }
+  } catch (error) {
+    console.warn('Could not find system chromium');
+  }
+  return null;
+}
 
 function getCoatOfArmsBase64() {
   try {
@@ -1414,7 +1427,8 @@ export async function generateAuthenticDocument(applicant, documentType, outputP
   try {
     const html = await generateDocumentHTML(applicant, documentType);
     
-    const browser = await puppeteer.launch({
+    const chromiumPath = getChromiumPath();
+    const launchOptions = {
       headless: true,
       args: [
         '--no-sandbox',
@@ -1422,7 +1436,13 @@ export async function generateAuthenticDocument(applicant, documentType, outputP
         '--disable-dev-shm-usage',
         '--disable-gpu'
       ]
-    });
+    };
+    
+    if (chromiumPath) {
+      launchOptions.executablePath = chromiumPath;
+    }
+    
+    const browser = await puppeteer.launch(launchOptions);
 
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: 'networkidle0' });
