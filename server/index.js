@@ -375,6 +375,16 @@ app.post('/api/generate-pdf', async (req, res) => {
   }
 });
 
+function escapeHtml(unsafe) {
+  if (unsafe == null) return '';
+  return String(unsafe)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 function generatePermitHTML(permit, qrCode, signature) {
   const coatOfArmsDataURL = getCoatOfArmsDataURL();
   return `
@@ -417,50 +427,50 @@ function generatePermitHTML(permit, qrCode, signature) {
     <div class="coat-of-arms"></div>
     <h1 style="display: inline-block; font-size: 24px; font-weight: 900; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">DEPARTMENT OF HOME AFFAIRS</h1>
     <p style="font-size: 12px; margin-top: 5px; letter-spacing: 1px;">Republic of South Africa</p>
-    <h2 style="border-top: 2px solid rgba(255,255,255,0.3); padding-top: 15px; margin-top: 15px;">${permit.type}</h2>
+    <h2 style="border-top: 2px solid rgba(255,255,255,0.3); padding-top: 15px; margin-top: 15px;">${escapeHtml(permit.type)}</h2>
   </div>
 
   <div class="content">
     <div class="field">
       <div class="label">Permit Number</div>
-      <div class="value" style="font-size: 18px; font-weight: bold; color: #006600;">${permit.permitNumber || permit.referenceNumber}</div>
+      <div class="value" style="font-size: 18px; font-weight: bold; color: #006600;">${escapeHtml(permit.permitNumber || permit.referenceNumber)}</div>
     </div>
 
     <div class="field">
       <div class="label">Full Name</div>
-      <div class="value">${permit.name || permit.surname + ' ' + permit.forename}</div>
+      <div class="value">${escapeHtml(permit.name || permit.surname + ' ' + permit.forename)}</div>
     </div>
 
     ${permit.passport ? `
     <div class="field">
       <div class="label">Passport Number</div>
-      <div class="value">${permit.passport}</div>
+      <div class="value">${escapeHtml(permit.passport)}</div>
     </div>` : ''}
 
     ${permit.idNumber || permit.identityNumber ? `
     <div class="field">
       <div class="label">ID Number</div>
-      <div class="value">${permit.idNumber || permit.identityNumber}</div>
+      <div class="value">${escapeHtml(permit.idNumber || permit.identityNumber)}</div>
     </div>` : ''}
 
     <div class="field">
       <div class="label">Nationality</div>
-      <div class="value">${permit.nationality}</div>
+      <div class="value">${escapeHtml(permit.nationality)}</div>
     </div>
 
     <div class="field">
       <div class="label">Issue Date</div>
-      <div class="value">${permit.issueDate}</div>
+      <div class="value">${escapeHtml(permit.issueDate)}</div>
     </div>
 
     <div class="field">
       <div class="label">Expiry Date</div>
-      <div class="value">${permit.expiryDate}</div>
+      <div class="value">${escapeHtml(permit.expiryDate)}</div>
     </div>
 
     <div class="field">
       <div class="label">Category</div>
-      <div class="value">${permit.category}</div>
+      <div class="value">${escapeHtml(permit.category)}</div>
     </div>
   </div>
 
@@ -471,12 +481,12 @@ function generatePermitHTML(permit, qrCode, signature) {
 
   <div class="signature">
     <strong>Digital Signature:</strong><br/>
-    ${signature}
+    ${escapeHtml(signature)}
   </div>
 
   <div class="footer">
     <p>This is an official government document issued by the Department of Home Affairs, Republic of South Africa</p>
-    <p>Issued by: ${permit.officerName} (${permit.officerID})</p>
+    <p>Issued by: ${escapeHtml(permit.officerName)} (${escapeHtml(permit.officerID)})</p>
     <p>Document generated: ${new Date().toLocaleString()}</p>
   </div>
 </body>
