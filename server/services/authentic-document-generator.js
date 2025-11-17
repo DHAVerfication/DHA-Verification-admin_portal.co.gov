@@ -60,40 +60,45 @@ async function generateDocumentHTML(applicant, documentType) {
 
 function generateGuillocheSVG() {
   return `
-    <svg class="guilloche-pattern" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 200">
+    <svg class="guilloche-pattern" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
       <defs>
-        <pattern id="guillocheLines" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
-          <path d="M0,50 Q25,25 50,50 T100,50" stroke="#006633" stroke-width="0.3" fill="none" opacity="0.15"/>
-          <path d="M0,50 Q25,75 50,50 T100,50" stroke="#006633" stroke-width="0.3" fill="none" opacity="0.15"/>
+        <pattern id="guillocheLines" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+          <path d="M0,40 Q20,10 40,40 T80,40" stroke="#006633" stroke-width="0.8" fill="none" opacity="0.3"/>
+          <path d="M0,40 Q20,70 40,40 T80,40" stroke="#006633" stroke-width="0.8" fill="none" opacity="0.3"/>
+          <circle cx="40" cy="40" r="25" fill="none" stroke="#006633" stroke-width="0.5" opacity="0.2"/>
+          <circle cx="40" cy="40" r="15" fill="none" stroke="#006633" stroke-width="0.5" opacity="0.2"/>
         </pattern>
-        <pattern id="microtext" x="0" y="0" width="200" height="20" patternUnits="userSpaceOnUse">
-          <text x="0" y="10" font-size="3px" fill="#006633" opacity="0.3">RSA•DHA•SECURE•RSA•DHA•SECURE•</text>
+        <pattern id="microtext" x="0" y="0" width="300" height="15" patternUnits="userSpaceOnUse">
+          <text x="0" y="12" font-size="8px" fill="#006633" opacity="0.5">RSA•DHA•SECURE•DOCUMENT•RSA•DHA•SECURE•DOCUMENT•</text>
         </pattern>
-        <pattern id="securityThread" x="0" y="0" width="5" height="10" patternUnits="userSpaceOnUse">
-          <rect width="2" height="10" fill="#FFD700" opacity="0.4"/>
+        <pattern id="securityThread" x="0" y="0" width="8" height="15" patternUnits="userSpaceOnUse">
+          <rect width="4" height="15" fill="#FFD700" opacity="0.6"/>
         </pattern>
         <linearGradient id="hologramGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" style="stop-color:#00ff00;stop-opacity:0.1" />
-          <stop offset="33%" style="stop-color:#00ffff;stop-opacity:0.1" />
-          <stop offset="66%" style="stop-color:#ff00ff;stop-opacity:0.1" />
-          <stop offset="100%" style="stop-color:#ffff00;stop-opacity:0.1" />
+          <stop offset="0%" style="stop-color:#00ff00;stop-opacity:0.15" />
+          <stop offset="33%" style="stop-color:#00ffff;stop-opacity:0.15" />
+          <stop offset="66%" style="stop-color:#ff00ff;stop-opacity:0.15" />
+          <stop offset="100%" style="stop-color:#ffff00;stop-opacity:0.15" />
         </linearGradient>
         <radialGradient id="rosetteGrad" cx="50%" cy="50%">
-          <stop offset="0%" style="stop-color:#006633;stop-opacity:0.05" />
-          <stop offset="100%" style="stop-color:#006633;stop-opacity:0.02" />
+          <stop offset="0%" style="stop-color:#006633;stop-opacity:0.08" />
+          <stop offset="100%" style="stop-color:#006633;stop-opacity:0.03" />
         </radialGradient>
       </defs>
-      <rect width="800" height="200" fill="url(#guillocheLines)"/>
-      <rect x="0" y="0" width="800" height="10" fill="url(#microtext)"/>
-      <rect x="0" y="190" width="800" height="10" fill="url(#microtext)"/>
-      <rect x="50" y="0" width="5" height="200" fill="url(#securityThread)"/>
-      <circle cx="100" cy="100" r="80" fill="none" stroke="#006633" stroke-width="0.2" opacity="0.1"/>
-      <circle cx="100" cy="100" r="70" fill="none" stroke="#006633" stroke-width="0.2" opacity="0.1"/>
-      <circle cx="100" cy="100" r="60" fill="none" stroke="#006633" stroke-width="0.2" opacity="0.1"/>
-      <circle cx="700" cy="100" r="80" fill="none" stroke="#006633" stroke-width="0.2" opacity="0.1"/>
-      <circle cx="700" cy="100" r="70" fill="none" stroke="#006633" stroke-width="0.2" opacity="0.1"/>
-      <circle cx="700" cy="100" r="60" fill="none" stroke="#006633" stroke-width="0.2" opacity="0.1"/>
-      <rect x="680" y="20" width="100" height="40" fill="url(#hologramGrad)" opacity="0.5" rx="5"/>
+      <rect width="800" height="600" fill="url(#guillocheLines)"/>
+      <rect x="0" y="0" width="800" height="15" fill="url(#microtext)"/>
+      <rect x="0" y="585" width="800" height="15" fill="url(#microtext)"/>
+      <rect x="70" y="0" width="8" height="600" fill="url(#securityThread)"/>
+      <rect x="720" y="0" width="8" height="600" fill="url(#securityThread)"/>
+      <circle cx="150" cy="300" r="100" fill="url(#rosetteGrad)"/>
+      <circle cx="150" cy="300" r="90" fill="none" stroke="#006633" stroke-width="0.5" opacity="0.2"/>
+      <circle cx="150" cy="300" r="80" fill="none" stroke="#006633" stroke-width="0.5" opacity="0.2"/>
+      <circle cx="150" cy="300" r="70" fill="none" stroke="#006633" stroke-width="0.5" opacity="0.2"/>
+      <circle cx="650" cy="300" r="100" fill="url(#rosetteGrad)"/>
+      <circle cx="650" cy="300" r="90" fill="none" stroke="#006633" stroke-width="0.5" opacity="0.2"/>
+      <circle cx="650" cy="300" r="80" fill="none" stroke="#006633" stroke-width="0.5" opacity="0.2"/>
+      <circle cx="650" cy="300" r="70" fill="none" stroke="#006633" stroke-width="0.5" opacity="0.2"/>
+      <rect x="650" y="30" width="130" height="60" fill="url(#hologramGrad)" opacity="0.7" rx="8"/>
     </svg>
   `;
 }
@@ -129,7 +134,7 @@ function generatePermanentResidenceHTML(applicant, coatOfArms) {
       width: 100%;
       height: 100%;
       z-index: 0;
-      opacity: 0.4;
+      opacity: 0.6;
     }
     .watermark {
       position: absolute;
@@ -137,7 +142,7 @@ function generatePermanentResidenceHTML(applicant, coatOfArms) {
       left: 50%;
       transform: translate(-50%, -50%) rotate(-45deg);
       font-size: 120px;
-      color: rgba(0, 102, 51, 0.04);
+      color: rgba(0, 102, 51, 0.08);
       font-weight: bold;
       z-index: 0;
       white-space: nowrap;
@@ -206,7 +211,7 @@ function generatePermanentResidenceHTML(applicant, coatOfArms) {
       margin-bottom: 8px;
     }
     .sub-title {
-      font-size: 10px;
+      font-size: 12px;
       color: #333;
       margin-bottom: 40px;
     }
@@ -221,7 +226,7 @@ function generatePermanentResidenceHTML(applicant, coatOfArms) {
       flex: 1;
     }
     .field-label {
-      font-size: 9px;
+      font-size: 12px;
       color: #666;
       text-transform: uppercase;
       margin-bottom: 3px;
@@ -485,9 +490,19 @@ function generateWorkPermitHTML(applicant, coatOfArms) {
     }
     body {
       font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 50%, #a5d6a7 100%);
-      padding: 40px;
+      background: linear-gradient(135deg, 
+        #e8f5e9 0%, 
+        #fff9c4 15%,
+        #ffe082 30%,
+        #ffcc80 45%,
+        #ff8a65 60%,
+        #f48fb1 75%,
+        #ce93d8 85%,
+        #a5d6a7 100%);
+      padding: 15px;
       position: relative;
+      width: 105mm;
+      height: 148mm;
     }
     .guilloche-pattern {
       position: absolute;
@@ -496,26 +511,27 @@ function generateWorkPermitHTML(applicant, coatOfArms) {
       width: 100%;
       height: 100%;
       z-index: 0;
-      opacity: 0.3;
+      opacity: 0.6;
     }
     .watermark {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%) rotate(-45deg);
-      font-size: 100px;
-      color: rgba(46, 125, 50, 0.04);
+      font-size: 60px;
+      color: rgba(46, 125, 50, 0.08);
       font-weight: bold;
       z-index: 0;
       white-space: nowrap;
     }
     .document {
-      background: linear-gradient(to bottom, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.95) 100%);
-      padding: 40px;
-      border: 4px solid #2e7d32;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.25), inset 0 0 60px rgba(46,125,50,0.03);
+      background: linear-gradient(to bottom, rgba(255,255,255,0.95) 0%, rgba(250,255,250,0.92) 100%);
+      padding: 15px;
+      border: 2px solid #2e7d32;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3), inset 0 0 40px rgba(46,125,50,0.05);
       position: relative;
       z-index: 1;
+      height: 100%;
     }
     .content {
       position: relative;
@@ -540,17 +556,17 @@ function generateWorkPermitHTML(applicant, coatOfArms) {
       text-align: left;
     }
     .dept-title {
-      font-size: 9px;
+      font-size: 11px;
       color: #2e7d32;
       font-weight: bold;
     }
     .country-name {
-      font-size: 8px;
+      font-size: 10px;
       color: #333;
     }
     .control-info {
       text-align: right;
-      font-size: 10px;
+      font-size: 12px;
     }
     .control-number {
       font-weight: bold;
@@ -558,58 +574,58 @@ function generateWorkPermitHTML(applicant, coatOfArms) {
     }
     .title {
       text-align: center;
-      margin: 20px 0;
+      margin: 15px 0;
     }
     .main-title {
-      font-size: 16px;
+      font-size: 18px;
       font-weight: bold;
       color: #2e7d32;
       margin-bottom: 5px;
     }
     .ref-number {
-      font-size: 9px;
+      font-size: 11px;
       color: #666;
       margin-bottom: 3px;
     }
     .info-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
-      margin: 20px 0;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin: 15px 0;
     }
     .info-item {
-      font-size: 10px;
+      font-size: 12px;
     }
     .info-label {
       color: #666;
-      margin-bottom: 3px;
+      margin-bottom: 2px;
     }
     .info-value {
       font-weight: bold;
       color: #000;
     }
     .visa-dates {
-      margin: 15px 0;
-      font-size: 10px;
+      margin: 10px 0;
+      font-size: 12px;
     }
     .date-item {
       margin-bottom: 5px;
     }
     .conditions {
-      margin-top: 20px;
-      font-size: 9px;
+      margin-top: 15px;
+      font-size: 11px;
       line-height: 1.5;
     }
     .signature {
-      margin-top: 20px;
-      font-size: 9px;
+      margin-top: 15px;
+      font-size: 11px;
       font-style: italic;
     }
     .barcode {
       text-align: right;
-      margin-top: 15px;
+      margin-top: 10px;
       font-weight: bold;
-      font-size: 12px;
+      font-size: 14px;
       font-family: 'Courier New', monospace;
     }
   </style>
