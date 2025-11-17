@@ -475,7 +475,7 @@ function generateWorkPermitHTML(applicant, coatOfArms) {
   <meta charset="UTF-8">
   <style>
     @page {
-      size: A4 portrait;
+      size: A6 portrait;
       margin: 0;
     }
     * {
