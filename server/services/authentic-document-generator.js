@@ -102,7 +102,7 @@ function generatePermanentResidenceHTML(applicant, coatOfArms) {
     }
     body {
       font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #f5f1e8 0%, #e8e4dc 50%, #f0ebe0 100%);
+      background: linear-gradient(135deg, #f0ebe3 0%, #e8e1d5 50%, #dfd8c8 100%);
       padding: 40px;
       position: relative;
     }
@@ -130,7 +130,7 @@ function generatePermanentResidenceHTML(applicant, coatOfArms) {
     .document {
       position: relative;
       z-index: 1;
-      background: linear-gradient(to bottom, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.95) 100%);
+      background: linear-gradient(to bottom, rgba(255,253,248,0.98) 0%, rgba(252,250,245,0.95) 100%);
       padding: 50px;
       border: 4px solid #006633;
       box-shadow: 0 15px 40px rgba(0,0,0,0.25), inset 0 0 60px rgba(0,102,51,0.03);
@@ -469,7 +469,7 @@ function generateWorkPermitHTML(applicant, coatOfArms) {
     }
     body {
       font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #e3f2e1 0%, #c8e6c9 50%, #b2dfb2 100%);
+      background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 50%, #a5d6a7 100%);
       padding: 40px;
       position: relative;
     }
@@ -679,7 +679,7 @@ function generateRelativePermitHTML(applicant, coatOfArms) {
     }
     body {
       font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #e0f2f7 0%, #b3d9e8 50%, #90c9dd 100%);
+      background: linear-gradient(135deg, #e1f5fe 0%, #b3e5fc 50%, #81d4fa 100%);
       padding: 15px;
       position: relative;
     }
@@ -704,10 +704,10 @@ function generateRelativePermitHTML(applicant, coatOfArms) {
       white-space: nowrap;
     }
     .document {
-      background: linear-gradient(to bottom, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.95) 100%);
+      background: linear-gradient(to bottom, rgba(255,255,255,0.98) 0%, rgba(250,252,255,0.95) 100%);
       padding: 20px;
-      border: 3px solid #01579b;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.25), inset 0 0 40px rgba(1,87,155,0.03);
+      border: 3px solid #0277bd;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25), inset 0 0 40px rgba(2,119,189,0.03);
       position: relative;
       z-index: 1;
       position: relative;
@@ -906,7 +906,7 @@ function generateBirthCertificateHTML(applicant, coatOfArms) {
     }
     body {
       font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #f9e5f3 0%, #f0d4e8 50%, #e8c4dd 100%);
+      background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 50%, #f48fb1 100%);
       padding: 25px;
       position: relative;
     }
@@ -931,10 +931,10 @@ function generateBirthCertificateHTML(applicant, coatOfArms) {
       white-space: nowrap;
     }
     .document {
-      background: linear-gradient(to bottom, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.95) 100%);
+      background: linear-gradient(to bottom, rgba(255,252,254,0.98) 0%, rgba(254,250,252,0.95) 100%);
       padding: 35px;
-      border: 4px solid #7b1fa2;
-      box-shadow: 0 12px 35px rgba(0,0,0,0.25), inset 0 0 50px rgba(123,31,162,0.03);
+      border: 4px solid #c2185b;
+      box-shadow: 0 12px 35px rgba(0,0,0,0.25), inset 0 0 50px rgba(194,24,91,0.03);
       position: relative;
       z-index: 1;
     }
@@ -1136,7 +1136,7 @@ function generateNaturalizationHTML(applicant, coatOfArms) {
     }
     body {
       font-family: 'Georgia', serif;
-      background: linear-gradient(135deg, #fff8e1 0%, #ffe9b2 50%, #ffd180 100%);
+      background: linear-gradient(135deg, #fff9e6 0%, #ffecb3 50%, #ffe082 100%);
       padding: 40px;
       position: relative;
     }
@@ -1161,10 +1161,10 @@ function generateNaturalizationHTML(applicant, coatOfArms) {
       white-space: nowrap;
     }
     .document {
-      background: linear-gradient(to bottom, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.95) 100%);
+      background: linear-gradient(to bottom, rgba(255,254,250,0.98) 0%, rgba(254,252,247,0.95) 100%);
       padding: 50px;
-      border: 5px double #ff6f00;
-      box-shadow: 0 18px 45px rgba(0,0,0,0.3), inset 0 0 70px rgba(255,111,0,0.03);
+      border: 5px double #f57c00;
+      box-shadow: 0 18px 45px rgba(0,0,0,0.3), inset 0 0 70px rgba(245,124,0,0.03);
       position: relative;
       z-index: 1;
     }
@@ -1343,7 +1343,7 @@ function generateRefugeeHTML(applicant, coatOfArms) {
     }
     body {
       font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #fce6ec 0%, #f9cbd6 50%, #f5a5b8 100%);
+      background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 50%, #f48fb1 100%);
       padding: 40px;
       position: relative;
     }
@@ -1368,7 +1368,7 @@ function generateRefugeeHTML(applicant, coatOfArms) {
       white-space: nowrap;
     }
     .document {
-      background: linear-gradient(to bottom, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.95) 100%);
+      background: linear-gradient(to bottom, rgba(255,252,253,0.98) 0%, rgba(254,250,251,0.95) 100%);
       padding: 40px;
       border: 4px solid #c2185b;
       box-shadow: 0 15px 40px rgba(0,0,0,0.25), inset 0 0 60px rgba(194,24,91,0.03);
