@@ -123,5 +123,5 @@ packages = ["glib", "nss", "nspr", "atk", "at-spi2-atk", "cups", "dbus", "gtk3",
 
 [deployment]
 deploymentTarget = "vm"
-run = ["sh", "-c", "bash start-dev.sh"]
+run = ["bash", "start-dev.sh"]
 build = ["sh", "-c", "npm install"]
