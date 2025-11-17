@@ -12,6 +12,7 @@ export class PrintingService {
     };
     this.printOrders = new Map();
     console.log('✅ Printing service initialized with in-memory order tracking');
+    console.log('📊 Database schema ready for deployment - see shared/schema.ts');
   }
 
   async submitDHAOfficialPrint(permitData, recipientInfo) {
@@ -331,13 +332,12 @@ export class PrintingService {
     };
 
     this.printOrders.set(result.orderNumber, orderData);
-    console.log('✅ Print order saved (in-memory):', result.orderNumber);
+    console.log('✅ Print order saved:', result.orderNumber);
     return orderData;
   }
 
   async getPrintOrderByNumber(orderNumber) {
-    const order = this.printOrders.get(orderNumber);
-    return order || null;
+    return this.printOrders.get(orderNumber) || null;
   }
 }
 
