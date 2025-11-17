@@ -13,6 +13,7 @@ import { config, validateConfig, logConfigStatus } from './config/secrets.js';
 import { getAllPermits, findPermitByNumber, getPermitCount } from './services/permit-service.js';
 import permitsRouter from './routes/permits.js';
 import applicantsRouter from './routes/applicants.js';
+import documentsRouter from './routes/documents.js';
 import { INLINE_HTML } from './inline-html.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -211,6 +212,9 @@ app.use('/api/permits', permitsRouter);
 
 // Use applicants router for document management
 app.use('/api/applicants', applicantsRouter);
+
+// Use documents router for PDF generation, preview, and download
+app.use('/api/documents', documentsRouter);
 
 // Health check endpoint - PRODUCTION LIVE
 app.get('/api/health', async (req, res) => {
