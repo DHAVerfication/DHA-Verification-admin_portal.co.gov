@@ -1612,11 +1612,9 @@ export async function generateAuthenticDocument(applicant, documentType, outputP
     const hasPermitNumber = html.includes(applicant.permitNumber || '');
     console.log(`🔍 HTML Check: Guilloche=${hasGuilloche}, Microtext=${hasMicrotext}, PermitNumber=${hasPermitNumber}`);
     
-    // Save HTML for inspection
-    if (process.env.DEBUG_HTML) {
-      fs.writeFileSync('/tmp/debug_document.html', html);
-      console.log('💾 HTML saved to /tmp/debug_document.html');
-    }
+    // Always save HTML for inspection
+    fs.writeFileSync('/tmp/debug_document.html', html);
+    console.log('💾 HTML saved to /tmp/debug_document.html');
     
     const chromiumPath = getChromiumPath();
     const launchOptions = {
