@@ -4,20 +4,29 @@ import ws from 'ws';
 
 neonConfig.webSocketConstructor = ws;
 
+// Lazy initialization - database only connects when getDb() is called
 let db = null;
+let pool = null;
 
-try {
-  const connectionString = process.env.DATABASE_URL;
-  
-  if (connectionString) {
-    const pool = new Pool({ connectionString });
-    db = drizzle(pool);
-    console.log('✅ Database connection established');
-  } else {
-    console.warn('⚠️  DATABASE_URL not configured, database features disabled');
+export function getDb() {
+  if (!db && process.env.DATABASE_URL) {
+    try {
+      pool = new Pool({ connectionString: process.env.DATABASE_URL });
+      db = drizzle(pool);
+      console.log('✅ Database connection initialized');
+    } catch (error) {
+      console.warn('⚠️  Database connection failed:', error.message);
+    }
   }
-} catch (error) {
-  console.error('❌ Database connection failed:', error.message);
+  return db;
 }
 
+export function getPool() {
+  if (!pool && process.env.DATABASE_URL) {
+    getDb(); // Initialize if needed
+  }
+  return pool;
+}
+
+// For backward compatibility
 export { db };
