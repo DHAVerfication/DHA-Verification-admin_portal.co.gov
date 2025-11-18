@@ -698,14 +698,8 @@
         }
         
         function showGWPBooking(appId) {
-            const bookingDiv = document.getElementById(`gwp-booking-${appId}`);
-            if (bookingDiv) {
-                if (bookingDiv.style.display === 'none') {
-                    bookingDiv.style.display = 'block';
-                } else {
-                    bookingDiv.style.display = 'none';
-                }
-            }
+            // Navigate to the official GWP booking page
+            window.location.href = `/gwp-booking?id=${appId}`;
         }
 
         function filterByType(type) {

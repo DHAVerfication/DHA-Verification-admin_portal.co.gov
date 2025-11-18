@@ -202,6 +202,12 @@ app.get('/all-applicants', (req, res) => {
   serveFile(res, 'official-all-applicants.html', ['/opt/render/project/attached_assets/official-all-applicants.html']);
 });
 
+// GWP Booking Details route
+app.get('/gwp-booking', (req, res) => {
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  serveFile(res, 'official-gwp-booking.html', ['/opt/render/project/attached_assets/official-gwp-booking.html']);
+});
+
 // GWP Hard Copy Printing routes (with alternatives)
 app.get('/gwp-printing', (req, res) => {
   res.setHeader('Content-Type', 'text/html; charset=utf-8');

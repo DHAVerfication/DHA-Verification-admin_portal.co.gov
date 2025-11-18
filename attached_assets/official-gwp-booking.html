@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GWP Hard Copy Booking - Department of Home Affairs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --dha-green: #007a3d;
+            --dha-dark-green: #006b3f;
+            --dha-dark: #333333;
+            --dha-gold: #ffb81c;
+            --dha-gold-dark: #ffd700;
+            --dha-light-gray: #f5f5f5;
+            --dha-border: #e0e0e0;
+            --dha-white: #ffffff;
+            --dha-charcoal: #1a1a1a;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: var(--dha-light-gray);
+            color: var(--dha-dark);
+            line-height: 1.6;
+        }
+
+        /* SOUTH AFRICAN FLAG STRIP */
+        .flag-strip {
+            display: flex;
+            height: 12px;
+            width: 100%;
+        }
+
+        .flag-strip div {
+            flex: 1;
+        }
+
+        .flag-black { background: #000000; }
+        .flag-gold { background: #FFD700; }
+        .flag-white { background: #ffffff; }
+        .flag-green { background: #007a3d; }
+        .flag-blue { background: #0066CC; }
+        .flag-orange { background: #FF6600; }
+
+        /* OFFICIAL HEADER */
+        header {
+            background: var(--dha-white);
+            border-bottom: 4px solid var(--dha-gold);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .coat-of-arms {
+            width: 60px;
+            height: 60px;
+            background: url('/public/coat-of-arms-official.png') center/contain no-repeat;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+        }
+
+        .header-title h1 {
+            color: var(--dha-green);
+            font-size: 22px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .header-title p {
+            color: #666;
+            font-size: 11px;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        .header-right {
+            text-align: right;
+        }
+
+        .back-button {
+            display: inline-block;
+            background: var(--dha-green);
+            color: var(--dha-white);
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid var(--dha-green);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .back-button:hover {
+            background: transparent;
+            color: var(--dha-green);
+        }
+
+        /* MAIN CONTAINER */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 30px;
+        }
+
+        /* OFFICIAL NOTICE BADGE */
+        .official-badge {
+            background: linear-gradient(135deg, var(--dha-green), var(--dha-dark-green));
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-align: center;
+            margin: 0 auto 30px auto;
+            max-width: 400px;
+            box-shadow: 0 4px 12px rgba(0, 122, 61, 0.3);
+            border: 3px solid var(--dha-gold);
+        }
+
+        .official-badge h2 {
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .official-badge h2::before {
+            content: "✓";
+            background: var(--dha-gold);
+            color: var(--dha-green);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 18px;
+        }
+
+        /* PAGE TITLE */
+        .page-header {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-left: 6px solid var(--dha-green);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .page-header h1 {
+            color: var(--dha-green);
+            font-size: 28px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .page-header p {
+            color: #666;
+            font-size: 14px;
+            letter-spacing: 0.3px;
+        }
+
+        /* STATUS BANNER */
+        .status-banner {
+            background: linear-gradient(135deg, var(--dha-green), var(--dha-dark-green));
+            color: white;
+            padding: 25px 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0, 122, 61, 0.2);
+            border: 2px solid var(--dha-gold);
+        }
+
+        .status-banner h2 {
+            font-size: 16px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            opacity: 0.9;
+        }
+
+        .status-value {
+            font-size: 24px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .status-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--dha-gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dha-green);
+            font-size: 24px;
+            font-weight: 900;
+        }
+
+        /* BOOKING SUMMARY CARDS */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .summary-card {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            border-left: 6px solid var(--dha-green);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .summary-card:hover {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .summary-card h3 {
+            color: var(--dha-green);
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .summary-card h3::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            background: var(--dha-gold);
+            border-radius: 50%;
+        }
+
+        .summary-card .value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--dha-dark);
+            letter-spacing: 0.5px;
+        }
+
+        .summary-card .sub-value {
+            font-size: 13px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        /* DETAILS TABLE */
+        .details-section {
+            background: white;
+            border-radius: 8px;
+            padding: 0;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            border: 1px solid var(--dha-border);
+        }
+
+        .details-header {
+            background: linear-gradient(to right, var(--dha-green), var(--dha-dark-green));
+            color: white;
+            padding: 20px 30px;
+            border-bottom: 3px solid var(--dha-gold);
+        }
+
+        .details-header h2 {
+            font-size: 18px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .details-body {
+            padding: 0;
+        }
+
+        .detail-row {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            border-bottom: 1px solid var(--dha-border);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            background: #f8f8f8;
+            padding: 18px 30px;
+            font-weight: 600;
+            color: var(--dha-green);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-right: 2px solid var(--dha-border);
+        }
+
+        .detail-value {
+            padding: 18px 30px;
+            color: var(--dha-dark);
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .detail-value.highlight {
+            font-weight: 700;
+            color: var(--dha-green);
+        }
+
+        /* PAYMENT CONFIRMATION */
+        .payment-confirmed {
+            background: linear-gradient(135deg, #059669, #047857);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+            border: 3px solid var(--dha-gold);
+        }
+
+        .payment-confirmed h3 {
+            font-size: 18px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .payment-confirmed h3::before {
+            content: "✓";
+            background: var(--dha-gold);
+            color: #059669;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 20px;
+        }
+
+        .payment-confirmed p {
+            font-size: 14px;
+            opacity: 0.95;
+        }
+
+        /* FOOTER NOTICE */
+        .footer-notice {
+            background: #fffbeb;
+            border: 2px solid var(--dha-gold);
+            border-radius: 8px;
+            padding: 25px 30px;
+            margin-top: 30px;
+        }
+
+        .footer-notice h3 {
+            color: var(--dha-green);
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            letter-spacing: 0.5px;
+        }
+
+        .footer-notice p {
+            color: #666;
+            font-size: 13px;
+            line-height: 1.8;
+            margin-bottom: 10px;
+        }
+
+        .footer-notice strong {
+            color: var(--dha-dark);
+        }
+
+        /* WATERMARK */
+        .watermark {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            opacity: 0.05;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .watermark img {
+            width: 300px;
+            height: 300px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .detail-row {
+                grid-template-columns: 1fr;
+            }
+
+            .detail-label {
+                border-right: none;
+                border-bottom: 1px solid var(--dha-border);
+            }
+
+            .page-header h1 {
+                font-size: 22px;
+            }
+
+            .status-value {
+                font-size: 18px;
+            }
+        }
+
+        /* PRINT STYLES */
+        @media print {
+            .back-button, .watermark {
+                display: none;
+            }
+            
+            .details-section {
+                box-shadow: none;
+                border: 2px solid #000;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- South African Flag Strip -->
+    <div class="flag-strip">
+        <div class="flag-black"></div>
+        <div class="flag-gold"></div>
+        <div class="flag-white"></div>
+        <div class="flag-green"></div>
+        <div class="flag-blue"></div>
+        <div class="flag-orange"></div>
+    </div>
+
+    <!-- Official Header -->
+    <header>
+        <div class="header-container">
+            <div class="header-left">
+                <div class="coat-of-arms"></div>
+                <div class="header-title">
+                    <h1>Department of Home Affairs</h1>
+                    <p>Republic of South Africa</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <a href="/all-applicants" class="back-button">← Back to Applicants</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Official Badge -->
+        <div class="official-badge">
+            <h2>Official DHA Notice</h2>
+        </div>
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>GWP Hard Copy Booking</h1>
+            <p>Government Warehouse & Printing Services - Official Document Order</p>
+        </div>
+
+        <!-- Status Banner -->
+        <div class="status-banner">
+            <h2>Booking Status</h2>
+            <div class="status-value">
+                <div class="status-icon">⚙</div>
+                <span id="booking-status">SCHEDULED FOR PRINTING</span>
+            </div>
+        </div>
+
+        <!-- Summary Grid -->
+        <div class="summary-grid">
+            <div class="summary-card">
+                <h3>Order Number</h3>
+                <div class="value" id="order-number">GWP-2025-RB-001234</div>
+                <div class="sub-value">Government Printing Order</div>
+            </div>
+
+            <div class="summary-card">
+                <h3>Tracking Number</h3>
+                <div class="value" id="tracking-number">SAPO-RB-20251118-001</div>
+                <div class="sub-value">South African Post Office</div>
+            </div>
+
+            <div class="summary-card">
+                <h3>Permit Number</h3>
+                <div class="value" id="permit-number">PR/PTA/2025/10/13459</div>
+                <div class="sub-value">Permanent Residence Permit</div>
+            </div>
+        </div>
+
+        <!-- Payment Confirmation -->
+        <div class="payment-confirmed">
+            <h3>Payment Confirmed</h3>
+            <p>Express Delivery (2-4 working days) - <strong id="cost">R1570</strong> | Ref: <strong id="payment-ref">BT-20251115-001</strong></p>
+        </div>
+
+        <!-- Applicant Details -->
+        <div class="details-section">
+            <div class="details-header">
+                <h2>Applicant Information</h2>
+            </div>
+            <div class="details-body">
+                <div class="detail-row">
+                    <div class="detail-label">Full Name</div>
+                    <div class="detail-value highlight" id="applicant-name">Muhammad Mohsin</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Applicant ID</div>
+                    <div class="detail-value" id="applicant-id">1</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Permit Number</div>
+                    <div class="detail-value highlight" id="permit-number-detail">PR/PTA/2025/10/13459</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Collection Details -->
+        <div class="details-section">
+            <div class="details-header">
+                <h2>Collection Details</h2>
+            </div>
+            <div class="details-body">
+                <div class="detail-row">
+                    <div class="detail-label">Collection Method</div>
+                    <div class="detail-value highlight" id="collection-method">Post Office</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Collection Location</div>
+                    <div class="detail-value" id="collection-location">Randburg Post Office</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Address</div>
+                    <div class="detail-value highlight" id="address">booked from home affairs</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Post Office Code</div>
+                    <div class="detail-value" id="post-office-code">Randburg</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Contact Number</div>
+                    <div class="detail-value" id="phone-number">0797953354</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="details-section">
+            <div class="details-header">
+                <h2>Processing Timeline</h2>
+            </div>
+            <div class="details-body">
+                <div class="detail-row">
+                    <div class="detail-label">Booking Date</div>
+                    <div class="detail-value" id="booking-date">2025-11-15</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Ready for Collection</div>
+                    <div class="detail-value highlight" id="ready-date">2025-11-18</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Collection Expires</div>
+                    <div class="detail-value" id="expiry-date">2025-12-18</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Delivery Speed</div>
+                    <div class="detail-value" id="delivery-speed">Express (2-4 working days)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Details -->
+        <div class="details-section">
+            <div class="details-header">
+                <h2>Payment Information</h2>
+            </div>
+            <div class="details-body">
+                <div class="detail-row">
+                    <div class="detail-label">Payment Status</div>
+                    <div class="detail-value highlight" id="payment-status">PAID ✓</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Payment Method</div>
+                    <div class="detail-value" id="payment-method">Bank Transfer</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Payment Reference</div>
+                    <div class="detail-value" id="payment-reference">BT-20251115-001</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Total Amount</div>
+                    <div class="detail-value highlight" id="total-amount">R1570</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Notice -->
+        <div class="footer-notice">
+            <h3>Important Information</h3>
+            <p><strong>POPIA Notice:</strong> This information is protected under the Protection of Personal Information Act (POPIA). Your personal information is processed securely by the Department of Home Affairs.</p>
+            <p><strong>Collection Instructions:</strong> Please bring your identity document and this booking reference when collecting your hard copy permit. Collection must be done within 30 days of the ready date.</p>
+            <p><strong>Enquiries:</strong> For any enquiries, please contact the DHA Contact Centre at 0800 60 11 90 or visit your nearest Home Affairs office.</p>
+            <p><strong>Address Information:</strong> This document was <span id="address-info" style="font-weight: 700; color: var(--dha-green);">booked from home affairs</span> for secure processing and delivery.</p>
+        </div>
+    </div>
+
+    <!-- Watermark -->
+    <div class="watermark">
+        <img src="/public/coat-of-arms-official.png" alt="DHA Watermark">
+    </div>
+
+    <script>
+        // Load booking data from URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const applicantId = urlParams.get('id');
+
+        if (applicantId) {
+            fetch(`/api/printing/gwp-booking/${applicantId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.booking) {
+                        const booking = data.booking;
+                        
+                        // Update all fields
+                        document.getElementById('booking-status').textContent = booking.status.replace(/_/g, ' ');
+                        document.getElementById('order-number').textContent = booking.orderNumber;
+                        document.getElementById('tracking-number').textContent = booking.trackingNumber;
+                        document.getElementById('permit-number').textContent = booking.permitNumber;
+                        document.getElementById('permit-number-detail').textContent = booking.permitNumber;
+                        document.getElementById('cost').textContent = booking.cost;
+                        document.getElementById('payment-ref').textContent = booking.paymentRef;
+                        
+                        document.getElementById('applicant-name').textContent = booking.name;
+                        document.getElementById('applicant-id').textContent = booking.applicantId;
+                        
+                        document.getElementById('collection-method').textContent = booking.collectionMethod;
+                        document.getElementById('collection-location').textContent = booking.collectionLocation;
+                        document.getElementById('address').textContent = booking.address;
+                        document.getElementById('address-info').textContent = booking.address;
+                        document.getElementById('post-office-code').textContent = booking.postOfficeCode;
+                        document.getElementById('phone-number').textContent = booking.phoneNumber;
+                        
+                        document.getElementById('booking-date').textContent = booking.bookingDate;
+                        document.getElementById('ready-date').textContent = booking.readyDate;
+                        document.getElementById('expiry-date').textContent = booking.expiryDate;
+                        document.getElementById('delivery-speed').textContent = booking.deliverySpeed;
+                        
+                        document.getElementById('payment-status').textContent = booking.paid ? 'PAID ✓' : 'PENDING';
+                        document.getElementById('payment-method').textContent = booking.paymentMethod;
+                        document.getElementById('payment-reference').textContent = booking.paymentRef;
+                        document.getElementById('total-amount').textContent = booking.cost;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading booking:', error);
+                });
+        }
+    </script>
+</body>
+</html>
