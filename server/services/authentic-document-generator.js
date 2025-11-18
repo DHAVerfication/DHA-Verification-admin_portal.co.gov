@@ -1647,7 +1647,11 @@ export async function generateAuthenticDocument(applicant, documentType, outputP
     
     console.log(`✅ Generated ${documentType} for ${applicant.name || applicant.surname}`);
     
-    return outputPath ? outputPath : pdfBuffer;
+    if (outputPath) {
+      return outputPath;
+    } else {
+      return Buffer.isBuffer(pdfBuffer) ? pdfBuffer : Buffer.from(pdfBuffer);
+    }
     
   } catch (error) {
     console.error(`❌ Error generating ${documentType} for ${applicant.name}:`, error);
