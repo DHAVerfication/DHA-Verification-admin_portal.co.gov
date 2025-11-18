@@ -1,6 +1,6 @@
 import express from 'express';
 import { getAllPermits } from '../services/permit-service.js';
-import { generatePermitPDF } from '../services/document-generator.js';
+import { generateAuthenticDocument } from '../services/authentic-document-generator.js';
 import QRCode from 'qrcode';
 import JSZip from 'jszip';
 
@@ -95,7 +95,7 @@ router.get('/:id/pdf', async (req, res) => {
       });
     }
 
-    const pdfBuffer = await generatePermitPDF(permit);
+    const pdfBuffer = await generateAuthenticDocument(permit, permit.type);
     
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename="${permit.id}_${permit.type || 'document'}.pdf"`);
@@ -151,7 +151,7 @@ router.post('/download-all', async (req, res) => {
 
     for (const permit of result.permits) {
       try {
-        const pdfBuffer = await generatePermitPDF(permit);
+        const pdfBuffer = await generateAuthenticDocument(permit, permit.type);
         const fileName = `${permit.id}_${permit.type || 'document'}.pdf`;
         zip.file(fileName, pdfBuffer);
       } catch (error) {
