@@ -37,22 +37,71 @@ function getCoatOfArmsBase64() {
   return null;
 }
 
+function getSignatureDGBase64() {
+  try {
+    const signaturePath = path.join(ASSETS_DIR, 'security-overlays', 'signature-dg.svg');
+    if (fs.existsSync(signaturePath)) {
+      const svgContent = fs.readFileSync(signaturePath, 'utf-8');
+      return `data:image/svg+xml;base64,${Buffer.from(svgContent).toString('base64')}`;
+    }
+  } catch (error) {
+    console.error('Error loading signature:', error);
+  }
+  return null;
+}
+
+function getSignatureOfficerBase64() {
+  try {
+    const signaturePath = path.join(ASSETS_DIR, 'security-overlays', 'signature-officer.svg');
+    if (fs.existsSync(signaturePath)) {
+      const svgContent = fs.readFileSync(signaturePath, 'utf-8');
+      return `data:image/svg+xml;base64,${Buffer.from(svgContent).toString('base64')}`;
+    }
+  } catch (error) {
+    console.error('Error loading officer signature:', error);
+  }
+  return null;
+}
+
+function getStampDHABase64() {
+  try {
+    const stampPath = path.join(ASSETS_DIR, 'security-overlays', 'stamp-dha-pretoria.svg');
+    if (fs.existsSync(stampPath)) {
+      const svgContent = fs.readFileSync(stampPath, 'utf-8');
+      return `data:image/svg+xml;base64,${Buffer.from(svgContent).toString('base64')}`;
+    }
+  } catch (error) {
+    console.error('Error loading stamp:', error);
+  }
+  return null;
+}
+
 async function generateDocumentHTML(applicant, documentType) {
   const coatOfArms = getCoatOfArmsBase64();
+  const signatureDG = getSignatureDGBase64();
+  const signatureOfficer = getSignatureOfficerBase64();
+  const stampDHA = getStampDHABase64();
+  
+  const assets = {
+    coatOfArms,
+    signatureDG,
+    signatureOfficer,
+    stampDHA
+  };
   
   switch (documentType) {
     case 'Permanent Residence':
-      return generatePermanentResidenceHTML(applicant, coatOfArms);
+      return generatePermanentResidenceHTML(applicant, assets);
     case 'General Work Permit':
-      return generateWorkPermitHTML(applicant, coatOfArms);
+      return generateWorkPermitHTML(applicant, assets);
     case "Relative's Permit":
-      return generateRelativePermitHTML(applicant, coatOfArms);
+      return generateRelativePermitHTML(applicant, assets);
     case 'Birth Certificate':
-      return generateBirthCertificateHTML(applicant, coatOfArms);
+      return generateBirthCertificateHTML(applicant, assets);
     case 'Naturalization Certificate':
-      return generateNaturalizationHTML(applicant, coatOfArms);
+      return generateNaturalizationHTML(applicant, assets);
     case 'Refugee Status (Section 24)':
-      return generateRefugeeHTML(applicant, coatOfArms);
+      return generateRefugeeHTML(applicant, assets);
     default:
       throw new Error(`Unsupported document type: ${documentType}`);
   }
@@ -103,7 +152,7 @@ function generateGuillocheSVG() {
   `;
 }
 
-function generatePermanentResidenceHTML(applicant, coatOfArms) {
+function generatePermanentResidenceHTML(applicant, assets) {
   const qrData = `VERIFY:${applicant.permitNumber}|${applicant.passport}|DHA`;
   
   return `
@@ -342,7 +391,7 @@ function generatePermanentResidenceHTML(applicant, coatOfArms) {
   <div class="document">
     <div class="header">
       <div class="logo-section">
-        ${coatOfArms ? `<img src="${coatOfArms}" alt="Coat of Arms" class="coat-of-arms">` : ''}
+        ${assets.coatOfArms ? `<img src="${assets.coatOfArms}" alt="Coat of Arms" class="coat-of-arms">` : ''}
         <div class="dept-info">
           <div class="dept-title">home affairs</div>
           <div class="dept-name">Department:<br>Home Affairs</div>
@@ -425,20 +474,12 @@ function generatePermanentResidenceHTML(applicant, coatOfArms) {
         <div class="field-label">Date of issue</div>
         <div class="field-value">${applicant.issueDate || ''}</div>
         <div class="signature-line">
-          <div class="signature-text">Makhode</div>
+          ${assets.signatureDG ? `<img src="${assets.signatureDG}" alt="Signature" style="width: 180px; height: auto; margin: 10px 0;">` : '<div class="signature-text">Makhode</div>'}
         </div>
         <div class="signature-label">Makhode LT<br>Surname and Initials</div>
       </div>
       <div class="signature-block" style="max-width: 200px;">
-        <div class="office-stamp">
-          Office stamp<br>
-          DEPARTMENT OF HOME AFFAIRS<br>
-          <strong>PRIVATE BAG X114</strong><br>
-          <br>
-          <strong>PRETORIA 0001</strong><br>
-          <br>
-          <strong>07</strong>
-        </div>
+        ${assets.stampDHA ? `<img src="${assets.stampDHA}" alt="Office Stamp" style="width: 200px; height: 120px;">` : `<div class="office-stamp">Office stamp<br>DEPARTMENT OF HOME AFFAIRS<br><strong>PRIVATE BAG X114</strong><br><br><strong>PRETORIA 0001</strong><br><br><strong>07</strong></div>`}
       </div>
     </div>
 
@@ -472,7 +513,7 @@ function generatePermanentResidenceHTML(applicant, coatOfArms) {
   `;
 }
 
-function generateWorkPermitHTML(applicant, coatOfArms) {
+function generateWorkPermitHTML(applicant, assets) {
   return `
 <!DOCTYPE html>
 <html>
@@ -637,7 +678,7 @@ function generateWorkPermitHTML(applicant, coatOfArms) {
     <div class="content">
       <div class="header">
         <div class="logo-section">
-          ${coatOfArms ? `<img src="${coatOfArms}" alt="Coat of Arms" class="coat-of-arms">` : ''}
+          ${assets.coatOfArms ? `<img src="${assets.coatOfArms}" alt="Coat of Arms" class="coat-of-arms">` : ''}
           <div class="dept-info">
             <div class="dept-title">home affairs</div>
             <div class="dept-title">Department:<br>Home Affairs</div>
@@ -693,7 +734,7 @@ function generateWorkPermitHTML(applicant, coatOfArms) {
   `;
 }
 
-function generateRelativePermitHTML(applicant, coatOfArms) {
+function generateRelativePermitHTML(applicant, assets) {
   return `
 <!DOCTYPE html>
 <html>
@@ -848,7 +889,7 @@ function generateRelativePermitHTML(applicant, coatOfArms) {
     <div class="content">
       <div class="header">
         <div class="logo-section">
-          ${coatOfArms ? `<img src="${coatOfArms}" alt="Coat of Arms" class="coat-of-arms">` : ''}
+          ${assets.coatOfArms ? `<img src="${assets.coatOfArms}" alt="Coat of Arms" class="coat-of-arms">` : ''}
           <div class="dept-info">
             <div class="dept-title">home affairs</div>
             <div class="dept-title">Department:<br>Home Affairs</div>
@@ -920,7 +961,7 @@ function generateRelativePermitHTML(applicant, coatOfArms) {
   `;
 }
 
-function generateBirthCertificateHTML(applicant, coatOfArms) {
+function generateBirthCertificateHTML(applicant, assets) {
   return `
 <!DOCTYPE html>
 <html>
@@ -1069,7 +1110,7 @@ function generateBirthCertificateHTML(applicant, coatOfArms) {
   <div class="document">
     <div class="header">
       <div class="logo-section">
-        ${coatOfArms ? `<img src="${coatOfArms}" alt="Coat of Arms" class="coat-of-arms">` : ''}
+        ${assets.coatOfArms ? `<img src="${assets.coatOfArms}" alt="Coat of Arms" class="coat-of-arms">` : ''}
         <div class="dept-info">
           <div class="dept-title">home affairs</div>
           <div class="dept-title">Department:<br>Home Affairs</div>
@@ -1150,7 +1191,7 @@ function generateBirthCertificateHTML(applicant, coatOfArms) {
   `;
 }
 
-function generateNaturalizationHTML(applicant, coatOfArms) {
+function generateNaturalizationHTML(applicant, assets) {
   return `
 <!DOCTYPE html>
 <html>
@@ -1357,7 +1398,7 @@ function generateNaturalizationHTML(applicant, coatOfArms) {
   `;
 }
 
-function generateRefugeeHTML(applicant, coatOfArms) {
+function generateRefugeeHTML(applicant, assets) {
   return `
 <!DOCTYPE html>
 <html>
@@ -1506,7 +1547,7 @@ function generateRefugeeHTML(applicant, coatOfArms) {
   <div class="document">
     <div class="header">
       <div class="left-section">
-        ${coatOfArms ? `<img src="${coatOfArms}" alt="Coat of Arms" class="coat-of-arms">` : ''}
+        ${assets.coatOfArms ? `<img src="${assets.coatOfArms}" alt="Coat of Arms" class="coat-of-arms">` : ''}
         <div class="dept-info">
           <div class="dept-title">REPUBLIC OF SOUTH AFRICA</div>
           <div class="dept-title">DEPARTMENT HOME AFFAIRS</div>
