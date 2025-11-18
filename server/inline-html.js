@@ -666,6 +666,24 @@ export const INLINE_HTML = {
                     option.textContent = \`\${applicant.name} - \${applicant.type} (\${applicant.permitNumber})\`;
                     selector.appendChild(option);
                 });
+
+                // Pre-select applicant from URL parameters
+                const urlParams = new URLSearchParams(window.location.search);
+                const permitNumber = urlParams.get('permitNumber');
+                
+                if (permitNumber) {
+                    const applicant = applicants.find(a => 
+                        a.permitNumber === permitNumber || 
+                        a.referenceNumber === permitNumber
+                    );
+                    
+                    if (applicant) {
+                        selector.value = applicant.id;
+                        selectedApplicant = applicant;
+                        displayEvisa(applicant);
+                        document.getElementById('evisaContent').style.display = 'block';
+                    }
+                }
             } catch (error) {
                 console.error('Failed to load applicants:', error);
             }
@@ -945,6 +963,15 @@ export const INLINE_HTML = {
                 </div>
 
                 <div class="form-group">
+                    <label>Delivery Speed *</label>
+                    <select id="deliverySpeed" required>
+                        <option value="standard">Standard (5-7 working days) - R50</option>
+                        <option value="express" selected>Express (2-4 working days) - R150</option>
+                        <option value="overnight">Overnight (1 working day) - R300</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
                     <label>Quantity</label>
                     <input type="number" id="quantity" value="1" min="1" max="5">
                 </div>
@@ -961,6 +988,31 @@ export const INLINE_HTML = {
     </div>
 
     <script>
+        // Pre-fill form from URL parameters
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            if (urlParams.has('permitNumber')) {
+                document.getElementById('permitNumber').value = urlParams.get('permitNumber');
+            }
+            if (urlParams.has('fullName')) {
+                document.getElementById('recipientName').value = urlParams.get('fullName');
+            }
+            if (urlParams.has('documentType')) {
+                const docType = urlParams.get('documentType').toLowerCase().replace(/ /g, '_');
+                const select = document.getElementById('documentType');
+                for (let option of select.options) {
+                    if (option.value === docType || option.text.toLowerCase().includes(docType.replace(/_/g, ' '))) {
+                        select.value = option.value;
+                        break;
+                    }
+                }
+            }
+            if (urlParams.has('deliverySpeed')) {
+                document.getElementById('deliverySpeed').value = urlParams.get('deliverySpeed');
+            }
+        });
+
         document.getElementById('gwpForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -978,6 +1030,7 @@ export const INLINE_HTML = {
                     postalCode: document.getElementById('postalCode').value,
                     phone: document.getElementById('phone').value
                 },
+                deliverySpeed: document.getElementById('deliverySpeed').value,
                 postOfficeCode: document.getElementById('postOfficeCode').value || null
             };
 
@@ -2208,6 +2261,15 @@ async function verifyWithDHA(permitNumber) {
                 </a>
                 <a href="/api/permits/${permit.id}/verify-document" class="btn btn-secondary" target="_blank">
                     🔍 View Full Details
+                </a>
+            </div>
+
+            <div class="action-buttons" style="margin-top: 15px;">
+                <a href="/e-visa?permitNumber=${encodeURIComponent(permit.permitNumber || permit.referenceNumber)}&fullName=${encodeURIComponent(permit.applicantFullName || permit.name || (permit.surname + ' ' + permit.forename))}&nationality=${encodeURIComponent(permit.nationality || 'South African')}&passportNumber=${encodeURIComponent(permit.passport || permit.passportNumber || '')}&permitType=${encodeURIComponent(permit.type)}" class="btn btn-primary">
+                    🛂 Generate E-Visa
+                </a>
+                <a href="/gwp-printing?permitNumber=${encodeURIComponent(permit.permitNumber || permit.referenceNumber)}&fullName=${encodeURIComponent(permit.applicantFullName || permit.name || (permit.surname + ' ' + permit.forename))}&documentType=${encodeURIComponent(permit.type)}&deliverySpeed=express&permitId=${permit.id}" class="btn btn-secondary">
+                    🖨️ GWP Express Print
                 </a>
             </div>
         </div>
