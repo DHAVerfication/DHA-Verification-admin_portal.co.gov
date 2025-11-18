@@ -29,18 +29,18 @@ export const INLINE_HTML = {
             width: 100%;
             height: 100%;
             background-image: 
-                repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(13, 71, 161, 0.03) 35px, rgba(13, 71, 161, 0.03) 70px),
-                repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(13, 71, 161, 0.03) 35px, rgba(13, 71, 161, 0.03) 70px);
+                repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(0, 135, 81, 0.02) 35px, rgba(0, 135, 81, 0.02) 70px),
+                repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(0, 135, 81, 0.02) 35px, rgba(0, 135, 81, 0.02) 70px);
             pointer-events: none;
             z-index: -1;
         }
 
         header {
-            background: linear-gradient(to right, #0d47a1 0%, #1565c0 50%, #0d47a1 100%);
-            color: white;
+            background: white;
+            color: #000;
             padding: 20px;
-            box-shadow: 0 4px 12px rgba(13, 71, 161, 0.3);
-            border-bottom: 4px solid #fdd835;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-bottom: 3px solid #008751;
         }
 
         .header-container {
@@ -71,11 +71,12 @@ export const INLINE_HTML = {
             font-size: 24px;
             font-weight: 700;
             margin-bottom: 5px;
+            color: #008751;
         }
 
         .header-text p {
             font-size: 12px;
-            opacity: 0.9;
+            color: #666;
         }
 
         .header-status {
@@ -109,12 +110,12 @@ export const INLINE_HTML = {
             border-radius: 8px;
             padding: 30px;
             margin-bottom: 30px;
-            box-shadow: 0 2px 8px rgba(13, 71, 161, 0.1);
-            border-left: 4px solid #0d47a1;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-left: 4px solid #008751;
         }
 
         .intro-section h2 {
-            color: #0d47a1;
+            color: #008751;
             margin-bottom: 15px;
             font-size: 20px;
         }
@@ -136,19 +137,19 @@ export const INLINE_HTML = {
             background: white;
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(13, 71, 161, 0.15);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             transition: all 0.3s ease;
-            border-top: 4px solid #0d47a1;
+            border-top: 4px solid #008751;
             cursor: pointer;
         }
 
         .document-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 8px 16px rgba(13, 71, 161, 0.25);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
         }
 
         .card-icon {
-            background: linear-gradient(135deg, #0d47a1 0%, #1565c0 100%);
+            background: linear-gradient(135deg, #008751 0%, #005f38 100%);
             color: white;
             font-size: 32px;
             padding: 20px;
@@ -160,7 +161,7 @@ export const INLINE_HTML = {
         }
 
         .card-content h3 {
-            color: #0d47a1;
+            color: #008751;
             margin-bottom: 10px;
             font-size: 16px;
         }
@@ -174,7 +175,7 @@ export const INLINE_HTML = {
 
         .card-button {
             display: inline-block;
-            background: #0d47a1;
+            background: #333;
             color: white;
             padding: 10px 20px;
             border-radius: 4px;
@@ -185,7 +186,7 @@ export const INLINE_HTML = {
         }
 
         .card-button:hover {
-            background: #1565c0;
+            background: #008751;
         }
 
         .security-badge {
@@ -201,7 +202,7 @@ export const INLINE_HTML = {
 
         .verify-button {
             background: #fdd835;
-            color: #0d47a1;
+            color: #000;
             padding: 12px 30px;
             border: none;
             border-radius: 6px;
@@ -219,7 +220,7 @@ export const INLINE_HTML = {
         }
 
         .verification-section {
-            background: linear-gradient(135deg, #0d47a1 0%, #1565c0 100%);
+            background: linear-gradient(135deg, #008751 0%, #005f38 100%);
             color: white;
             border-radius: 8px;
             padding: 30px;
@@ -243,12 +244,12 @@ export const INLINE_HTML = {
         }
 
         footer {
-            background: #0d47a1;
+            background: #333;
             color: white;
             text-align: center;
             padding: 20px;
             margin-top: 40px;
-            border-top: 4px solid #fdd835;
+            border-top: 3px solid #008751;
         }
 
         footer p {
@@ -371,6 +372,376 @@ export const INLINE_HTML = {
 </body>
 </html>`,
 
+  evisa: `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>South Africa E-visa for Visitors - DHA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f5f5;
+            color: #000;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: #FFF5E9;
+            padding: 20px;
+            border-bottom: 2px solid #008751;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .coat-of-arms {
+            width: 80px;
+            height: 80px;
+            font-size: 60px;
+        }
+        .header-text {
+            flex: 1;
+        }
+        .header-text h1 {
+            color: #008751;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0;
+        }
+        .header-text p {
+            color: #666;
+            font-size: 14px;
+            margin: 5px 0 0 0;
+        }
+        .content {
+            padding: 30px;
+            background: white;
+        }
+        .section-title {
+            color: #008751;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 20px 0 15px 0;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #008751;
+        }
+        .info-row {
+            display: flex;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+        .info-label {
+            color: #000;
+            font-weight: bold;
+            width: 180px;
+            flex-shrink: 0;
+        }
+        .info-value {
+            color: #333;
+            flex: 1;
+        }
+        .status-approved {
+            background: #d4edda;
+            color: #155724;
+            padding: 4px 12px;
+            border-radius: 4px;
+            display: inline-block;
+            font-weight: bold;
+        }
+        .checkmark {
+            color: #008751;
+            font-weight: bold;
+            margin-left: 5px;
+        }
+        .qr-section {
+            margin: 30px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
+        .qr-code {
+            width: 120px;
+            height: 120px;
+            border: 2px solid #000;
+            background: white;
+        }
+        .visa-notes {
+            flex: 1;
+            font-size: 12px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .footer {
+            background: #FFF5E9;
+            padding: 15px;
+            text-align: center;
+            font-size: 11px;
+            color: #000;
+            font-weight: bold;
+            border-top: 2px solid #008751;
+        }
+        .applicant-select {
+            margin: 20px 0;
+        }
+        select {
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%;
+            max-width: 400px;
+        }
+        .buttons {
+            margin: 20px 0;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: bold;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: #008751;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #006940;
+        }
+        .btn-secondary {
+            background: #333;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background: #000;
+        }
+        .photo-placeholder {
+            width: 120px;
+            height: 140px;
+            border: 2px solid #000;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="coat-of-arms">🇿🇦</div>
+            <div class="header-text">
+                <h1>South Africa E-visa for Visitors</h1>
+                <p>Department of Home Affairs - Republic of South Africa</p>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="applicant-select">
+                <label for="applicantSelector" style="font-weight: bold; display: block; margin-bottom: 8px;">Select Applicant:</label>
+                <select id="applicantSelector">
+                    <option value="">-- Choose an applicant --</option>
+                </select>
+            </div>
+
+            <div id="evisaContent" style="display: none;">
+                <div class="section-title">Applicant Details</div>
+                <div class="info-row">
+                    <div class="info-label">Applicant Name</div>
+                    <div class="info-value" id="applicantName">-</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Applicant Surname</div>
+                    <div class="info-value" id="applicantSurname">-</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Date of Birth</div>
+                    <div class="info-value" id="dateOfBirth">-</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Nationality</div>
+                    <div class="info-value" id="nationality">-</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Passport Number</div>
+                    <div class="info-value" id="passportNumber">-</div>
+                </div>
+
+                <div class="section-title">Visa Details</div>
+                <div class="info-row">
+                    <div class="info-label">Type of Visa</div>
+                    <div class="info-value" id="visaType">-</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Visa Number</div>
+                    <div class="info-value" id="visaNumber">-</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Date of Visa Application</div>
+                    <div class="info-value" id="applicationDate">-</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Visa Issue Date</div>
+                    <div class="info-value" id="issueDate">- <span class="checkmark">✓</span></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Place of Issue</div>
+                    <div class="info-value">Republic of South Africa <span class="checkmark">✓</span></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Valid Until</div>
+                    <div class="info-value" id="expiryDate">- <span class="checkmark">✓</span></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Expiry Date</div>
+                    <div class="info-value" id="expiryDate2">-</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Number of Entries</div>
+                    <div class="info-value"><span class="status-approved">SINGLE</span> <span class="checkmark">✓</span></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Category</div>
+                    <div class="info-value">Visitors <span class="checkmark">✓</span></div>
+                </div>
+
+                <div class="qr-section">
+                    <div class="qr-code" id="qrCodeContainer">
+                        <canvas id="qrCanvas"></canvas>
+                    </div>
+                    <div class="visa-notes">
+                        <p><strong>Your visa has been approved, subject to:</strong></p>
+                        <ol style="margin-left: 20px; margin-top: 8px;">
+                            <li>Not allowed to change status within South Africa</li>
+                            <li>Applicant complies with the requirements for visitor's visa</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="buttons">
+                    <button class="btn btn-primary" onclick="printEvisa()">🖨️ Print E-Visa</button>
+                    <button class="btn btn-secondary" onclick="downloadPDF()">📄 Download PDF</button>
+                    <button class="btn btn-secondary" onclick="window.location.href='/gwp-printing'">📦 Order Hard Copy (GWP)</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            ISSUED ON BEHALF OF THE DIRECTOR GENERAL OF THE DEPARTMENT OF HOME AFFAIRS
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script>
+        let applicants = [];
+        let selectedApplicant = null;
+
+        async function loadApplicants() {
+            try {
+                const response = await fetch('/api/permits');
+                const data = await response.json();
+                applicants = data.permits || [];
+                
+                const selector = document.getElementById('applicantSelector');
+                applicants.forEach(applicant => {
+                    const option = document.createElement('option');
+                    option.value = applicant.id;
+                    option.textContent = \`\${applicant.name} - \${applicant.type} (\${applicant.permitNumber})\`;
+                    selector.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Failed to load applicants:', error);
+            }
+        }
+
+        document.getElementById('applicantSelector').addEventListener('change', function() {
+            const applicantId = parseInt(this.value);
+            selectedApplicant = applicants.find(a => a.id === applicantId);
+            
+            if (selectedApplicant) {
+                displayEvisa(selectedApplicant);
+                document.getElementById('evisaContent').style.display = 'block';
+            } else {
+                document.getElementById('evisaContent').style.display = 'none';
+            }
+        });
+
+        function displayEvisa(applicant) {
+            document.getElementById('applicantName').textContent = applicant.forename || applicant.name;
+            document.getElementById('applicantSurname').textContent = applicant.surname || 'N/A';
+            document.getElementById('dateOfBirth').textContent = applicant.dateOfBirth || 'N/A';
+            document.getElementById('nationality').textContent = applicant.nationality || 'N/A';
+            document.getElementById('passportNumber').textContent = applicant.passport || 'N/A';
+            document.getElementById('visaType').textContent = applicant.type || 'Visitor Visa';
+            document.getElementById('visaNumber').textContent = applicant.referenceNumber || applicant.permitNumber;
+            document.getElementById('applicationDate').textContent = applicant.issueDate || 'N/A';
+            document.getElementById('issueDate').innerHTML = (applicant.issueDate || 'N/A') + ' <span class="checkmark">✓</span>';
+            document.getElementById('expiryDate').innerHTML = (applicant.expiryDate || 'N/A') + ' <span class="checkmark">✓</span>';
+            document.getElementById('expiryDate2').textContent = applicant.expiryDate || 'N/A';
+
+            generateQRCode(applicant);
+        }
+
+        function generateQRCode(applicant) {
+            const qrData = JSON.stringify({
+                type: 'DHA_EVISA',
+                permitNumber: applicant.permitNumber,
+                referenceNumber: applicant.referenceNumber,
+                name: applicant.name,
+                passport: applicant.passport,
+                nationality: applicant.nationality,
+                issueDate: applicant.issueDate,
+                expiryDate: applicant.expiryDate,
+                verification: 'https://dha.gov.za/verify/' + applicant.permitNumber
+            });
+
+            const canvas = document.getElementById('qrCanvas');
+            QRCode.toCanvas(canvas, qrData, {
+                width: 116,
+                margin: 1,
+                color: {
+                    dark: '#000000',
+                    light: '#FFFFFF'
+                }
+            }, function (error) {
+                if (error) console.error(error);
+            });
+        }
+
+        function printEvisa() {
+            window.print();
+        }
+
+        async function downloadPDF() {
+            if (!selectedApplicant) {
+                alert('Please select an applicant first');
+                return;
+            }
+            alert('Generating official PDF with security features...');
+        }
+
+        loadApplicants();
+    </script>
+</body>
+</html>`,
+
   gwpPrinting: `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -384,15 +755,16 @@ export const INLINE_HTML = {
             box-sizing: border-box;
         }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: Arial, Helvetica, sans-serif;
             background: #f5f5f5;
-            color: #333;
+            color: #000;
         }
         header {
-            background: linear-gradient(135deg, #008751 0%, #005f38 100%);
-            color: white;
+            background: white;
+            border-bottom: 3px solid #008751;
+            color: #000;
             padding: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         .header-content {
             max-width: 1200px;
@@ -401,9 +773,13 @@ export const INLINE_HTML = {
             align-items: center;
             gap: 20px;
         }
+        .coat-of-arms {
+            font-size: 50px;
+        }
         h1 {
             font-size: 24px;
             font-weight: 600;
+            color: #008751;
         }
         .container {
             max-width: 900px;
@@ -457,34 +833,35 @@ export const INLINE_HTML = {
             background: #006940;
         }
         .button-secondary {
-            background: #0d47a1;
+            background: #333;
             margin-left: 10px;
         }
         .button-secondary:hover {
-            background: #083175;
+            background: #000;
         }
         .info-box {
-            background: #e3f2fd;
-            border-left: 4px solid #0d47a1;
+            background: #f9f9f9;
+            border-left: 4px solid #008751;
             padding: 15px;
             margin-bottom: 20px;
             border-radius: 4px;
         }
         .success-box {
             background: #e8f5e9;
-            border-left: 4px solid #4caf50;
+            border-left: 4px solid #008751;
             padding: 15px;
             margin-top: 20px;
             border-radius: 4px;
             display: none;
         }
         .nav-link {
-            color: #0d47a1;
+            color: #333;
             text-decoration: none;
             margin-right: 20px;
         }
         .nav-link:hover {
             text-decoration: underline;
+            color: #008751;
         }
     </style>
 </head>
@@ -686,20 +1063,20 @@ export const INLINE_HTML = {
             padding-bottom: 10px;
         }
         .section h3 {
-            color: #0d47a1;
+            color: #333;
             margin-top: 20px;
             margin-bottom: 10px;
             font-size: 18px;
         }
         .feature-card {
             background: #f9f9f9;
-            border-left: 4px solid #0d47a1;
+            border-left: 4px solid #008751;
             padding: 15px;
             margin: 15px 0;
             border-radius: 4px;
         }
         .feature-card strong {
-            color: #0d47a1;
+            color: #008751;
         }
         .steps {
             counter-reset: step-counter;
@@ -748,7 +1125,7 @@ export const INLINE_HTML = {
         .nav-links a {
             display: inline-block;
             padding: 10px 20px;
-            background: #0d47a1;
+            background: #333;
             color: white;
             text-decoration: none;
             border-radius: 4px;
@@ -756,7 +1133,7 @@ export const INLINE_HTML = {
             margin-bottom: 10px;
         }
         .nav-links a:hover {
-            background: #083175;
+            background: #008751;
         }
         table {
             width: 100%;

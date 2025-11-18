@@ -164,7 +164,7 @@ app.get('/travel-document', (req, res) => {
 // E-Visa route
 app.get('/e-visa', (req, res) => {
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
-  serveFile(res, 'e-visa.html', ['/opt/render/project/attached_assets/e-visa.html']);
+  res.send(INLINE_HTML.evisa);
 });
 
 // Permit Profile route
