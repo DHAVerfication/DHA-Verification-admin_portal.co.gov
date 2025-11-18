@@ -53,7 +53,7 @@ router.post('/generate', async (req, res) => {
       evisaData: result.evisaData,
       html: result.html,
       qrCode: result.qrCode,
-      authorization: result.authorization
+      authData: result.authorization
     });
   } catch (error) {
     console.error('E-visa generation error:', error);

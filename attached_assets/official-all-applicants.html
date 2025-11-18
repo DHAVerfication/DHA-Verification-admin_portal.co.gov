@@ -650,13 +650,62 @@
                         
                         <div class="card-actions" style="margin-top: 10px;">
                             <button class="action-btn btn-evisa" onclick="window.location.href='/e-visa?permitNumber=${encodeURIComponent(app.permitNumber || app.referenceNumber)}&fullName=${encodeURIComponent(app.name)}&nationality=${encodeURIComponent(app.nationality || 'South African')}&passportNumber=${encodeURIComponent(app.passport || app.passportNumber || '')}&permitType=${encodeURIComponent(app.type)}'">🛂 Generate E-Visa</button>
-                            <button class="action-btn btn-gwp" onclick="window.location.href='/gwp-printing?permitNumber=${encodeURIComponent(app.permitNumber || app.referenceNumber)}&fullName=${encodeURIComponent(app.name)}&documentType=${encodeURIComponent(app.type)}&deliverySpeed=express&permitId=${app.id}'">🖨️ GWP Express Print</button>
+                            <button class="action-btn btn-gwp" onclick="showGWPBooking('${app.id}')">📦 View GWP Booking</button>
+                        </div>
+                        
+                        <div id="gwp-booking-${app.id}" style="display:none; margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #FF6600;">
+                            <div style="font-weight: 700; color: #FF6600; margin-bottom: 10px;">📦 GWP BOOKING CONFIRMED</div>
+                            <div class="booking-details" id="booking-details-${app.id}">Loading...</div>
                         </div>
                     </div>
                 </div>
             `).join('');
 
             document.getElementById('count').textContent = applicants.length;
+            
+            // Load GWP bookings for all applicants
+            applicants.forEach(app => loadGWPBooking(app.id));
+        }
+        
+        async function loadGWPBooking(appId) {
+            try {
+                const response = await fetch(`/api/printing/gwp-booking/${appId}`);
+                const data = await response.json();
+                
+                if (data.success && data.booking) {
+                    const booking = data.booking;
+                    const detailsDiv = document.getElementById(`booking-details-${appId}`);
+                    if (detailsDiv) {
+                        detailsDiv.innerHTML = `
+                            <div style="margin-bottom: 8px;"><strong>Order #:</strong> ${booking.orderNumber}</div>
+                            <div style="margin-bottom: 8px;"><strong>Tracking #:</strong> ${booking.trackingNumber}</div>
+                            <div style="margin-bottom: 8px;"><strong>Status:</strong> <span style="color: #28a745; font-weight: 700;">✓ ${booking.status.replace(/_/g, ' ')}</span></div>
+                            <div style="margin-bottom: 8px;"><strong>Collection Method:</strong> ${booking.collectionMethod}</div>
+                            <div style="margin-bottom: 8px;"><strong>Collection Location:</strong> ${booking.collectionLocation}</div>
+                            <div style="margin-bottom: 8px;"><strong>Address:</strong> ${booking.address}</div>
+                            <div style="margin-bottom: 8px;"><strong>Ready Date:</strong> ${booking.readyDate}</div>
+                            <div style="margin-bottom: 8px;"><strong>Expires:</strong> ${booking.expiryDate}</div>
+                            <div style="margin-bottom: 8px;"><strong>Cost:</strong> ${booking.cost} (${booking.paid ? '✓ PAID' : 'PENDING'})</div>
+                            <div style="margin-top: 12px; padding: 8px; background: #fff; border-radius: 4px; font-size: 11px;">
+                                <strong>Payment:</strong> ${booking.paymentMethod} - Ref: ${booking.paymentRef}
+                            </div>
+                        `;
+                    }
+                }
+            } catch (e) {
+                console.warn('GWP booking load failed for applicant', appId);
+            }
+        }
+        
+        function showGWPBooking(appId) {
+            const bookingDiv = document.getElementById(`gwp-booking-${appId}`);
+            if (bookingDiv) {
+                if (bookingDiv.style.display === 'none') {
+                    bookingDiv.style.display = 'block';
+                } else {
+                    bookingDiv.style.display = 'none';
+                }
+            }
         }
 
         function filterByType(type) {

@@ -68,3 +68,48 @@ router.get('/check-status/:orderNumber', async (req, res) => {
 });
 
 export default router;
+
+router.get('/gwp-booking/:applicantId', async (req, res) => {
+  try {
+    const { applicantId } = req.params;
+    const { getBookingByApplicantId } = await import('../services/gwp-bookings.js');
+    const booking = getBookingByApplicantId(applicantId);
+    
+    if (!booking) {
+      return res.status(404).json({
+        success: false,
+        error: 'No GWP booking found for this applicant'
+      });
+    }
+    
+    res.json({
+      success: true,
+      booking
+    });
+  } catch (error) {
+    console.error('GWP booking check error:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+router.get('/gwp-bookings/all', async (req, res) => {
+  try {
+    const { getAllBookings } = await import('../services/gwp-bookings.js');
+    const bookings = getAllBookings();
+    
+    res.json({
+      success: true,
+      count: bookings.length,
+      bookings
+    });
+  } catch (error) {
+    console.error('GWP bookings fetch error:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
