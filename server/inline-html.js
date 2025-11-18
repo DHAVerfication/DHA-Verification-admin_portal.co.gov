@@ -966,7 +966,7 @@ export const INLINE_HTML = {
                     <label>Delivery Speed *</label>
                     <select id="deliverySpeed" required>
                         <option value="standard">Standard (5-7 working days) - R50</option>
-                        <option value="express" selected>Express (2-4 working days) - R150</option>
+                        <option value="express" selected>Express (2-4 working days) - R1570</option>
                         <option value="overnight">Overnight (1 working day) - R300</option>
                     </select>
                 </div>

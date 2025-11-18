@@ -1625,8 +1625,7 @@ export async function generateAuthenticDocument(applicant, documentType, outputP
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: 'networkidle0' });
     
-    await page.pdf({
-      path: outputPath,
+    const pdfOptions = {
       format: documentType === 'Permanent Residence' || documentType === 'Birth Certificate' || documentType === 'Naturalization Certificate' || documentType === 'Refugee Status (Section 24)' ? 'A4' : 'A4',
       landscape: documentType === 'General Work Permit' || documentType === "Relative's Permit",
       printBackground: true,
@@ -1636,12 +1635,19 @@ export async function generateAuthenticDocument(applicant, documentType, outputP
         bottom: '0',
         left: '0'
       }
-    });
+    };
+    
+    if (outputPath) {
+      pdfOptions.path = outputPath;
+    }
+    
+    const pdfBuffer = await page.pdf(pdfOptions);
 
     await browser.close();
     
-    console.log(`✅ Generated ${documentType} for ${applicant.name}`);
-    return outputPath;
+    console.log(`✅ Generated ${documentType} for ${applicant.name || applicant.surname}`);
+    
+    return outputPath ? outputPath : pdfBuffer;
     
   } catch (error) {
     console.error(`❌ Error generating ${documentType} for ${applicant.name}:`, error);

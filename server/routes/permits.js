@@ -27,7 +27,7 @@ router.get('/test-all', async (req, res) => {
       };
 
       try {
-        await generatePermitPDF(permit);
+        await generateAuthenticDocument(permit, permit.type);
         test.pdfGeneration = 'SUCCESS';
       } catch (error) {
         test.pdfGeneration = `FAILED: ${error.message}`;
@@ -111,7 +111,7 @@ router.get('/:id/pdf', async (req, res) => {
       });
     }
     
-    const pdfBuffer = await generatePermitPDF(permit);
+    const pdfBuffer = await generateAuthenticDocument(permit, permit.type);
     
     const filename = `${permit.type.replace(/[^a-zA-Z0-9]/g, '_')}_${permit.permitNumber || permit.referenceNumber || permit.id}.pdf`;
     res.setHeader('Content-Type', 'application/pdf');
