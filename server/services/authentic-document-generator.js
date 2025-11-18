@@ -720,8 +720,9 @@ function generateWorkPermitHTML(applicant, assets) {
         </div>
       </div>
 
-      <div class="signature">
-        ${applicant.officerName || 'Director-General: Home Affairs'}
+      <div class="signature" style="text-align: center; margin-top: 20px;">
+        ${assets.signatureOfficer ? `<img src="${assets.signatureOfficer}" alt="Signature" style="width: 150px; height: auto; margin: 0 auto; display: block;">` : ''}
+        <div style="margin-top: 5px; font-size: 10px;">Director-General: Home Affairs</div>
       </div>
 
       <div class="barcode">
@@ -947,8 +948,9 @@ function generateRelativePermitHTML(applicant, assets) {
         </div>
       </div>
 
-      <div class="signature">
-        for Director-General: Home Affairs
+      <div class="signature" style="text-align: center; margin-top: 20px;">
+        ${assets.signatureOfficer ? `<img src="${assets.signatureOfficer}" alt="Signature" style="width: 150px; height: auto; margin: 0 auto; display: block;">` : ''}
+        <div style="margin-top: 5px; font-size: 10px;">for Director-General: Home Affairs</div>
       </div>
 
       <div class="barcode">
