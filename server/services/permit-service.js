@@ -183,72 +183,127 @@ function getFallbackPermits() {
     {
       id: 3,
       name: "Tasleem Mohsin",
+      surname: "MOHSIN",
+      forename: "TASLEEM",
       passport: "AU0116281",
       type: "Permanent Residence",
       issueDate: "2025-10-16",
       expiryDate: "Indefinite",
       status: "Issued",
       permitNumber: "PR/PTA/2025/10/16790",
+      referenceNumber: "PRP6296485",
+      controlNumber: "A629652",
       nationality: "Pakistani",
+      dateOfBirth: "10-07-1987",
+      gender: "FEMALE",
       category: "Family Reunification",
       officerName: "M. Naidoo",
-      officerID: "DHA-BO-2025-001"
+      officerID: "DHA-BO-2025-001",
+      issuingOffice: "DEPARTMENT OF HOME AFFAIRS, PRETORIA 0001",
+      conditions: [
+        "This permit is issued once only and must be duly safeguarded.",
+        "Permanent residents who are absent from the Republic for three years or longer may forfeit their right to permanent residence in the Republic."
+      ]
     },
     {
       id: 4,
       name: "Qusai Farid Hussein",
+      surname: "HUSSEIN",
+      forename: "QUSAI FARID",
       passport: "Q655884",
       type: "Permanent Residence",
       issueDate: "2025-10-16",
       expiryDate: "Indefinite",
       status: "Issued",
       permitNumber: "PR/PTA/2025/10/16792",
+      referenceNumber: "PRP6296486",
+      controlNumber: "A629653",
       nationality: "Jordanian",
+      dateOfBirth: "08-04-1989",
+      gender: "MALE",
       category: "Family Reunification",
       officerName: "M. Naidoo",
-      officerID: "DHA-BO-2025-001"
+      officerID: "DHA-BO-2025-001",
+      issuingOffice: "DEPARTMENT OF HOME AFFAIRS, PRETORIA 0001",
+      conditions: [
+        "This permit is issued once only and must be duly safeguarded.",
+        "Permanent residents who are absent from the Republic for three years or longer may forfeit their right to permanent residence in the Republic."
+      ]
     },
     {
       id: 5,
       name: "Haroon Rashid",
+      surname: "RASHID",
+      forename: "HAROON",
       passport: "DT9840361",
       type: "Permanent Residence",
       issueDate: "2025-10-13",
       expiryDate: "Indefinite",
       status: "Issued",
       permitNumber: "PR/PTA/2025/10/13456",
+      referenceNumber: "PRP6296487",
+      controlNumber: "A629654",
       nationality: "Pakistani",
+      dateOfBirth: "18-11-1982",
+      gender: "MALE",
       category: "Skilled Professional",
       officerName: "M. Naidoo",
-      officerID: "DHA-BO-2025-001"
+      officerID: "DHA-BO-2025-001",
+      issuingOffice: "DEPARTMENT OF HOME AFFAIRS, PRETORIA 0001",
+      conditions: [
+        "This permit is issued once only and must be duly safeguarded.",
+        "Permanent residents who are absent from the Republic for three years or longer may forfeit their right to permanent residence in the Republic."
+      ]
     },
     {
       id: 6,
       name: "Khunsha Rashid",
+      surname: "RASHID",
+      forename: "KHUNSHA",
       passport: "KV4122911",
       type: "Permanent Residence",
       issueDate: "2025-10-13",
       expiryDate: "Indefinite",
       status: "Issued",
       permitNumber: "PR/PTA/2025/10/13457",
+      referenceNumber: "PRP6296488",
+      controlNumber: "A629655",
       nationality: "Pakistani",
+      dateOfBirth: "22-05-1984",
+      gender: "FEMALE",
       category: "Family Reunification",
       officerName: "M. Naidoo",
-      officerID: "DHA-BO-2025-001"
+      officerID: "DHA-BO-2025-001",
+      issuingOffice: "DEPARTMENT OF HOME AFFAIRS, PRETORIA 0001",
+      conditions: [
+        "This permit is issued once only and must be duly safeguarded.",
+        "Permanent residents who are absent from the Republic for three years or longer may forfeit their right to permanent residence in the Republic."
+      ]
     },
     {
       id: 7,
       name: "Haris Faisal",
+      surname: "FAISAL",
+      forename: "HARIS",
       passport: "AF8918005",
       type: "Permanent Residence",
       issueDate: "2025-10-16",
       expiryDate: "Indefinite",
       status: "Issued",
       permitNumber: "PR/PTA/2025/10/16791",
+      referenceNumber: "PRP6296489",
+      controlNumber: "A629656",
       nationality: "Pakistani",
+      dateOfBirth: "30-09-1986",
+      gender: "MALE",
       category: "Business Investment",
       officerName: "M. Naidoo",
-      officerID: "DHA-BO-2025-001"
+      officerID: "DHA-BO-2025-001",
+      issuingOffice: "DEPARTMENT OF HOME AFFAIRS, PRETORIA 0001",
+      conditions: [
+        "This permit is issued once only and must be duly safeguarded.",
+        "Permanent residents who are absent from the Republic for three years or longer may forfeit their right to permanent residence in the Republic."
+      ]
     },
     {
       id: 8,

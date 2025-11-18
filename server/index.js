@@ -161,8 +161,13 @@ app.get('/travel-document', (req, res) => {
   serveFile(res, 'travel-document.html', ['/opt/render/project/attached_assets/travel-document.html']);
 });
 
-// E-Visa route
+// E-Visa routes (with alternatives)
 app.get('/e-visa', (req, res) => {
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.send(INLINE_HTML.evisa);
+});
+
+app.get('/evisa', (req, res) => {
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   res.send(INLINE_HTML.evisa);
 });
@@ -197,8 +202,13 @@ app.get('/all-applicants', (req, res) => {
   serveFile(res, 'official-all-applicants.html', ['/opt/render/project/attached_assets/official-all-applicants.html']);
 });
 
-// GWP Hard Copy Printing route
+// GWP Hard Copy Printing routes (with alternatives)
 app.get('/gwp-printing', (req, res) => {
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.send(INLINE_HTML.gwpPrinting);
+});
+
+app.get('/printing', (req, res) => {
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   res.send(INLINE_HTML.gwpPrinting);
 });
