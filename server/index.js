@@ -197,6 +197,18 @@ app.get('/all-applicants', (req, res) => {
   serveFile(res, 'official-all-applicants.html', ['/opt/render/project/attached_assets/official-all-applicants.html']);
 });
 
+// GWP Hard Copy Printing route
+app.get('/gwp-printing', (req, res) => {
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.send(INLINE_HTML.gwpPrinting);
+});
+
+// Tutorial/User Guide route
+app.get('/tutorial', (req, res) => {
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.send(INLINE_HTML.tutorial);
+});
+
 // Use permits router
 app.use('/api/permits', permitsRouter);
 
