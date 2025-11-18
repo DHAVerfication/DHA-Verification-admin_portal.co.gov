@@ -62,20 +62,8 @@ for (const p of candidateAssetPaths) {
   }
 }
 
-console.log('🔍 PATH DEBUG INFO:');
-console.log('  __dirname:', __dirname);
-console.log('  PROJECT_ROOT:', PROJECT_ROOT);
-console.log('  ASSETS_DIR:', ASSETS_DIR);
-console.log('  CANDIDATE_ASSET_PATHS:', candidateAssetPaths);
-console.log('  FINAL_ASSETS_DIR:', FINAL_ASSETS_DIR);
-console.log('  NODE_ENV:', process.env.NODE_ENV);
-console.log('  RENDER env:', process.env.RENDER);
-
-validateConfig();
-logConfigStatus();
-
 const app = express();
-const PORT = config.port;
+const PORT = parseInt(process.env.PORT, 10) || 5000;
 
 // Security & Performance Middleware
 app.use(helmet({
@@ -514,21 +502,39 @@ app.use((req, res) => {
   });
 });
 
-app.listen(PORT, '0.0.0.0', async () => {
-  const permitCount = await getPermitCount();
-  const isProduction = process.env.NODE_ENV === 'production';
-  console.log('\n========================================');
-  console.log('🏛️  DHA BACK OFFICE - LIVE SYSTEM');
-  console.log('========================================');
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`✅ DHA Back Office listening on port ${PORT}`);
   console.log(`🚀 Server: http://0.0.0.0:${PORT}`);
-  console.log(`🌐 Environment: ${isProduction ? '🔴 PRODUCTION' : 'development'}`);
-  console.log(`📄 Permits Loaded: ${permitCount}`);
-  console.log(`✅ System Status: FULLY OPERATIONAL`);
-  console.log(`🔒 Production APIs: ENABLED`);
-  console.log(`🔥 Real Data Mode: ACTIVE`);
-  console.log(`🛡️  Security: QR Codes, Digital Signatures, Watermarks`);
-  console.log(`🔐 Verification Level: ${config.production.verificationLevel}`);
-  console.log('========================================\n');
+  
+  setImmediate(async () => {
+    try {
+      console.log('\n🔍 PATH DEBUG INFO:');
+      console.log('  __dirname:', __dirname);
+      console.log('  PROJECT_ROOT:', PROJECT_ROOT);
+      console.log('  FINAL_ASSETS_DIR:', FINAL_ASSETS_DIR);
+      console.log('  NODE_ENV:', process.env.NODE_ENV);
+      console.log('  PORT:', PORT);
+      
+      validateConfig();
+      logConfigStatus();
+      
+      const permitCount = await getPermitCount();
+      const isProduction = process.env.NODE_ENV === 'production';
+      console.log('\n========================================');
+      console.log('🏛️  DHA BACK OFFICE - LIVE SYSTEM');
+      console.log('========================================');
+      console.log(`🌐 Environment: ${isProduction ? '🔴 PRODUCTION' : 'development'}`);
+      console.log(`📄 Permits Loaded: ${permitCount}`);
+      console.log(`✅ System Status: FULLY OPERATIONAL`);
+      console.log(`🔒 Production APIs: ENABLED`);
+      console.log(`🔥 Real Data Mode: ACTIVE`);
+      console.log(`🛡️  Security: QR Codes, Digital Signatures, Watermarks`);
+      console.log(`🔐 Verification Level: ${config.production.verificationLevel}`);
+      console.log('========================================\n');
+    } catch (error) {
+      console.error('⚠️  Error during background initialization:', error.message);
+    }
+  });
 });
 
 export default app;
