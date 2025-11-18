@@ -209,6 +209,24 @@ app.get('/tutorial', (req, res) => {
   res.send(INLINE_HTML.tutorial);
 });
 
+// Document Detail route - matches exact format from reference images
+app.get('/applicant/:id', async (req, res) => {
+  try {
+    const result = await getAllPermits();
+    const permit = result.permits.find(p => p.id === parseInt(req.params.id));
+    
+    if (!permit) {
+      return res.status(404).send('<h1>Document Not Found</h1><p><a href="/">Back to Home</a></p>');
+    }
+    
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.send(INLINE_HTML.documentDetail(permit));
+  } catch (error) {
+    console.error('[APPLICANT VIEW] Error:', error);
+    res.status(500).send('<h1>Error Loading Document</h1><p><a href="/">Back to Home</a></p>');
+  }
+});
+
 // Use permits router
 app.use('/api/permits', permitsRouter);
 

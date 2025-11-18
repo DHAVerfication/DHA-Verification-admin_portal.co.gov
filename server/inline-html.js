@@ -1433,5 +1433,272 @@ Content-Type: application/json
         </div>
     </div>
 </body>
+</html>`,
+
+  documentDetail: (permit) => `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${permit.permitNumber || permit.referenceNumber} - DHA BACK OFFICE</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', 'Helvetica Neue', sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding: 0;
+        }
+
+        .header {
+            background: white;
+            padding: 25px 40px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .coat-of-arms {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+
+        .header-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #008751;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .header-subtitle {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #008751;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        .back-button:hover {
+            background: #006641;
+        }
+
+        .divider {
+            height: 4px;
+            background: linear-gradient(to right, #FFD700, #FFA500);
+            margin: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .content {
+            padding: 30px 40px;
+        }
+
+        .field {
+            margin-bottom: 25px;
+        }
+
+        .field-label {
+            font-size: 14px;
+            font-weight: 700;
+            color: #008751;
+            margin-bottom: 8px;
+        }
+
+        .field-value {
+            font-size: 16px;
+            color: #333;
+            font-weight: 400;
+            line-height: 1.5;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #008751;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .qr-section {
+            background: #f5f5f5;
+            padding: 30px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .qr-container {
+            display: inline-block;
+            border: 3px dashed #008751;
+            padding: 20px;
+            background: white;
+        }
+
+        .qr-container img {
+            width: 200px;
+            height: 200px;
+            display: block;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            flex: 1;
+            min-width: 140px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #008751;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #006641;
+        }
+
+        .btn-secondary {
+            background: #333;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #000;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 20px;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .header-title {
+                font-size: 22px;
+            }
+
+            .qr-container img {
+                width: 180px;
+                height: 180px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <div class="coat-of-arms">🇿🇦</div>
+                <div class="header-title">DHA BACK OFFICE</div>
+                <div class="header-subtitle">All Applicants & Documents</div>
+                <a href="/" class="back-button">
+                    ← Back Home
+                </a>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="content">
+            <div class="field">
+                <div class="field-label">Permit #:</div>
+                <div class="field-value">${permit.permitNumber || permit.referenceNumber || 'N/A'}</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Type:</div>
+                <div class="field-value">${permit.type}</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Nationality:</div>
+                <div class="field-value">${permit.nationality || 'N/A'}</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Status:</div>
+                <div class="status-badge">
+                    ✓ ${permit.status || 'Issued'}
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Issue Date:</div>
+                <div class="field-value">${permit.issueDate || 'N/A'}</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Expiry:</div>
+                <div class="field-value">${permit.expiryDate || 'N/A'}</div>
+            </div>
+
+            <div class="qr-section">
+                <div class="qr-container">
+                    <img src="/api/permits/${permit.id}/qr" alt="QR Code" />
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <a href="/api/permits/${permit.id}/pdf" class="btn btn-primary" download>
+                    📄 Download PDF
+                </a>
+                <a href="/api/permits/${permit.id}/verify-document" class="btn btn-secondary" target="_blank">
+                    🔍 View Full Details
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
 </html>`
 };
