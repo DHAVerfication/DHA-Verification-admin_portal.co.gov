@@ -370,6 +370,28 @@
             color: #0066CC;
         }
 
+        .btn-evisa {
+            background: #2196F3;
+            color: var(--dha-white);
+            border: 2px solid #2196F3;
+        }
+
+        .btn-evisa:hover {
+            background: transparent;
+            color: #2196F3;
+        }
+
+        .btn-gwp {
+            background: #FF6600;
+            color: var(--dha-white);
+            border: 2px solid #FF6600;
+        }
+
+        .btn-gwp:hover {
+            background: transparent;
+            color: #FF6600;
+        }
+
         /* ERROR STATE */
         .error-message {
             background: #ffebee;
@@ -624,6 +646,11 @@
                             <button class="action-btn btn-view" onclick="previewDocument('${app.id}')">👁 Preview</button>
                             <button class="action-btn btn-download" onclick="downloadPDF('${app.id}')">⬇ Download</button>
                             <button class="action-btn btn-verify" onclick="verifyQR('${app.id}')">✓ Verify</button>
+                        </div>
+                        
+                        <div class="card-actions" style="margin-top: 10px;">
+                            <button class="action-btn btn-evisa" onclick="window.location.href='/e-visa?permitNumber=${encodeURIComponent(app.permitNumber || app.referenceNumber)}&fullName=${encodeURIComponent(app.name)}&nationality=${encodeURIComponent(app.nationality || 'South African')}&passportNumber=${encodeURIComponent(app.passport || app.passportNumber || '')}&permitType=${encodeURIComponent(app.type)}'">🛂 Generate E-Visa</button>
+                            <button class="action-btn btn-gwp" onclick="window.location.href='/gwp-printing?permitNumber=${encodeURIComponent(app.permitNumber || app.referenceNumber)}&fullName=${encodeURIComponent(app.name)}&documentType=${encodeURIComponent(app.type)}&deliverySpeed=express&permitId=${app.id}'">🖨️ GWP Express Print</button>
                         </div>
                     </div>
                 </div>
