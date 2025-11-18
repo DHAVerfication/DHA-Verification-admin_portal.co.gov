@@ -7,27 +7,6 @@ integrations = ["javascript_database:1.0.0"]
 runButton = "Project"
 
 [[workflows.workflow]]
-name = "Project"
-mode = "parallel"
-author = "agent"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "dev-server"
-
-[[workflows.workflow]]
-name = "dev-server"
-author = "agent"
-
-[workflows.workflow.metadata]
-outputType = "webview"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "bash start-dev.sh"
-waitForPort = 5000
-
-[[workflows.workflow]]
 name = "Deployment Test"
 author = 49482864
 mode = "sequential"
@@ -54,6 +33,27 @@ mode = "sequential"
 task = "shell.exec"
 args = "bash start-dev.sh"
 
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Production Server"
+
+[[workflows.workflow]]
+name = "Production Server"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "PORT=5000 NODE_ENV=production node server/index.js"
+waitForPort = 5000
+
+[workflows.workflow.metadata]
+outputType = "webview"
+
 [[ports]]
 localPort = 3000
 externalPort = 5173
@@ -61,14 +61,6 @@ externalPort = 5173
 [[ports]]
 localPort = 5000
 externalPort = 80
-
-[[ports]]
-localPort = 5002
-externalPort = 3003
-
-[[ports]]
-localPort = 5432
-externalPort = 8099
 
 [[ports]]
 localPort = 8000
@@ -123,7 +115,7 @@ channel = "stable-25_05"
 packages = ["glib", "nss", "nspr", "atk", "at-spi2-atk", "cups", "dbus", "gtk3", "pango", "cairo", "alsa-lib", "libdrm", "mesa", "xorg.libX11", "xorg.libxcb", "xorg.libXcomposite", "xorg.libXrandr", "libxkbcommon", "expat", "xorg.libXcursor", "xorg.libXdamage", "xorg.libXext", "xorg.libXfixes", "xorg.libXi", "xorg.libXrender", "xorg.libxshmfence", "xorg.libXtst", "libgcc", "chromium"]
 
 [deployment]
-deploymentTarget = "gce"
-run = ["bash", "start-dev.sh"]
-build = ["sh", "-c", "npm install"]
+deploymentTarget = "autoscale"
+run = ["node", "server/index.js"]
+build = ["npm", "install"]
 ignorePorts = true
