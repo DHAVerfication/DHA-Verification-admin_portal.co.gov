@@ -1427,9 +1427,522 @@ Content-Type: application/json
             </ul>
         </div>
 
+        <div class="section">
+            <h2>🏗️ System Architecture</h2>
+            <p>The DHA Back Office is built with a modern Node.js architecture with clear separation of concerns.</p>
+            
+            <h3>Technology Stack</h3>
+            <table>
+                <tr>
+                    <th>Layer</th>
+                    <th>Technology</th>
+                    <th>Purpose</th>
+                </tr>
+                <tr>
+                    <td>Runtime</td>
+                    <td>Node.js 20</td>
+                    <td>JavaScript runtime environment</td>
+                </tr>
+                <tr>
+                    <td>Web Framework</td>
+                    <td>Express.js</td>
+                    <td>HTTP server and routing</td>
+                </tr>
+                <tr>
+                    <td>Database</td>
+                    <td>PostgreSQL (Neon)</td>
+                    <td>Relational data storage</td>
+                </tr>
+                <tr>
+                    <td>ORM</td>
+                    <td>Drizzle ORM</td>
+                    <td>Type-safe database queries</td>
+                </tr>
+                <tr>
+                    <td>Security</td>
+                    <td>Helmet, CORS, Rate Limiting</td>
+                    <td>Request protection and security headers</td>
+                </tr>
+                <tr>
+                    <td>PDF Generation</td>
+                    <td>PDFKit, Puppeteer</td>
+                    <td>Document creation and rendering</td>
+                </tr>
+                <tr>
+                    <td>Image Processing</td>
+                    <td>Sharp, QRCode</td>
+                    <td>Image manipulation and QR generation</td>
+                </tr>
+            </table>
+
+            <h3>Architecture Layers</h3>
+            <div class="code-block">
+┌─────────────────────────────────────────┐
+│         Frontend (HTML/JS)              │  User Interface
+├─────────────────────────────────────────┤
+│         Routes Layer                    │  HTTP endpoints
+│   (permits, applicants, documents)      │
+├─────────────────────────────────────────┤
+│         Service Layer                   │  Business logic
+│  (permit-service, evisa-generator,      │
+│   printing-service, verification)       │
+├─────────────────────────────────────────┤
+│         Data Layer                      │  Database access
+│   (Drizzle ORM + PostgreSQL)            │
+├─────────────────────────────────────────┤
+│         External APIs                   │  DHA Integration
+│  (NPR, DMS, VISA, MCS, ABIS, HANIS)     │
+└─────────────────────────────────────────┘
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📁 Code Structure</h2>
+            <p>The project follows a modular structure for maintainability:</p>
+            
+            <div class="code-block">
+project/
+├── server/
+│   ├── index.js                 # Main server file & routes
+│   ├── inline-html.js           # HTML templates
+│   ├── config/
+│   │   └── secrets.js           # Environment config & validation
+│   ├── routes/
+│   │   ├── permits.js           # Permit endpoints
+│   │   ├── applicants.js        # Applicant management
+│   │   ├── documents.js         # Document handling
+│   │   ├── printing.js          # Print order routes
+│   │   └── evisa.js             # E-visa generation
+│   ├── services/
+│   │   ├── permit-service.js    # Permit business logic
+│   │   ├── evisa-generator.js   # E-visa creation
+│   │   ├── printing-service.js  # GWP printing
+│   │   └── verification.js      # Document verification
+│   └── db/
+│       ├── schema.ts            # Database schema (Drizzle)
+│       └── index.ts             # Database connection
+├── shared/
+│   └── schema.ts                # Shared type definitions
+├── attached_assets/             # Static files & images
+│   ├── index.html               # Homepage
+│   ├── admin-dashboard.html     # Admin panel
+│   ├── permit-profile.html      # Permit details view
+│   └── coat-of-arms-official.png
+├── package.json                 # Dependencies
+└── .replit                      # Deployment config
+            </div>
+
+            <h3>Key Files Explained</h3>
+            <div class="feature-card">
+                <strong>server/index.js</strong>
+                <p>Main entry point. Sets up Express server, middleware, routes, and starts listening on port 5000. Contains core routes for serving HTML pages and health checks.</p>
+            </div>
+
+            <div class="feature-card">
+                <strong>server/config/secrets.js</strong>
+                <p>Manages all environment variables and API keys. Validates configuration on startup. Contains DHA API endpoints and credentials.</p>
+            </div>
+
+            <div class="feature-card">
+                <strong>server/services/evisa-generator.js</strong>
+                <p>Handles E-visa creation including QR code generation, DHA authorization, HTML rendering, and PDF conversion. Integrates with DHA VISA API.</p>
+            </div>
+
+            <div class="feature-card">
+                <strong>server/services/printing-service.js</strong>
+                <p>Manages print orders to Government Warehouse & Printing. Tracks order status, generates tracking numbers, and interfaces with GWP API.</p>
+            </div>
+
+            <div class="feature-card">
+                <strong>server/services/permit-service.js</strong>
+                <p>Core permit management. Loads permit data, performs searches, validates permit numbers, and caches results for performance.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>💾 Database Schema</h2>
+            <p>PostgreSQL database with the following tables:</p>
+
+            <h3>Main Tables</h3>
+            <table>
+                <tr>
+                    <th>Table</th>
+                    <th>Purpose</th>
+                    <th>Key Fields</th>
+                </tr>
+                <tr>
+                    <td>permits</td>
+                    <td>Stores all permit records</td>
+                    <td>id, permitNumber, type, status, nationality, issueDate, expiryDate</td>
+                </tr>
+                <tr>
+                    <td>applicants</td>
+                    <td>Personal information</td>
+                    <td>id, name, passportNumber, idNumber, dateOfBirth, nationality</td>
+                </tr>
+                <tr>
+                    <td>documents</td>
+                    <td>Uploaded documents</td>
+                    <td>id, permitId, documentType, fileUrl, uploadDate</td>
+                </tr>
+                <tr>
+                    <td>print_orders</td>
+                    <td>GWP print tracking</td>
+                    <td>id, orderNumber, permitId, status, trackingNumber, createdAt</td>
+                </tr>
+                <tr>
+                    <td>evisa_records</td>
+                    <td>E-visa generation log</td>
+                    <td>id, visaNumber, applicantId, status, qrCode, generatedAt</td>
+                </tr>
+            </table>
+
+            <h3>Database Connection</h3>
+            <p>Connection string stored in <span class="highlight">DATABASE_URL</span> environment variable. Uses connection pooling for performance.</p>
+            
+            <div class="code-block">
+# PostgreSQL connection (Neon)
+DATABASE_URL=postgresql://user:pass@host/database?sslmode=require
+PGDATABASE=neondb
+PGPORT=5432
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔧 Environment Variables</h2>
+            <p>All configuration is managed through environment variables for security and flexibility.</p>
+
+            <h3>Required Variables</h3>
+            <table>
+                <tr>
+                    <th>Variable</th>
+                    <th>Purpose</th>
+                    <th>Example</th>
+                </tr>
+                <tr>
+                    <td>PORT</td>
+                    <td>Server port (must be 5000)</td>
+                    <td>5000</td>
+                </tr>
+                <tr>
+                    <td>NODE_ENV</td>
+                    <td>Environment mode</td>
+                    <td>production</td>
+                </tr>
+                <tr>
+                    <td>DATABASE_URL</td>
+                    <td>PostgreSQL connection</td>
+                    <td>postgresql://...</td>
+                </tr>
+            </table>
+
+            <h3>DHA API Keys</h3>
+            <table>
+                <tr>
+                    <th>Variable</th>
+                    <th>DHA System</th>
+                </tr>
+                <tr>
+                    <td>DHA_NPR_API_KEY</td>
+                    <td>National Population Register</td>
+                </tr>
+                <tr>
+                    <td>DHA_DMS_API_KEY</td>
+                    <td>Document Management System</td>
+                </tr>
+                <tr>
+                    <td>DHA_VISA_API_KEY</td>
+                    <td>Visa Processing System</td>
+                </tr>
+                <tr>
+                    <td>DHA_MCS_API_KEY</td>
+                    <td>Movement Control System</td>
+                </tr>
+                <tr>
+                    <td>DHA_ABIS_API_KEY</td>
+                    <td>Automated Biometrics</td>
+                </tr>
+                <tr>
+                    <td>HANIS_API_KEY</td>
+                    <td>Home Affairs National ID</td>
+                </tr>
+            </table>
+
+            <h3>Security Keys</h3>
+            <table>
+                <tr>
+                    <th>Variable</th>
+                    <th>Purpose</th>
+                </tr>
+                <tr>
+                    <td>DOCUMENT_SIGNING_KEY</td>
+                    <td>Digital signature for documents</td>
+                </tr>
+                <tr>
+                    <td>DOCUMENT_ENCRYPTION_KEY</td>
+                    <td>Encrypt sensitive data</td>
+                </tr>
+                <tr>
+                    <td>PKI_CERTIFICATE_PATH</td>
+                    <td>SSL certificate location</td>
+                </tr>
+                <tr>
+                    <td>ICAO_PKD_API_KEY</td>
+                    <td>International passport verification</td>
+                </tr>
+                <tr>
+                    <td>SAPS_CRC_API_KEY</td>
+                    <td>SAPS criminal record checks</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>🚀 Development Setup</h2>
+            
+            <h3>Local Development</h3>
+            <ol class="steps">
+                <li>Clone the repository and navigate to project directory</li>
+                <li>Install dependencies: <code>npm install</code></li>
+                <li>Set up environment variables in Replit Secrets</li>
+                <li>Initialize database: <code>npm run db:push</code></li>
+                <li>Start development server: <code>npm run dev</code></li>
+                <li>Access at: <code>http://localhost:5000</code></li>
+            </ol>
+
+            <h3>Database Migrations</h3>
+            <div class="code-block">
+# Push schema changes to database
+npm run db:push
+
+# Generate new migration
+npm run db:generate
+
+# View database in Drizzle Studio
+npm run db:studio
+            </div>
+
+            <h3>Testing</h3>
+            <div class="code-block">
+# Test server health
+curl http://localhost:5000/api/health
+
+# Test E-visa generation
+curl -X POST http://localhost:5000/api/evisa/generate \\
+  -H "Content-Type: application/json" \\
+  -d '{"applicant": {"name": "Test User"}}'
+
+# Check permit data
+curl http://localhost:5000/api/permits
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🌐 Deployment Guide</h2>
+            
+            <h3>Replit Deployment</h3>
+            <ol class="steps">
+                <li>Ensure all environment variables are set in Secrets</li>
+                <li>Verify PORT=5000 in deployment configuration</li>
+                <li>Check .replit file has correct run command</li>
+                <li>Click "Publish" in Replit dashboard</li>
+                <li>Monitor build logs for any errors</li>
+                <li>Test deployed app at provided URL</li>
+            </ol>
+
+            <h3>Deployment Configuration (.replit)</h3>
+            <div class="code-block">
+[deployment]
+deploymentTarget = "autoscale"
+run = ["sh", "-c", "PORT=5000 node server/index.js"]
+build = ["npm", "install"]
+ignorePorts = true
+            </div>
+
+            <h3>Important Deployment Notes</h3>
+            <ul>
+                <li>✅ Server MUST listen on port 5000 (not 3000 or any other port)</li>
+                <li>✅ Deployment run command MUST explicitly set PORT=5000</li>
+                <li>✅ Database integration may set PGPORT=5432 - don't confuse with server PORT</li>
+                <li>✅ All API keys must be configured before deployment</li>
+                <li>✅ Static assets in attached_assets/ are automatically served</li>
+            </ul>
+
+            <h3>Troubleshooting Deployment</h3>
+            <div class="feature-card">
+                <strong>Error: "Port mismatch" or "Server on 5432 not 5000"</strong>
+                <p>The deployment configuration is not setting PORT=5000. Update .replit deployment section to use: <code>run = ["sh", "-c", "PORT=5000 node server/index.js"]</code></p>
+            </div>
+
+            <div class="feature-card">
+                <strong>Error: "Application did not open port 5000"</strong>
+                <p>Server may be crashing on startup. Check for: missing environment variables, database connection errors, or syntax errors in code.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔍 How It All Works</h2>
+            
+            <h3>Request Flow: E-Visa Generation</h3>
+            <ol class="steps">
+                <li>User fills form on /e-visa page</li>
+                <li>JavaScript sends POST to /api/evisa/generate</li>
+                <li>Route handler in server/routes/evisa.js receives request</li>
+                <li>Service layer (evisa-generator.js) processes request:
+                    <ul>
+                        <li>Validates applicant data</li>
+                        <li>Generates unique visa number</li>
+                        <li>Creates QR code with visa details</li>
+                        <li>Calls DHA VISA API for authorization</li>
+                        <li>Renders HTML template with data</li>
+                        <li>Converts HTML to PDF using Puppeteer</li>
+                    </ul>
+                </li>
+                <li>Response sent back with visa data, QR code, and PDF</li>
+                <li>JavaScript displays result to user</li>
+                <li>Record saved to evisa_records table</li>
+            </ol>
+
+            <h3>Request Flow: GWP Printing</h3>
+            <ol class="steps">
+                <li>User submits form on /gwp-printing page</li>
+                <li>POST request to /api/printing/submit-gwp-print</li>
+                <li>Route handler in server/routes/printing.js validates data</li>
+                <li>Service layer (printing-service.js):
+                    <ul>
+                        <li>Generates unique order number</li>
+                        <li>Validates permit exists in database</li>
+                        <li>Calls GWP API to submit print job</li>
+                        <li>Generates tracking number</li>
+                        <li>Calculates delivery estimates</li>
+                    </ul>
+                </li>
+                <li>Order saved to print_orders table</li>
+                <li>Response with order details sent to frontend</li>
+                <li>User sees confirmation with tracking info</li>
+            </ol>
+
+            <h3>Security Flow</h3>
+            <div class="code-block">
+Request → Rate Limiter → CORS Check → Helmet Security Headers
+         → Route Handler → Input Validation → Business Logic
+         → Database Query → API Call (if needed) → Response
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🧪 Testing & Debugging</h2>
+            
+            <h3>Check Server Status</h3>
+            <div class="code-block">
+# Health check
+GET /api/health
+
+# Response:
+{
+  "status": "ok",
+  "timestamp": "2025-11-18T...",
+  "environment": "production",
+  "apis": {
+    "npr": "connected",
+    "dms": "connected",
+    ...
+  }
+}
+            </div>
+
+            <h3>View Logs</h3>
+            <p>Server logs show:</p>
+            <ul>
+                <li>Startup messages with configuration status</li>
+                <li>API endpoint calls and responses</li>
+                <li>Database queries and errors</li>
+                <li>Request/response cycles</li>
+            </ul>
+
+            <h3>Common Debug Commands</h3>
+            <div class="code-block">
+# Check environment variables
+env | grep -E "(PORT|DATABASE|DHA_)"
+
+# Test database connection
+npm run db:studio
+
+# View permit data
+curl http://localhost:5000/api/permits
+
+# Test specific permit
+curl http://localhost:5000/api/permits/PR/PTA/2025/10/13459
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📚 Code Examples</h2>
+            
+            <h3>Adding a New Route</h3>
+            <div class="code-block">
+// In server/index.js
+app.get('/my-new-page', (req, res) => {
+  res.setHeader('Content-Type', 'text/html');
+  res.send(INLINE_HTML.myNewTemplate);
+});
+
+// In server/inline-html.js
+export const INLINE_HTML = {
+  myNewTemplate: \`
+    &lt;!DOCTYPE html&gt;
+    &lt;html&gt;
+    &lt;head&gt;&lt;title&gt;My Page&lt;/title&gt;&lt;/head&gt;
+    &lt;body&gt;
+      &lt;h1&gt;Hello World&lt;/h1&gt;
+    &lt;/body&gt;
+    &lt;/html&gt;
+  \`
+};
+            </div>
+
+            <h3>Adding a New API Endpoint</h3>
+            <div class="code-block">
+// In server/routes/permits.js
+router.get('/search/:query', async (req, res) => {
+  try {
+    const { query } = req.params;
+    const results = await searchPermits(query);
+    res.json({ success: true, results });
+  } catch (error) {
+    res.status(500).json({ 
+      success: false, 
+      error: error.message 
+    });
+  }
+});
+            </div>
+
+            <h3>Calling DHA API</h3>
+            <div class="code-block">
+import { config } from './config/secrets.js';
+
+async function verifyWithDHA(permitNumber) {
+  const response = await fetch(
+    \`\${config.dha.nprEndpoint}/verify\`,
+    {
+      method: 'POST',
+      headers: {
+        'Authorization': \`Bearer \${config.dha.nprApiKey}\`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ permitNumber })
+    }
+  );
+  return await response.json();
+}
+            </div>
+        </div>
+
         <div class="section" style="background: #e8f5e9; border-left: 4px solid #4caf50;">
             <h2 style="color: #2e7d32;">✅ Your System is Fully Operational!</h2>
             <p>All features are working 100% with official DHA styling (white, black, and green). The system is production-ready and connected to real DHA production APIs.</p>
+            <p><strong>Quick Links:</strong> <a href="/">Home</a> | <a href="/admin-dashboard">Admin</a> | <a href="/e-visa">E-Visa</a> | <a href="/gwp-printing">GWP Printing</a> | <a href="/tutorial">Tutorial</a></p>
         </div>
     </div>
 </body>
