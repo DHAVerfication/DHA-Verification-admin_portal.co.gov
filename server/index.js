@@ -542,37 +542,32 @@ app.use((req, res) => {
   });
 });
 
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`✅ DHA Back Office listening on port ${PORT}`);
-  console.log(`🚀 Server: http://0.0.0.0:${PORT}`);
+// Start server immediately on the PORT provided by environment
+const server = app.listen(PORT, '0.0.0.0', () => {
+  const actualPort = server.address().port;
+  console.log(`✅ DHA Back Office listening on port ${actualPort}`);
+  console.log(`🚀 Server ready at http://0.0.0.0:${actualPort}`);
+  console.log(`📍 Environment PORT: ${process.env.PORT || 'not set, using default 5000'}`);
+  console.log(`📍 Actual bound port: ${actualPort}`);
   
+  // Background initialization - does not block port binding
   setImmediate(async () => {
     try {
-      console.log('\n🔍 PATH DEBUG INFO:');
-      console.log('  __dirname:', __dirname);
-      console.log('  PROJECT_ROOT:', PROJECT_ROOT);
-      console.log('  FINAL_ASSETS_DIR:', FINAL_ASSETS_DIR);
-      console.log('  NODE_ENV:', process.env.NODE_ENV);
-      console.log('  PORT:', PORT);
+      const isProduction = process.env.NODE_ENV === 'production';
+      console.log(`\n🌐 Environment: ${isProduction ? 'PRODUCTION' : 'development'}`);
       
       validateConfig();
       logConfigStatus();
       
       const permitCount = await getPermitCount();
-      const isProduction = process.env.NODE_ENV === 'production';
       console.log('\n========================================');
-      console.log('🏛️  DHA BACK OFFICE - LIVE SYSTEM');
+      console.log('🏛️  DHA BACK OFFICE - READY');
       console.log('========================================');
-      console.log(`🌐 Environment: ${isProduction ? '🔴 PRODUCTION' : 'development'}`);
-      console.log(`📄 Permits Loaded: ${permitCount}`);
-      console.log(`✅ System Status: FULLY OPERATIONAL`);
-      console.log(`🔒 Production APIs: ENABLED`);
-      console.log(`🔥 Real Data Mode: ACTIVE`);
-      console.log(`🛡️  Security: QR Codes, Digital Signatures, Watermarks`);
-      console.log(`🔐 Verification Level: ${config.production.verificationLevel}`);
+      console.log(`📄 Permits: ${permitCount} loaded`);
+      console.log(`✅ Status: OPERATIONAL`);
       console.log('========================================\n');
     } catch (error) {
-      console.error('⚠️  Error during background initialization:', error.message);
+      console.error('⚠️  Background initialization error:', error.message);
     }
   });
 });
