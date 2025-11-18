@@ -97,8 +97,12 @@ router.get('/:id/pdf', async (req, res) => {
 
     const pdfBuffer = await generateAuthenticDocument(permit, permit.type);
     
+    // Prevent caching - always serve fresh authentic documents
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename="${permit.id}_${permit.type || 'document'}.pdf"`);
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
     res.send(pdfBuffer);
   } catch (error) {
     console.error('[PDF GENERATION] Error:', error);

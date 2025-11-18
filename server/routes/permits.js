@@ -116,6 +116,9 @@ router.get('/:id/pdf', async (req, res) => {
     const filename = `${permit.type.replace(/[^a-zA-Z0-9]/g, '_')}_${permit.permitNumber || permit.referenceNumber || permit.id}.pdf`;
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
     res.send(pdfBuffer);
   } catch (error) {
     console.error('PDF generation error:', error);

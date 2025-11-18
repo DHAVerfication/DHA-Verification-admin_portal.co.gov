@@ -1605,6 +1605,19 @@ export async function generateAuthenticDocument(applicant, documentType, outputP
   try {
     const html = await generateDocumentHTML(applicant, documentType);
     
+    // Debug: Log HTML length and check for key content
+    console.log(`📝 HTML generated: ${html.length} chars`);
+    const hasGuilloche = html.includes('guilloche');
+    const hasMicrotext = html.includes('microtext');
+    const hasPermitNumber = html.includes(applicant.permitNumber || '');
+    console.log(`🔍 HTML Check: Guilloche=${hasGuilloche}, Microtext=${hasMicrotext}, PermitNumber=${hasPermitNumber}`);
+    
+    // Save HTML for inspection
+    if (process.env.DEBUG_HTML) {
+      fs.writeFileSync('/tmp/debug_document.html', html);
+      console.log('💾 HTML saved to /tmp/debug_document.html');
+    }
+    
     const chromiumPath = getChromiumPath();
     const launchOptions = {
       headless: true,
