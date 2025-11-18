@@ -3,9 +3,23 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { config } from '../config/secrets.js';
+import puppeteer from 'puppeteer-core';
+import { execSync } from 'child_process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+function getChromiumPath() {
+  try {
+    const chromiumPath = execSync('which chromium', { encoding: 'utf-8' }).trim();
+    if (chromiumPath && fs.existsSync(chromiumPath)) {
+      return chromiumPath;
+    }
+  } catch (error) {
+    console.warn('Could not find system chromium');
+  }
+  return null;
+}
 
 export class EvisaGenerator {
   constructor() {
@@ -31,7 +45,7 @@ export class EvisaGenerator {
     return 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Coat_of_arms_of_South_Africa.svg/200px-Coat_of_arms_of_South_Africa.svg.png';
   }
 
-  async generateEvisa(applicant) {
+  async generateEvisa(applicant, generatePDF = true) {
     try {
       console.log(`📧 Generating E-visa for ${applicant.name}...`);
 
@@ -43,12 +57,18 @@ export class EvisaGenerator {
 
       const evisaHTML = this.generateEvisaHTML(evisaData, qrCodeDataURL, authorizationResult);
 
+      let pdfBuffer = null;
+      if (generatePDF) {
+        pdfBuffer = await this.generatePDF(evisaHTML);
+      }
+
       return {
         success: true,
         evisaData,
         html: evisaHTML,
         qrCode: qrCodeDataURL,
-        authorization: authorizationResult
+        authorization: authorizationResult,
+        pdfBuffer
       };
     } catch (error) {
       console.error('❌ E-visa generation error:', error.message);
@@ -56,6 +76,49 @@ export class EvisaGenerator {
         success: false,
         error: error.message
       };
+    }
+  }
+
+  async generatePDF(html) {
+    try {
+      const chromiumPath = getChromiumPath();
+      const launchOptions = {
+        headless: true,
+        args: [
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-dev-shm-usage',
+          '--disable-gpu'
+        ]
+      };
+      
+      if (chromiumPath) {
+        launchOptions.executablePath = chromiumPath;
+      }
+      
+      const browser = await puppeteer.launch(launchOptions);
+      const page = await browser.newPage();
+      await page.setContent(html, { waitUntil: 'networkidle0' });
+      
+      const pdfBuffer = await page.pdf({
+        format: 'A4',
+        printBackground: true,
+        margin: {
+          top: '0',
+          right: '0',
+          bottom: '0',
+          left: '0'
+        }
+      });
+
+      await browser.close();
+      
+      console.log(`✅ E-visa PDF generated successfully`);
+      return Buffer.isBuffer(pdfBuffer) ? pdfBuffer : Buffer.from(pdfBuffer);
+      
+    } catch (error) {
+      console.error(`❌ Error generating E-visa PDF:`, error);
+      throw error;
     }
   }
 

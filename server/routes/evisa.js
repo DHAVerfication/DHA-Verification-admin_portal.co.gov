@@ -40,12 +40,18 @@ router.post('/generate', async (req, res) => {
       });
     }
 
-    console.log(`📧 Generating E-visa for: ${applicant.name || applicant.permitNumber}`);
+    console.log(`📧 Generating E-visa PDF for: ${applicant.name || applicant.permitNumber}`);
 
     const result = await evisaGenerator.generateEvisa(applicant);
 
     if (!result.success) {
       return res.status(500).json(result);
+    }
+
+    if (result.pdfBuffer) {
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `attachment; filename="evisa_${applicant.permitNumber || applicant.referenceNumber || 'document'}.pdf"`);
+      return res.send(result.pdfBuffer);
     }
 
     res.json({

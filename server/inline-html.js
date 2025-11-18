@@ -752,7 +752,47 @@ export const INLINE_HTML = {
                 alert('Please select an applicant first');
                 return;
             }
-            alert('Generating official PDF with security features...');
+            
+            try {
+                const button = event.target;
+                button.disabled = true;
+                button.textContent = '⏳ Generating PDF...';
+                
+                const response = await fetch('/api/evisa/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id: selectedApplicant.id,
+                        applicant: selectedApplicant
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to generate E-visa PDF');
+                }
+                
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'evisa_' + (selectedApplicant.permitNumber || selectedApplicant.referenceNumber) + '.pdf';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+                
+                button.disabled = false;
+                button.textContent = '📄 Download PDF';
+                alert('E-visa PDF downloaded successfully!');
+            } catch (error) {
+                console.error('PDF generation failed:', error);
+                alert('Failed to generate PDF: ' + error.message);
+                const button = event.target;
+                button.disabled = false;
+                button.textContent = '📄 Download PDF';
+            }
         }
 
         loadApplicants();
