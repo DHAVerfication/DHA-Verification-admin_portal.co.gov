@@ -63,26 +63,26 @@ function generateGuillocheSVG() {
     <svg class="guilloche-pattern" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
       <defs>
         <pattern id="guillocheLines" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
-          <path d="M0,40 Q20,10 40,40 T80,40" stroke="#006633" stroke-width="0.8" fill="none" opacity="0.3"/>
-          <path d="M0,40 Q20,70 40,40 T80,40" stroke="#006633" stroke-width="0.8" fill="none" opacity="0.3"/>
-          <circle cx="40" cy="40" r="25" fill="none" stroke="#006633" stroke-width="0.5" opacity="0.2"/>
-          <circle cx="40" cy="40" r="15" fill="none" stroke="#006633" stroke-width="0.5" opacity="0.2"/>
+          <path d="M0,40 Q20,10 40,40 T80,40" stroke="#006633" stroke-width="1.5" fill="none" opacity="0.7"/>
+          <path d="M0,40 Q20,70 40,40 T80,40" stroke="#006633" stroke-width="1.5" fill="none" opacity="0.7"/>
+          <circle cx="40" cy="40" r="25" fill="none" stroke="#006633" stroke-width="1" opacity="0.6"/>
+          <circle cx="40" cy="40" r="15" fill="none" stroke="#006633" stroke-width="1" opacity="0.6"/>
         </pattern>
         <pattern id="microtext" x="0" y="0" width="300" height="15" patternUnits="userSpaceOnUse">
-          <text x="0" y="12" font-size="8px" fill="#006633" opacity="0.5">RSA•DHA•SECURE•DOCUMENT•RSA•DHA•SECURE•DOCUMENT•</text>
+          <text x="0" y="12" font-size="8px" fill="#006633" opacity="0.8">RSA•DHA•SECURE•DOCUMENT•RSA•DHA•SECURE•DOCUMENT•</text>
         </pattern>
         <pattern id="securityThread" x="0" y="0" width="8" height="15" patternUnits="userSpaceOnUse">
-          <rect width="4" height="15" fill="#FFD700" opacity="0.6"/>
+          <rect width="4" height="15" fill="#FFD700" opacity="0.9"/>
         </pattern>
         <linearGradient id="hologramGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" style="stop-color:#00ff00;stop-opacity:0.15" />
-          <stop offset="33%" style="stop-color:#00ffff;stop-opacity:0.15" />
-          <stop offset="66%" style="stop-color:#ff00ff;stop-opacity:0.15" />
-          <stop offset="100%" style="stop-color:#ffff00;stop-opacity:0.15" />
+          <stop offset="0%" style="stop-color:#00ff00;stop-opacity:0.4" />
+          <stop offset="33%" style="stop-color:#00ffff;stop-opacity:0.4" />
+          <stop offset="66%" style="stop-color:#ff00ff;stop-opacity:0.4" />
+          <stop offset="100%" style="stop-color:#ffff00;stop-opacity:0.4" />
         </linearGradient>
         <radialGradient id="rosetteGrad" cx="50%" cy="50%">
-          <stop offset="0%" style="stop-color:#006633;stop-opacity:0.08" />
-          <stop offset="100%" style="stop-color:#006633;stop-opacity:0.03" />
+          <stop offset="0%" style="stop-color:#006633;stop-opacity:0.35" />
+          <stop offset="100%" style="stop-color:#006633;stop-opacity:0.15" />
         </radialGradient>
       </defs>
       <rect width="800" height="600" fill="url(#guillocheLines)"/>
@@ -91,14 +91,14 @@ function generateGuillocheSVG() {
       <rect x="70" y="0" width="8" height="600" fill="url(#securityThread)"/>
       <rect x="720" y="0" width="8" height="600" fill="url(#securityThread)"/>
       <circle cx="150" cy="300" r="100" fill="url(#rosetteGrad)"/>
-      <circle cx="150" cy="300" r="90" fill="none" stroke="#006633" stroke-width="0.5" opacity="0.2"/>
-      <circle cx="150" cy="300" r="80" fill="none" stroke="#006633" stroke-width="0.5" opacity="0.2"/>
-      <circle cx="150" cy="300" r="70" fill="none" stroke="#006633" stroke-width="0.5" opacity="0.2"/>
+      <circle cx="150" cy="300" r="90" fill="none" stroke="#006633" stroke-width="1" opacity="0.6"/>
+      <circle cx="150" cy="300" r="80" fill="none" stroke="#006633" stroke-width="1" opacity="0.6"/>
+      <circle cx="150" cy="300" r="70" fill="none" stroke="#006633" stroke-width="1" opacity="0.6"/>
       <circle cx="650" cy="300" r="100" fill="url(#rosetteGrad)"/>
-      <circle cx="650" cy="300" r="90" fill="none" stroke="#006633" stroke-width="0.5" opacity="0.2"/>
-      <circle cx="650" cy="300" r="80" fill="none" stroke="#006633" stroke-width="0.5" opacity="0.2"/>
-      <circle cx="650" cy="300" r="70" fill="none" stroke="#006633" stroke-width="0.5" opacity="0.2"/>
-      <rect x="650" y="30" width="130" height="60" fill="url(#hologramGrad)" opacity="0.7" rx="8"/>
+      <circle cx="650" cy="300" r="90" fill="none" stroke="#006633" stroke-width="1" opacity="0.6"/>
+      <circle cx="650" cy="300" r="80" fill="none" stroke="#006633" stroke-width="1" opacity="0.6"/>
+      <circle cx="650" cy="300" r="70" fill="none" stroke="#006633" stroke-width="1" opacity="0.6"/>
+      <rect x="650" y="30" width="130" height="60" fill="url(#hologramGrad)" opacity="0.85" rx="8"/>
     </svg>
   `;
 }
@@ -134,7 +134,7 @@ function generatePermanentResidenceHTML(applicant, coatOfArms) {
       width: 100%;
       height: 100%;
       z-index: 0;
-      opacity: 0.6;
+      opacity: 0.9;
     }
     .watermark {
       position: absolute;
@@ -142,7 +142,7 @@ function generatePermanentResidenceHTML(applicant, coatOfArms) {
       left: 50%;
       transform: translate(-50%, -50%) rotate(-45deg);
       font-size: 120px;
-      color: rgba(0, 102, 51, 0.08);
+      color: rgba(0, 102, 51, 0.35);
       font-weight: bold;
       z-index: 0;
       white-space: nowrap;
@@ -511,7 +511,7 @@ function generateWorkPermitHTML(applicant, coatOfArms) {
       width: 100%;
       height: 100%;
       z-index: 0;
-      opacity: 0.6;
+      opacity: 0.9;
     }
     .watermark {
       position: absolute;
@@ -519,7 +519,7 @@ function generateWorkPermitHTML(applicant, coatOfArms) {
       left: 50%;
       transform: translate(-50%, -50%) rotate(-45deg);
       font-size: 60px;
-      color: rgba(46, 125, 50, 0.08);
+      color: rgba(46, 125, 50, 0.35);
       font-weight: bold;
       z-index: 0;
       white-space: nowrap;
@@ -722,7 +722,7 @@ function generateRelativePermitHTML(applicant, coatOfArms) {
       width: 100%;
       height: 100%;
       z-index: 0;
-      opacity: 0.25;
+      opacity: 0.9;
     }
     .watermark {
       position: absolute;
@@ -730,7 +730,7 @@ function generateRelativePermitHTML(applicant, coatOfArms) {
       left: 50%;
       transform: translate(-50%, -50%) rotate(-45deg);
       font-size: 36px;
-      color: rgba(1, 87, 155, 0.04);
+      color: rgba(1, 87, 155, 0.35);
       font-weight: bold;
       z-index: 0;
       white-space: nowrap;
@@ -949,7 +949,7 @@ function generateBirthCertificateHTML(applicant, coatOfArms) {
       width: 100%;
       height: 100%;
       z-index: 0;
-      opacity: 0.3;
+      opacity: 0.9;
     }
     .watermark {
       position: absolute;
@@ -957,7 +957,7 @@ function generateBirthCertificateHTML(applicant, coatOfArms) {
       left: 50%;
       transform: translate(-50%, -50%) rotate(-45deg);
       font-size: 60px;
-      color: rgba(123, 31, 162, 0.04);
+      color: rgba(123, 31, 162, 0.35);
       font-weight: bold;
       z-index: 0;
       white-space: nowrap;
@@ -1179,7 +1179,7 @@ function generateNaturalizationHTML(applicant, coatOfArms) {
       width: 100%;
       height: 100%;
       z-index: 0;
-      opacity: 0.35;
+      opacity: 0.9;
     }
     .watermark {
       position: absolute;
@@ -1187,7 +1187,7 @@ function generateNaturalizationHTML(applicant, coatOfArms) {
       left: 50%;
       transform: translate(-50%, -50%) rotate(-45deg);
       font-size: 110px;
-      color: rgba(255, 111, 0, 0.04);
+      color: rgba(255, 111, 0, 0.35);
       font-weight: bold;
       z-index: 0;
       white-space: nowrap;
@@ -1386,7 +1386,7 @@ function generateRefugeeHTML(applicant, coatOfArms) {
       width: 100%;
       height: 100%;
       z-index: 0;
-      opacity: 0.3;
+      opacity: 0.9;
     }
     .watermark {
       position: absolute;
@@ -1394,7 +1394,7 @@ function generateRefugeeHTML(applicant, coatOfArms) {
       left: 50%;
       transform: translate(-50%, -50%) rotate(-45deg);
       font-size: 100px;
-      color: rgba(194, 24, 91, 0.04);
+      color: rgba(194, 24, 91, 0.35);
       font-weight: bold;
       z-index: 0;
       white-space: nowrap;
@@ -1636,9 +1636,23 @@ export async function generateAuthenticDocument(applicant, documentType, outputP
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: 'networkidle0' });
     
+    let pageFormat = 'A4';
+    let landscape = false;
+    
+    if (documentType === 'General Work Permit' || documentType === "Relative's Permit") {
+      pageFormat = 'A6';
+      landscape = false;
+    } else if (documentType === 'Birth Certificate') {
+      pageFormat = 'A5';
+      landscape = false;
+    } else {
+      pageFormat = 'A4';
+      landscape = false;
+    }
+    
     const pdfOptions = {
-      format: documentType === 'Permanent Residence' || documentType === 'Birth Certificate' || documentType === 'Naturalization Certificate' || documentType === 'Refugee Status (Section 24)' ? 'A4' : 'A4',
-      landscape: documentType === 'General Work Permit' || documentType === "Relative's Permit",
+      format: pageFormat,
+      landscape: landscape,
       printBackground: true,
       margin: {
         top: '0',
