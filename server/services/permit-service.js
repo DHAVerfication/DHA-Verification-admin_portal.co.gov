@@ -395,7 +395,7 @@ function getFallbackPermits() {
       referenceNumber: "REF/PTA/2025/10/13001",
       nationality: "ERITREAN",
       dateOfBirth: "15-05-1990",
-      gender: "FEMALE",
+      gender: "MALE",
       education: "HIGH SCHOOL",
       countryOfBirth: "ERITREA",
       category: "4-Year Refugee Permit",

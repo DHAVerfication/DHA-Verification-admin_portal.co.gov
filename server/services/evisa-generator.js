@@ -284,24 +284,84 @@ export class EvisaGenerator {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Open+Sans:wght@400;600;700&family=Noto+Sans:wght@400;600;700;900&display=swap');
+    
+    @page {
+      size: A4 portrait;
+      margin: 0;
+    }
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
     body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
+      font-family: 'Roboto', 'Noto Sans', 'Open Sans', 'Helvetica Neue', sans-serif;
+      background: linear-gradient(135deg, #f8f8f8 0%, #f0f0f0 100%);
       padding: 20px;
+      position: relative;
+    }
+    .security-pattern {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      opacity: 0.03;
+      background-image: 
+        repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(0,102,51,0.1) 35px, rgba(0,102,51,0.1) 70px),
+        repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(0,102,51,0.1) 35px, rgba(0,102,51,0.1) 70px);
+      pointer-events: none;
+      z-index: 0;
     }
     .evisa-container {
-      max-width: 600px;
+      max-width: 800px;
       margin: 0 auto;
-      background: linear-gradient(135deg, #f8f4e6 0%, #fef9f0 100%);
-      border-radius: 12px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+      background: linear-gradient(135deg, #ffffff 0%, #fdfdfb 25%, #fbf9f5 50%, #f9f7f0 75%, #f8f4e6 100%);
+      border-radius: 0;
+      box-shadow: 0 15px 50px rgba(0,0,0,0.2), 0 5px 15px rgba(0,0,0,0.1);
       overflow: hidden;
-      border: 2px solid #d4af37;
+      border: 3px solid #006633;
+      position: relative;
+      z-index: 1;
+    }
+    .hologram-strip {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 120px;
+      height: 50px;
+      background: linear-gradient(45deg, 
+        rgba(0,255,0,0.3) 0%, 
+        rgba(0,255,255,0.3) 25%, 
+        rgba(255,0,255,0.3) 50%, 
+        rgba(255,255,0,0.3) 75%, 
+        rgba(0,255,0,0.3) 100%);
+      border-radius: 8px;
+      opacity: 0.7;
+      z-index: 10;
+    }
+    .microtext-border {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 12px;
+      background: repeating-linear-gradient(90deg, 
+        #006633 0px, #006633 80px, 
+        #FFD700 80px, #FFD700 85px);
+      opacity: 0.8;
+      font-size: 6px;
+      color: white;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      letter-spacing: 2px;
+      overflow: hidden;
+    }
+    .microtext-border::after {
+      content: 'RSA • DHA • SECURE • DOCUMENT • RSA • DHA • SECURE • DOCUMENT • RSA • DHA • SECURE • DOCUMENT • ';
+      white-space: nowrap;
     }
     .header {
       background: linear-gradient(135deg, #f8f4e6 0%, #fef9f0 50%, #f0ede0 100%);

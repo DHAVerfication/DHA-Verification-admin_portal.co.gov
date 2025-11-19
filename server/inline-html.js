@@ -2315,5 +2315,737 @@ async function verifyWithDHA(permitNumber) {
         </div>
     </div>
 </body>
+</html>`,
+
+  adminDashboard: `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DHA Admin Portal - Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f4f6f9;
+            color: #333;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1a237e;
+        }
+
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #e8f5e9;
+            padding: 8px 16px;
+            border-radius: 20px;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background: #4caf50;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(76, 175, 80, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
+        }
+
+        .status-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2e7d32;
+        }
+
+        /* Layout Container */
+        .admin-container {
+            display: flex;
+            min-height: calc(100vh - 70px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: #1a237e;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 20px 0;
+        }
+
+        .sidebar-item {
+            margin: 2px 0;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 24px;
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .sidebar-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .sidebar-link.active {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border-left: 4px solid #4fc3f7;
+            padding-left: 20px;
+        }
+
+        .sidebar-link i {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        /* Statistics Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .stat-icon.documents {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .stat-icon.permits {
+            background: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .stat-icon.users {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .stat-icon.uptime {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1a237e;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-trend {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            color: #4caf50;
+            margin-top: 10px;
+        }
+
+        /* Tables */
+        .section {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a237e;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e8eaf6;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th {
+            background: #f5f5f5;
+            color: #666;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            padding: 12px;
+            text-align: left;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .data-table td {
+            padding: 12px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+        }
+
+        .data-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge.active {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .badge.pending {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .badge.operational {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            background: white;
+            border: 2px solid #e0e0e0;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .action-btn:hover {
+            border-color: #1976d2;
+            background: #e3f2fd;
+            transform: translateY(-2px);
+        }
+
+        .action-btn i {
+            font-size: 20px;
+            color: #1976d2;
+        }
+
+        .action-btn span {
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* Mobile Responsive */
+        .mobile-menu {
+            display: none;
+            background: #1a237e;
+            color: white;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu {
+                display: block;
+            }
+
+            .sidebar {
+                position: fixed;
+                left: -260px;
+                top: 0;
+                height: 100vh;
+                z-index: 1000;
+                transition: left 0.3s;
+            }
+
+            .sidebar.active {
+                left: 0;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-actions {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .data-table {
+                font-size: 12px;
+            }
+
+            .data-table th,
+            .data-table td {
+                padding: 8px;
+            }
+        }
+
+        /* Overlay for mobile sidebar */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+
+        .sidebar-overlay.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-left">
+            <div class="logo">🇿🇦</div>
+            <h1>DHA Admin Portal</h1>
+        </div>
+        <div class="system-status">
+            <div class="status-dot"></div>
+            <span class="status-text">SYSTEM ONLINE</span>
+        </div>
+    </div>
+
+    <div class="mobile-menu" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </div>
+
+    <div class="admin-container">
+        <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+        <aside class="sidebar">
+            <ul class="sidebar-menu">
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link active">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="/all-applicants" class="sidebar-link">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Documents</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="/api/permits" class="sidebar-link">
+                        <i class="fas fa-id-card"></i>
+                        <span>Permits</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-users"></i>
+                        <span>Users</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="/verify" class="sidebar-link">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Verification</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="/api/health" class="sidebar-link">
+                        <i class="fas fa-server"></i>
+                        <span>API Status</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Reports</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="/" class="sidebar-link">
+                        <i class="fas fa-home"></i>
+                        <span>Back to Home</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <!-- Statistics Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-value">1,247</div>
+                            <div class="stat-label">Total Documents</div>
+                        </div>
+                        <div class="stat-icon documents">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                    </div>
+                    <div class="stat-trend">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>12% from last month</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-value">3,892</div>
+                            <div class="stat-label">Active Permits</div>
+                        </div>
+                        <div class="stat-icon permits">
+                            <i class="fas fa-id-card"></i>
+                        </div>
+                    </div>
+                    <div class="stat-trend">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>8% from last month</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-value">543</div>
+                            <div class="stat-label">Users Online</div>
+                        </div>
+                        <div class="stat-icon users">
+                            <i class="fas fa-users"></i>
+                        </div>
+                    </div>
+                    <div class="stat-trend">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>Active now</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-value">99.99%</div>
+                            <div class="stat-label">System Uptime</div>
+                        </div>
+                        <div class="stat-icon uptime">
+                            <i class="fas fa-server"></i>
+                        </div>
+                    </div>
+                    <div class="stat-trend">
+                        <i class="fas fa-check-circle"></i>
+                        <span>All systems operational</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Permits Table -->
+            <div class="section">
+                <h2 class="section-title">Recent Permits</h2>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Permit ID</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>PR/PTA/2025/10/13459</td>
+                            <td>Permanent Residence</td>
+                            <td><span class="badge active">Active</span></td>
+                            <td>2025-10-13</td>
+                        </tr>
+                        <tr>
+                            <td>PR/PTA/2025/10/13458</td>
+                            <td>Permanent Residence</td>
+                            <td><span class="badge active">Active</span></td>
+                            <td>2025-10-13</td>
+                        </tr>
+                        <tr>
+                            <td>PR/PTA/2025/10/16790</td>
+                            <td>Permanent Residence</td>
+                            <td><span class="badge active">Active</span></td>
+                            <td>2025-10-16</td>
+                        </tr>
+                        <tr>
+                            <td>PR/PTA/2025/10/16792</td>
+                            <td>Permanent Residence</td>
+                            <td><span class="badge active">Active</span></td>
+                            <td>2025-10-16</td>
+                        </tr>
+                        <tr>
+                            <td>WP/PTA/2025/10/13001</td>
+                            <td>General Work Permit</td>
+                            <td><span class="badge active">Active</span></td>
+                            <td>2025-10-13</td>
+                        </tr>
+                        <tr>
+                            <td>REL/PTA/2025/10/13001</td>
+                            <td>Relative's Permit</td>
+                            <td><span class="badge active">Active</span></td>
+                            <td>2025-10-13</td>
+                        </tr>
+                        <tr>
+                            <td>NAT/PTA/2025/10/16001</td>
+                            <td>Naturalization Certificate</td>
+                            <td><span class="badge active">Active</span></td>
+                            <td>2025-10-16</td>
+                        </tr>
+                        <tr>
+                            <td>REF/PTA/2025/10/13001</td>
+                            <td>Refugee Status (Section 24)</td>
+                            <td><span class="badge active">Active</span></td>
+                            <td>2025-10-13</td>
+                        </tr>
+                        <tr>
+                            <td>F7895390</td>
+                            <td>Birth Certificate</td>
+                            <td><span class="badge active">Active</span></td>
+                            <td>2024-11-15</td>
+                        </tr>
+                        <tr>
+                            <td>PR/PTA/2025/10/13456</td>
+                            <td>Permanent Residence</td>
+                            <td><span class="badge active">Active</span></td>
+                            <td>2025-10-13</td>
+                        </tr>
+                        <tr>
+                            <td>PR/PTA/2025/10/13457</td>
+                            <td>Permanent Residence</td>
+                            <td><span class="badge active">Active</span></td>
+                            <td>2025-10-13</td>
+                        </tr>
+                        <tr>
+                            <td>PR/PTA/2025/10/16791</td>
+                            <td>Permanent Residence</td>
+                            <td><span class="badge active">Active</span></td>
+                            <td>2025-10-16</td>
+                        </tr>
+                        <tr>
+                            <td>PR/PTA/2025/10/16789</td>
+                            <td>Permanent Residence</td>
+                            <td><span class="badge pending">Pending</span></td>
+                            <td>2025-10-16</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="section">
+                <h2 class="section-title">Quick Actions</h2>
+                <div class="quick-actions">
+                    <a href="/id-card" class="action-btn">
+                        <i class="fas fa-id-card"></i>
+                        <span>View ID Template</span>
+                    </a>
+                    <a href="/travel-document" class="action-btn">
+                        <i class="fas fa-passport"></i>
+                        <span>View Travel Doc</span>
+                    </a>
+                    <a href="/all-applicants" class="action-btn">
+                        <i class="fas fa-user-friends"></i>
+                        <span>User Profiles</span>
+                    </a>
+                    <a href="/verify" class="action-btn">
+                        <i class="fas fa-check-double"></i>
+                        <span>Verify Documents</span>
+                    </a>
+                    <a href="/api/health" class="action-btn">
+                        <i class="fas fa-heartbeat"></i>
+                        <span>API Status</span>
+                    </a>
+                    <a href="#" class="action-btn">
+                        <i class="fas fa-file-pdf"></i>
+                        <span>Generate Report</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- System Status Table -->
+            <div class="section">
+                <h2 class="section-title">System Status</h2>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Service</th>
+                            <th>Status</th>
+                            <th>Response Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Main API Server</td>
+                            <td><span class="badge operational">Operational</span></td>
+                            <td>45ms</td>
+                        </tr>
+                        <tr>
+                            <td>Document Generation</td>
+                            <td><span class="badge operational">Operational</span></td>
+                            <td>120ms</td>
+                        </tr>
+                        <tr>
+                            <td>Biometric Service</td>
+                            <td><span class="badge operational">Operational</span></td>
+                            <td>89ms</td>
+                        </tr>
+                        <tr>
+                            <td>Verification System</td>
+                            <td><span class="badge operational">Operational</span></td>
+                            <td>67ms</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        // Auto-refresh statistics every 30 seconds
+        setInterval(() => {
+            // Update users online with random variation
+            const usersElement = document.querySelector('.stat-value');
+            if (usersElement && usersElement.parentElement.querySelector('.stat-label').textContent === 'Users Online') {
+                const currentValue = parseInt(usersElement.textContent);
+                const variation = Math.floor(Math.random() * 20) - 10;
+                usersElement.textContent = Math.max(500, currentValue + variation);
+            }
+        }, 30000);
+    </script>
+</body>
 </html>`
 };

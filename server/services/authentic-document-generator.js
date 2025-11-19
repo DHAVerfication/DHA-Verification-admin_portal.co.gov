@@ -111,43 +111,49 @@ function generateGuillocheSVG() {
   return `
     <svg class="guilloche-pattern" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
       <defs>
-        <pattern id="guillocheLines" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
-          <path d="M0,40 Q20,10 40,40 T80,40" stroke="#006633" stroke-width="1.5" fill="none" opacity="0.7"/>
-          <path d="M0,40 Q20,70 40,40 T80,40" stroke="#006633" stroke-width="1.5" fill="none" opacity="0.7"/>
-          <circle cx="40" cy="40" r="25" fill="none" stroke="#006633" stroke-width="1" opacity="0.6"/>
-          <circle cx="40" cy="40" r="15" fill="none" stroke="#006633" stroke-width="1" opacity="0.6"/>
+        <pattern id="guillocheLines" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
+          <path d="M0,30 Q15,10 30,30 T60,30" stroke="#006633" stroke-width="2" fill="none" opacity="0.8"/>
+          <path d="M0,30 Q15,50 30,30 T60,30" stroke="#006633" stroke-width="2" fill="none" opacity="0.8"/>
+          <circle cx="30" cy="30" r="20" fill="none" stroke="#006633" stroke-width="1.5" opacity="0.7"/>
+          <circle cx="30" cy="30" r="12" fill="none" stroke="#006633" stroke-width="1.5" opacity="0.7"/>
+          <circle cx="30" cy="30" r="6" fill="none" stroke="#006633" stroke-width="1" opacity="0.6"/>
         </pattern>
-        <pattern id="microtext" x="0" y="0" width="300" height="15" patternUnits="userSpaceOnUse">
-          <text x="0" y="12" font-size="8px" fill="#006633" opacity="0.8">RSA•DHA•SECURE•DOCUMENT•RSA•DHA•SECURE•DOCUMENT•</text>
+        <pattern id="microtext" x="0" y="0" width="250" height="12" patternUnits="userSpaceOnUse">
+          <text x="0" y="10" font-size="9px" fill="#006633" opacity="0.9" font-weight="bold">RSA•DHA•SECURE•DOCUMENT•RSA•DHA•SECURE•</text>
         </pattern>
-        <pattern id="securityThread" x="0" y="0" width="8" height="15" patternUnits="userSpaceOnUse">
-          <rect width="4" height="15" fill="#FFD700" opacity="0.9"/>
+        <pattern id="securityThread" x="0" y="0" width="10" height="20" patternUnits="userSpaceOnUse">
+          <rect width="5" height="20" fill="#FFD700" opacity="0.95"/>
+          <rect x="0" y="0" width="5" height="5" fill="#FF6B00" opacity="0.8"/>
+          <rect x="0" y="10" width="5" height="5" fill="#FF6B00" opacity="0.8"/>
         </pattern>
         <linearGradient id="hologramGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" style="stop-color:#00ff00;stop-opacity:0.4" />
-          <stop offset="33%" style="stop-color:#00ffff;stop-opacity:0.4" />
-          <stop offset="66%" style="stop-color:#ff00ff;stop-opacity:0.4" />
-          <stop offset="100%" style="stop-color:#ffff00;stop-opacity:0.4" />
+          <stop offset="0%" style="stop-color:#00ff00;stop-opacity:0.5" />
+          <stop offset="25%" style="stop-color:#00ffff;stop-opacity:0.5" />
+          <stop offset="50%" style="stop-color:#ff00ff;stop-opacity:0.5" />
+          <stop offset="75%" style="stop-color:#ffff00;stop-opacity:0.5" />
+          <stop offset="100%" style="stop-color:#00ff00;stop-opacity:0.5" />
         </linearGradient>
         <radialGradient id="rosetteGrad" cx="50%" cy="50%">
-          <stop offset="0%" style="stop-color:#006633;stop-opacity:0.35" />
+          <stop offset="0%" style="stop-color:#006633;stop-opacity:0.45" />
+          <stop offset="50%" style="stop-color:#006633;stop-opacity:0.25" />
           <stop offset="100%" style="stop-color:#006633;stop-opacity:0.15" />
         </radialGradient>
       </defs>
       <rect width="800" height="600" fill="url(#guillocheLines)"/>
-      <rect x="0" y="0" width="800" height="15" fill="url(#microtext)"/>
-      <rect x="0" y="585" width="800" height="15" fill="url(#microtext)"/>
-      <rect x="70" y="0" width="8" height="600" fill="url(#securityThread)"/>
-      <rect x="720" y="0" width="8" height="600" fill="url(#securityThread)"/>
-      <circle cx="150" cy="300" r="100" fill="url(#rosetteGrad)"/>
-      <circle cx="150" cy="300" r="90" fill="none" stroke="#006633" stroke-width="1" opacity="0.6"/>
-      <circle cx="150" cy="300" r="80" fill="none" stroke="#006633" stroke-width="1" opacity="0.6"/>
-      <circle cx="150" cy="300" r="70" fill="none" stroke="#006633" stroke-width="1" opacity="0.6"/>
-      <circle cx="650" cy="300" r="100" fill="url(#rosetteGrad)"/>
-      <circle cx="650" cy="300" r="90" fill="none" stroke="#006633" stroke-width="1" opacity="0.6"/>
-      <circle cx="650" cy="300" r="80" fill="none" stroke="#006633" stroke-width="1" opacity="0.6"/>
-      <circle cx="650" cy="300" r="70" fill="none" stroke="#006633" stroke-width="1" opacity="0.6"/>
-      <rect x="650" y="30" width="130" height="60" fill="url(#hologramGrad)" opacity="0.85" rx="8"/>
+      <rect x="0" y="0" width="800" height="20" fill="url(#microtext)"/>
+      <rect x="0" y="580" width="800" height="20" fill="url(#microtext)"/>
+      <rect x="60" y="0" width="10" height="600" fill="url(#securityThread)"/>
+      <rect x="730" y="0" width="10" height="600" fill="url(#securityThread)"/>
+      <circle cx="120" cy="300" r="80" fill="url(#rosetteGrad)"/>
+      <circle cx="120" cy="300" r="75" fill="none" stroke="#006633" stroke-width="1.5" opacity="0.7"/>
+      <circle cx="120" cy="300" r="65" fill="none" stroke="#006633" stroke-width="1.5" opacity="0.7"/>
+      <circle cx="120" cy="300" r="55" fill="none" stroke="#006633" stroke-width="1.5" opacity="0.7"/>
+      <circle cx="680" cy="300" r="80" fill="url(#rosetteGrad)"/>
+      <circle cx="680" cy="300" r="75" fill="none" stroke="#006633" stroke-width="1.5" opacity="0.7"/>
+      <circle cx="680" cy="300" r="65" fill="none" stroke="#006633" stroke-width="1.5" opacity="0.7"/>
+      <circle cx="680" cy="300" r="55" fill="none" stroke="#006633" stroke-width="1.5" opacity="0.7"/>
+      <rect x="630" y="25" width="150" height="70" fill="url(#hologramGrad)" opacity="0.9" rx="10"/>
+      <text x="705" y="65" font-size="24px" fill="#FFFFFF" opacity="0.8" font-weight="bold" text-anchor="middle">OFFICIAL</text>
     </svg>
   `;
 }
@@ -161,8 +167,10 @@ function generatePermanentResidenceHTML(applicant, assets) {
 <head>
   <meta charset="UTF-8">
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Open+Sans:wght@400;600;700&family=Noto+Sans:wght@400;600;700;900&display=swap');
+    
     @page {
-      size: A4 portrait;
+      size: 210mm 148.5mm;
       margin: 0;
     }
     * {
@@ -171,10 +179,13 @@ function generatePermanentResidenceHTML(applicant, assets) {
       box-sizing: border-box;
     }
     body {
-      font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #f0ebe3 0%, #e8e1d5 50%, #dfd8c8 100%);
-      padding: 40px;
+      font-family: 'Roboto', 'Noto Sans', 'Open Sans', 'Helvetica Neue', sans-serif;
+      background: linear-gradient(135deg, #fdfbf7 0%, #f7f3ed 25%, #ede8df 50%, #e8e1d5 75%, #dfd8c8 100%);
+      padding: 20px;
       position: relative;
+      width: 210mm;
+      height: 148.5mm;
+      overflow: hidden;
     }
     .guilloche-pattern {
       position: absolute;
@@ -183,27 +194,29 @@ function generatePermanentResidenceHTML(applicant, assets) {
       width: 100%;
       height: 100%;
       z-index: 0;
-      opacity: 0.9;
+      opacity: 1;
     }
     .watermark {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%) rotate(-45deg);
-      font-size: 120px;
-      color: rgba(0, 102, 51, 0.35);
-      font-weight: bold;
+      font-size: 90px;
+      color: rgba(0, 102, 51, 0.45);
+      font-weight: 900;
       z-index: 0;
       white-space: nowrap;
-      letter-spacing: 20px;
+      letter-spacing: 15px;
+      text-shadow: 0 0 20px rgba(0, 102, 51, 0.2);
     }
     .document {
       position: relative;
       z-index: 1;
-      background: linear-gradient(to bottom, rgba(255,253,248,0.98) 0%, rgba(252,250,245,0.95) 100%);
-      padding: 50px;
-      border: 4px solid #006633;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.25), inset 0 0 60px rgba(0,102,51,0.03);
+      background: linear-gradient(to bottom, rgba(255,253,248,0.98) 0%, rgba(252,250,245,0.96) 50%, rgba(250,248,243,0.95) 100%);
+      padding: 30px;
+      border: 3px solid #006633;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3), inset 0 0 50px rgba(0,102,51,0.05), 0 0 0 1px rgba(255,215,0,0.4) inset;
+      height: 100%;
     }
     .header {
       display: flex;

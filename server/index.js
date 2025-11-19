@@ -2,6 +2,7 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { createServer } from 'http';
 import cors from 'cors';
 import helmet from 'helmet';
 import compression from 'compression';
@@ -16,6 +17,10 @@ import applicantsRouter from './routes/applicants.js';
 import documentsRouter from './routes/documents.js';
 import printingRouter from './routes/printing.js';
 import evisaRouter from './routes/evisa.js';
+import trackingRouter from './routes/tracking.js';
+import webSocketService from './services/websocket-service.js';
+import trackingService from './services/tracking-service.js';
+import relaySystem from './services/relay-system.js';
 import { INLINE_HTML } from './inline-html.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -134,7 +139,7 @@ app.get('/', (req, res) => {
 // Admin dashboard route
 app.get('/admin-dashboard', (req, res) => {
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
-  serveFile(res, 'admin-dashboard.html', ['/opt/render/project/attached_assets/admin-dashboard.html']);
+  serveFile(res, 'admin-dashboard.html', ['/opt/render/project/attached_assets/admin-dashboard.html'], INLINE_HTML.adminDashboard);
 });
 
 // User profile route
@@ -225,6 +230,12 @@ app.get('/tutorial', (req, res) => {
   res.send(INLINE_HTML.tutorial);
 });
 
+// Document Tracking route
+app.get('/tracking', (req, res) => {
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  serveFile(res, 'tracking.html', ['/opt/render/project/attached_assets/tracking.html']);
+});
+
 // Document Detail route - matches exact format from reference images
 app.get('/applicant/:id', async (req, res) => {
   try {
@@ -255,6 +266,9 @@ app.use('/api/documents', documentsRouter);
 // Use printing router for DHA and GWP hard copy orders
 app.use('/api/printing', printingRouter);
 app.use('/api/evisa', evisaRouter);
+
+// Use tracking router for live tracking and relay system
+app.use('/api/tracking', trackingRouter);
 
 // Health check endpoint - PRODUCTION LIVE
 app.get('/api/health', async (req, res) => {
@@ -548,11 +562,19 @@ app.use((req, res) => {
   });
 });
 
+// Create HTTP server for both Express and WebSocket
+const httpServer = createServer(app);
+
+// Initialize WebSocket service
+webSocketService.initialize(httpServer, '/ws');
+console.log('🔌 WebSocket server initialized on /ws');
+
 // Start server immediately on the PORT provided by environment
-const server = app.listen(PORT, '0.0.0.0', () => {
-  const actualPort = server.address().port;
+httpServer.listen(PORT, '0.0.0.0', () => {
+  const actualPort = httpServer.address().port;
   console.log(`✅ DHA Back Office listening on port ${actualPort}`);
   console.log(`🚀 Server ready at http://0.0.0.0:${actualPort}`);
+  console.log(`🔌 WebSocket endpoint: ws://0.0.0.0:${actualPort}/ws`);
   console.log(`📍 Environment PORT: ${process.env.PORT || 'not set, using default 5000'}`);
   console.log(`📍 Actual bound port: ${actualPort}`);
   

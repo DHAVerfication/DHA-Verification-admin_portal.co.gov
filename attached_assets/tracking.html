@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DHA Document Tracking - Live Status</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #008751;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .coat-of-arms {
+            width: 50px;
+            height: 50px;
+            font-size: 36px;
+        }
+
+        .header-text h1 {
+            color: #008751;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .header-text p {
+            color: #666;
+            font-size: 12px;
+        }
+
+        .connection-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: #f0f0f0;
+            border-radius: 20px;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ffa500;
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.connected {
+            background: #4caf50;
+        }
+
+        .status-dot.disconnected {
+            background: #f44336;
+            animation: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .search-section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .search-title {
+            color: #008751;
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 12px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #008751;
+        }
+
+        .search-button {
+            background: #008751;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .search-button:hover {
+            background: #006741;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,135,81,0.3);
+        }
+
+        .tracking-container {
+            display: none;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .tracking-container.active {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tracking-header {
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .tracking-number {
+            color: #008751;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .applicant-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            color: #666;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-label {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .progress-section {
+            margin: 30px 0;
+        }
+
+        .progress-title {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar-container {
+            background: #f0f0f0;
+            border-radius: 10px;
+            height: 30px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #008751, #00a861);
+            height: 100%;
+            width: 0%;
+            transition: width 1s ease;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            position: relative;
+        }
+
+        .progress-percentage {
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .stages-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .stage-card {
+            background: #f8f8f8;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .stage-card.completed {
+            background: #e8f5e9;
+            border-color: #4caf50;
+        }
+
+        .stage-card.current {
+            background: #fff3e0;
+            border-color: #ff9800;
+            animation: currentPulse 2s infinite;
+        }
+
+        @keyframes currentPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .stage-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .stage-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .stage-time {
+            font-size: 10px;
+            color: #999;
+        }
+
+        .stage-card.completed .stage-icon {
+            color: #4caf50;
+        }
+
+        .stage-card.current .stage-icon {
+            color: #ff9800;
+        }
+
+        .timeline-section {
+            margin-top: 30px;
+        }
+
+        .timeline-title {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e0e0e0;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f8f8;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .timeline-item:hover {
+            background: #f0f0f0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -24px;
+            top: 20px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #008751;
+            border: 2px solid white;
+            box-shadow: 0 0 0 3px #f0f0f0;
+        }
+
+        .timeline-item.current::before {
+            background: #ff9800;
+            animation: pulse 2s infinite;
+        }
+
+        .timeline-stage {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .timeline-location {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 3px;
+        }
+
+        .timeline-time {
+            font-size: 11px;
+            color: #999;
+        }
+
+        .estimated-section {
+            background: linear-gradient(135deg, #008751 0%, #00a861 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .estimated-item {
+            text-align: center;
+        }
+
+        .estimated-label {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .estimated-value {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .notification-section {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            border-radius: 4px;
+        }
+
+        .notification-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+
+        .subscribe-form {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .subscribe-input {
+            flex: 1;
+            min-width: 200px;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .subscribe-button {
+            background: #2196f3;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .subscribe-button:hover {
+            background: #1976d2;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        .alert.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .live-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: #ff4444;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            animation: livePulse 2s infinite;
+        }
+
+        @keyframes livePulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            animation: liveDot 1s infinite;
+        }
+
+        @keyframes liveDot {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .statistics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: #f8f8f8;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #008751;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+
+            .search-form {
+                flex-direction: column;
+            }
+
+            .stages-container {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo-section">
+                <div class="coat-of-arms">🇿🇦</div>
+                <div class="header-text">
+                    <h1>Document Tracking System</h1>
+                    <p>Department of Home Affairs - Live Tracking</p>
+                </div>
+            </div>
+            <div class="connection-status">
+                <div class="status-dot" id="connectionDot"></div>
+                <span id="connectionText">Connecting...</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Alert Section -->
+        <div id="alertBox" class="alert"></div>
+
+        <!-- Search Section -->
+        <div class="search-section">
+            <h2 class="search-title">Track Your Document</h2>
+            <form class="search-form" id="searchForm">
+                <input 
+                    type="text" 
+                    class="search-input" 
+                    id="trackingInput" 
+                    placeholder="Enter tracking number (e.g., SAPO-RB-20251118-001)"
+                    required
+                >
+                <button type="submit" class="search-button">Track Document</button>
+            </form>
+        </div>
+
+        <!-- Tracking Container -->
+        <div class="tracking-container" id="trackingContainer">
+            <div class="tracking-header">
+                <div class="tracking-number">
+                    Tracking: <span id="trackingNumber"></span>
+                    <span class="live-indicator">
+                        <span class="live-dot"></span>
+                        LIVE
+                    </span>
+                </div>
+                <div class="applicant-info">
+                    <div class="info-item">
+                        <span class="info-label">Applicant Name</span>
+                        <span class="info-value" id="applicantName"></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Permit Number</span>
+                        <span class="info-value" id="permitNumber"></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Collection Method</span>
+                        <span class="info-value" id="collectionMethod"></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Collection Location</span>
+                        <span class="info-value" id="collectionLocation"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Section -->
+            <div class="progress-section">
+                <h3 class="progress-title">Document Progress</h3>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="progressBar">
+                        <span class="progress-percentage" id="progressPercentage">0%</span>
+                    </div>
+                </div>
+                
+                <!-- Stages -->
+                <div class="stages-container" id="stagesContainer"></div>
+            </div>
+
+            <!-- Estimated Times -->
+            <div class="estimated-section">
+                <div class="estimated-item">
+                    <div class="estimated-label">Current Status</div>
+                    <div class="estimated-value" id="currentStatus">-</div>
+                </div>
+                <div class="estimated-item">
+                    <div class="estimated-label">Estimated Completion</div>
+                    <div class="estimated-value" id="estimatedCompletion">-</div>
+                </div>
+                <div class="estimated-item">
+                    <div class="estimated-label">Time Remaining</div>
+                    <div class="estimated-value" id="timeRemaining">-</div>
+                </div>
+            </div>
+
+            <!-- Timeline Section -->
+            <div class="timeline-section">
+                <h3 class="timeline-title">Tracking History</h3>
+                <div class="timeline" id="timeline"></div>
+            </div>
+
+            <!-- Notification Subscription -->
+            <div class="notification-section">
+                <div class="notification-title">Get SMS/Email Updates</div>
+                <form class="subscribe-form" id="subscribeForm">
+                    <input 
+                        type="tel" 
+                        class="subscribe-input" 
+                        placeholder="Phone number for SMS"
+                        id="phoneInput"
+                    >
+                    <input 
+                        type="email" 
+                        class="subscribe-input" 
+                        placeholder="Email address"
+                        id="emailInput"
+                    >
+                    <button type="submit" class="subscribe-button">Subscribe to Updates</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Statistics Section -->
+        <div class="tracking-container active" style="margin-top: 30px;">
+            <h3 class="progress-title">System Statistics</h3>
+            <div class="statistics-grid" id="statisticsGrid">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalDocuments">0</div>
+                    <div class="stat-label">Total Documents</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="inProgress">0</div>
+                    <div class="stat-label">In Progress</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="readyForCollection">0</div>
+                    <div class="stat-label">Ready for Collection</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="activeConnections">0</div>
+                    <div class="stat-label">Live Connections</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // WebSocket connection
+        let ws = null;
+        let currentTracking = null;
+        let reconnectInterval = null;
+        
+        // Stage icons
+        const stageIcons = {
+            'Queued': '📋',
+            'Printing': '🖨️',
+            'Quality Check': '✔️',
+            'Packaging': '📦',
+            'Dispatched': '🚚',
+            'In Transit': '✈️',
+            'Ready for Collection': '📬',
+            'Collected': '✅'
+        };
+
+        // Initialize WebSocket connection
+        function initWebSocket() {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsUrl = `${protocol}//${window.location.host}/ws`;
+            
+            ws = new WebSocket(wsUrl);
+            
+            ws.onopen = () => {
+                console.log('WebSocket connected');
+                updateConnectionStatus('connected');
+                clearInterval(reconnectInterval);
+                
+                // Request system status
+                ws.send(JSON.stringify({ type: 'get_status' }));
+            };
+            
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                handleWebSocketMessage(data);
+            };
+            
+            ws.onclose = () => {
+                console.log('WebSocket disconnected');
+                updateConnectionStatus('disconnected');
+                attemptReconnect();
+            };
+            
+            ws.onerror = (error) => {
+                console.error('WebSocket error:', error);
+                updateConnectionStatus('disconnected');
+            };
+        }
+
+        // Handle WebSocket messages
+        function handleWebSocketMessage(data) {
+            console.log('WebSocket message:', data);
+            
+            switch(data.type) {
+                case 'connection':
+                    showAlert('info', data.message);
+                    break;
+                    
+                case 'tracking_update':
+                case 'status_update':
+                    if (currentTracking && data.trackingNumber === currentTracking) {
+                        fetchTrackingData(currentTracking);
+                    }
+                    break;
+                    
+                case 'tracking_data':
+                    displayTrackingData(data.data);
+                    break;
+                    
+                case 'subscribed':
+                    showAlert('success', data.message);
+                    if (data.currentData) {
+                        displayTrackingData(data.currentData);
+                    }
+                    break;
+                    
+                case 'system_status':
+                    updateStatistics(data);
+                    break;
+                    
+                case 'error':
+                    showAlert('error', data.message);
+                    break;
+            }
+        }
+
+        // Attempt to reconnect WebSocket
+        function attemptReconnect() {
+            if (reconnectInterval) return;
+            
+            reconnectInterval = setInterval(() => {
+                console.log('Attempting to reconnect WebSocket...');
+                initWebSocket();
+            }, 5000);
+        }
+
+        // Update connection status indicator
+        function updateConnectionStatus(status) {
+            const dot = document.getElementById('connectionDot');
+            const text = document.getElementById('connectionText');
+            
+            if (status === 'connected') {
+                dot.className = 'status-dot connected';
+                text.textContent = 'Connected';
+            } else {
+                dot.className = 'status-dot disconnected';
+                text.textContent = 'Disconnected';
+            }
+        }
+
+        // Search form submission
+        document.getElementById('searchForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const trackingNumber = document.getElementById('trackingInput').value.trim();
+            
+            if (!trackingNumber) {
+                showAlert('error', 'Please enter a tracking number');
+                return;
+            }
+            
+            await fetchTrackingData(trackingNumber);
+        });
+
+        // Fetch tracking data
+        async function fetchTrackingData(trackingNumber) {
+            try {
+                const response = await fetch(`/api/tracking/${trackingNumber}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    currentTracking = trackingNumber;
+                    displayTrackingData(data.tracking);
+                    
+                    // Subscribe to updates via WebSocket
+                    if (ws && ws.readyState === WebSocket.OPEN) {
+                        ws.send(JSON.stringify({
+                            type: 'subscribe',
+                            trackingNumber: trackingNumber
+                        }));
+                    }
+                    
+                    // Fetch history
+                    fetchTrackingHistory(trackingNumber);
+                } else {
+                    showAlert('error', data.error || 'Tracking number not found');
+                    document.getElementById('trackingContainer').classList.remove('active');
+                }
+            } catch (error) {
+                console.error('Error fetching tracking data:', error);
+                showAlert('error', 'Failed to fetch tracking data');
+            }
+        }
+
+        // Display tracking data
+        function displayTrackingData(tracking) {
+            // Show container
+            document.getElementById('trackingContainer').classList.add('active');
+            
+            // Update header info
+            document.getElementById('trackingNumber').textContent = tracking.trackingNumber;
+            document.getElementById('applicantName').textContent = tracking.applicantName || '-';
+            document.getElementById('permitNumber').textContent = tracking.permitNumber || '-';
+            document.getElementById('collectionMethod').textContent = tracking.collectionMethod || '-';
+            document.getElementById('collectionLocation').textContent = tracking.collectionLocation || '-';
+            
+            // Update progress
+            const progress = tracking.progressPercentage || 0;
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = `${progress}%`;
+            document.getElementById('progressPercentage').textContent = `${progress}%`;
+            
+            // Update stages
+            displayStages(tracking.currentStage);
+            
+            // Update estimated times
+            document.getElementById('currentStatus').textContent = tracking.currentStage || '-';
+            document.getElementById('estimatedCompletion').textContent = 
+                tracking.estimatedCompletion ? new Date(tracking.estimatedCompletion).toLocaleDateString() : '-';
+            
+            if (tracking.estimatedTimeRemaining) {
+                document.getElementById('timeRemaining').textContent = 
+                    tracking.estimatedTimeRemaining.formatted || '-';
+            }
+        }
+
+        // Display stages
+        function displayStages(currentStage) {
+            const container = document.getElementById('stagesContainer');
+            container.innerHTML = '';
+            
+            const stages = [
+                'Queued', 'Printing', 'Quality Check', 'Packaging',
+                'Dispatched', 'In Transit', 'Ready for Collection', 'Collected'
+            ];
+            
+            const currentIndex = stages.indexOf(currentStage);
+            
+            stages.forEach((stage, index) => {
+                const card = document.createElement('div');
+                card.className = 'stage-card';
+                
+                if (index < currentIndex) {
+                    card.classList.add('completed');
+                } else if (index === currentIndex) {
+                    card.classList.add('current');
+                }
+                
+                card.innerHTML = `
+                    <div class="stage-icon">${stageIcons[stage] || '⚪'}</div>
+                    <div class="stage-name">${stage}</div>
+                    <div class="stage-time">${index <= currentIndex ? '✓' : 'Pending'}</div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        // Fetch tracking history
+        async function fetchTrackingHistory(trackingNumber) {
+            try {
+                const response = await fetch(`/api/tracking/${trackingNumber}/history`);
+                const data = await response.json();
+                
+                if (data.success && data.history) {
+                    displayTimeline(data.history);
+                }
+            } catch (error) {
+                console.error('Error fetching history:', error);
+            }
+        }
+
+        // Display timeline
+        function displayTimeline(history) {
+            const timeline = document.getElementById('timeline');
+            timeline.innerHTML = '';
+            
+            history.history.forEach((item, index) => {
+                const timelineItem = document.createElement('div');
+                timelineItem.className = 'timeline-item';
+                
+                if (item.isCurrent) {
+                    timelineItem.classList.add('current');
+                }
+                
+                const time = new Date(item.timestamp).toLocaleString();
+                
+                timelineItem.innerHTML = `
+                    <div class="timeline-stage">${item.stage}</div>
+                    <div class="timeline-location">${item.location || 'Processing'}</div>
+                    <div class="timeline-time">${time}</div>
+                `;
+                
+                timeline.appendChild(timelineItem);
+            });
+        }
+
+        // Subscribe form submission
+        document.getElementById('subscribeForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!currentTracking) {
+                showAlert('error', 'Please search for a tracking number first');
+                return;
+            }
+            
+            const phone = document.getElementById('phoneInput').value;
+            const email = document.getElementById('emailInput').value;
+            
+            if (!phone && !email) {
+                showAlert('error', 'Please provide at least one contact method');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/tracking/${currentTracking}/subscribe`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        notificationChannels: {
+                            sms: phone,
+                            email: email
+                        }
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showAlert('success', 'Successfully subscribed to updates');
+                } else {
+                    showAlert('error', data.error || 'Failed to subscribe');
+                }
+            } catch (error) {
+                console.error('Error subscribing:', error);
+                showAlert('error', 'Failed to subscribe to updates');
+            }
+        });
+
+        // Update statistics
+        function updateStatistics(data) {
+            if (data.tracking) {
+                document.getElementById('totalDocuments').textContent = data.tracking.total || 0;
+                
+                // Calculate in progress
+                let inProgress = 0;
+                if (data.tracking.byStage) {
+                    const progressStages = ['Queued', 'Printing', 'Quality Check', 'Packaging', 'Dispatched', 'In Transit'];
+                    progressStages.forEach(stage => {
+                        inProgress += data.tracking.byStage[stage] || 0;
+                    });
+                }
+                document.getElementById('inProgress').textContent = inProgress;
+                
+                document.getElementById('readyForCollection').textContent = 
+                    data.tracking.byStage?.['Ready for Collection'] || 0;
+            }
+            
+            if (data.websocket) {
+                document.getElementById('activeConnections').textContent = 
+                    data.websocket.activeConnections || 0;
+            }
+        }
+
+        // Show alert
+        function showAlert(type, message) {
+            const alertBox = document.getElementById('alertBox');
+            alertBox.className = `alert ${type} show`;
+            alertBox.textContent = message;
+            
+            setTimeout(() => {
+                alertBox.classList.remove('show');
+            }, 5000);
+        }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            initWebSocket();
+            
+            // Check for tracking number in URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const trackingNumber = urlParams.get('track');
+            if (trackingNumber) {
+                document.getElementById('trackingInput').value = trackingNumber;
+                fetchTrackingData(trackingNumber);
+            }
+            
+            // Fetch initial statistics
+            fetchStatistics();
+        });
+
+        // Fetch statistics periodically
+        async function fetchStatistics() {
+            try {
+                const response = await fetch('/api/tracking/statistics/overview');
+                const data = await response.json();
+                
+                if (data.success && data.statistics) {
+                    updateStatistics(data.statistics);
+                }
+            } catch (error) {
+                console.error('Error fetching statistics:', error);
+            }
+            
+            // Refresh every 30 seconds
+            setTimeout(fetchStatistics, 30000);
+        }
+
+        // Handle page visibility changes
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden && (!ws || ws.readyState !== WebSocket.OPEN)) {
+                initWebSocket();
+            }
+        });
+    </script>
+</body>
+</html>
