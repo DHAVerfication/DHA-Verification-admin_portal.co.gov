@@ -58,18 +58,6 @@ outputType = "webview"
 localPort = 5000
 externalPort = 80
 
-[[ports]]
-localPort = 33031
-externalPort = 3000
-
-[[ports]]
-localPort = 41829
-externalPort = 3002
-
-[[ports]]
-localPort = 44831
-externalPort = 3001
-
 [nix]
 channel = "stable-25_05"
 packages = ["glib", "nss", "nspr", "atk", "at-spi2-atk", "cups", "dbus", "gtk3", "pango", "cairo", "alsa-lib", "libdrm", "mesa", "xorg.libX11", "xorg.libxcb", "xorg.libXcomposite", "xorg.libXrandr", "libxkbcommon", "expat", "xorg.libXcursor", "xorg.libXdamage", "xorg.libXext", "xorg.libXfixes", "xorg.libXi", "xorg.libXrender", "xorg.libxshmfence", "xorg.libXtst", "libgcc", "chromium"]
